@@ -1,48 +1,27 @@
 import os
 from datetime import datetime, timedelta
-from flask import Flask, jsonify, request, send_from_directory
+
+from flask import Flask, jsonify, request, send_from_directory, abort
 from flask_cors import CORS
 import psycopg2
 from werkzeug.security import generate_password_hash, check_password_hash
 
-# Настраиваем Flask так, чтобы он искал HTML/CSS/JS в текущей папке
 app = Flask(__name__, static_folder='.', static_url_path='')
-CORS(app)  # Разрешаем запросы с фронтенда
+CORS(app)
 
-# Подключение к базе данных
 def get_db():
-    # Проверяем, есть ли облачная строка подключения от Render/Neon
     database_url = os.environ.get("DATABASE_URL")
-
     if database_url:
-        # Если запущено в облаке (Render), подключаемся к Neon.tech
-        return psycopg2.connect(database_url)
-    else:
-        # Если запущено локально на твоем ПК
-        return psycopg2.connect(
-            dbname="airline",
-            user="postgres",
-            password="2726259012",
-            host="localhost",
-            port="5432"
-        )
+        return psycopg2.connect(database_url, sslmode="require")
 
-# Главная страница (отдает index.html)
-@app.route('/')
-def home():
-    return send_from_directory('.', 'index.html')
+    return psycopg2.connect(
+        dbname="airline",
+        user="postgres",
+        password="2726259012",
+        host="localhost",
+        port="5432"
+    )
 
-# Маршрут для отдачи всех остальных файлов (CSS, JS, картинки)
-@app.route('/<path:path>')
-def send_static(path):
-    return send_from_directory('.', path)
-
-# Совместимость с путями вида /images/filename.jpg, когда файлы лежат в корне проекта
-@app.route('/images/<path:filename>')
-def serve_images(filename):
-    return send_from_directory('.', filename)
-
-# Автоматическое создание таблиц при старте (если их еще нет)
 def init_db():
     try:
         conn = get_db()
@@ -78,12 +57,11 @@ def init_db():
         cur.execute("ALTER TABLE users ALTER COLUMN name DROP NOT NULL;")
         cur.execute("ALTER TABLE users ALTER COLUMN password DROP NOT NULL;")
 
-        # База должна всегда быть готова для страницы поиска рейсов
         now = datetime.utcnow()
         demo_flights = [
             ("EN-101", "New York", "London", now + timedelta(days=14), now + timedelta(days=14, hours=8), 2450.00, 120),
             ("EN-108", "New York", "London", now + timedelta(days=15), now + timedelta(days=15, hours=8, minutes=30), 2548.00, 98),
-            ("EN-214", "New York", "Paris", now + timedelta(days=18), now + timedelta(days=18, hours=7, minutes=0), 2352.00, 85),
+            ("EN-214", "New York", "Paris", now + timedelta(days=18), now + timedelta(days=18, hours=7), 2352.00, 85),
             ("EN-305", "London", "Athens", now + timedelta(days=12), now + timedelta(days=12, hours=5, minutes=20), 420.00, 64),
         ]
 
@@ -93,22 +71,39 @@ def init_db():
                 (flight_number,)
             )
             if cur.fetchone() is None:
-                cur.execute(
-                    """
-                    INSERT INTO flights (flight_number, departure_city, arrival_city, departure_time, arrival_time, price, seats_available)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s);
-                    """,
-                    (flight_number, dep_city, arr_city, dep_time, arr_time, price, seats)
-                )
+                cur.execute("""
+                    INSERT INTO flights (
+                        flight_number, departure_city, arrival_city,
+                        departure_time, arrival_time, price, seats_available
+                    ) VALUES (%s, %s, %s, %s, %s, %s, %s);
+                """, (flight_number, dep_city, arr_city, dep_time, arr_time, price, seats))
 
         conn.commit()
         cur.close()
         conn.close()
-        print("Таблицы пользователей и рейсов проверены/созданы успешно!")
+        print("Database initialized successfully.")
     except Exception:
         app.logger.exception("Unable to initialize the database tables")
 
-# API получения рейсов
+@app.route("/")
+def home():
+    return send_from_directory(".", "index.html")
+
+@app.route("/images/<path:filename>")
+def serve_images(filename):
+    return send_from_directory(".", filename)
+
+@app.route("/<path:path>")
+def send_static(path):
+    if path.startswith("api/"):
+        abort(404)
+
+    full_path = os.path.join(".", path)
+    if os.path.isfile(full_path):
+        return send_from_directory(".", path)
+
+    abort(404)
+
 @app.route("/api/flights")
 def flights():
     conn = get_db()
@@ -116,32 +111,33 @@ def flights():
     cur.execute("""
         SELECT id, flight_number, departure_city, arrival_city,
                departure_time, arrival_time, price, seats_available
-        FROM flights ORDER BY departure_time
+        FROM flights
+        ORDER BY departure_time
     """)
     rows = cur.fetchall()
     cur.close()
     conn.close()
 
     result = []
-    for r in rows:
+    for row in rows:
         result.append({
-            "id": r[0],
-            "flight_number": r[1],
-            "departure_city": r[2],
-            "arrival_city": r[3],
-            "departure_time": r[4].strftime("%d.%m.%Y %H:%M"),
-            "arrival_time": r[5].strftime("%d.%m.%Y %H:%M"),
-            "price": float(r[6]),
-            "seats_available": r[7]
+            "id": row[0],
+            "flight_number": row[1],
+            "departure_city": row[2],
+            "arrival_city": row[3],
+            "departure_time": row[4].strftime("%d.%m.%Y %H:%M"),
+            "arrival_time": row[5].strftime("%d.%m.%Y %H:%M"),
+            "price": float(row[6]),
+            "seats_available": row[7],
         })
+
     return jsonify(result)
 
-# API Регистрации
-@app.route('/api/register', methods=['POST'])
+@app.route("/api/register", methods=["POST"])
 def register():
-    data = request.get_json()
-    email = data.get('email')
-    password = data.get('password')
+    data = request.get_json(silent=True) or {}
+    email = data.get("email")
+    password = data.get("password")
 
     if not email or not password:
         return jsonify({"error": "Укажите email и пароль"}), 400
@@ -163,12 +159,10 @@ def register():
         )
         new_user = cur.fetchone()
         conn.commit()
-
         return jsonify({
             "message": "Регистрация прошла успешно!",
-            "user": {"id": new_user[0], "email": new_user[1]}
+            "user": {"id": new_user[0], "email": new_user[1]},
         }), 201
-
     except Exception:
         if conn:
             conn.rollback()
@@ -180,12 +174,11 @@ def register():
         if conn:
             conn.close()
 
-# API Логина
-@app.route('/api/login', methods=['POST'])
+@app.route("/api/login", methods=["POST"])
 def login():
-    data = request.get_json()
-    email = data.get('email')
-    password = data.get('password')
+    data = request.get_json(silent=True) or {}
+    email = data.get("email")
+    password = data.get("password")
 
     if not email or not password:
         return jsonify({"error": "Укажите email и пароль"}), 400
@@ -204,11 +197,10 @@ def login():
         if check_password_hash(user[2], password):
             return jsonify({
                 "message": "Успешный вход!",
-                "user": {"id": user[0], "email": user[1]}
+                "user": {"id": user[0], "email": user[1]},
             }), 200
-        else:
-            return jsonify({"error": "Неверный email или пароль"}), 401
 
+        return jsonify({"error": "Неверный email или пароль"}), 401
     except Exception:
         if conn:
             conn.rollback()
@@ -220,12 +212,11 @@ def login():
         if conn:
             conn.close()
 
-# API БРОНИРОВАНИЯ (ЗАЩИЩЕННЫЙ)
-@app.route('/api/book', methods=['POST'])
+@app.route("/api/book", methods=["POST"])
 def book_flight():
-    data = request.get_json()
-    user_id = data.get('user_id')
-    flight_id = data.get('flight_id')
+    data = request.get_json(silent=True) or {}
+    user_id = data.get("user_id")
+    flight_id = data.get("flight_id")
 
     if not user_id:
         return jsonify({"error": "Доступ запрещен. Пожалуйста, войдите в систему."}), 401
@@ -233,7 +224,6 @@ def book_flight():
     try:
         conn = get_db()
         cur = conn.cursor()
-
         cur.execute("SELECT id FROM users WHERE id = %s;", (user_id,))
         if not cur.fetchone():
             cur.close()
@@ -243,10 +233,13 @@ def book_flight():
         cur.close()
         conn.close()
         return jsonify({"message": "Билет успешно забронирован!"}), 200
+    except Exception as exc:
+        return jsonify({"error": str(exc)}), 500
 
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+@app.route("/healthz")
+def healthz():
+    return jsonify({"status": "ok"})
 
 if __name__ == "__main__":
     init_db()
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", "5000")), debug=False)
