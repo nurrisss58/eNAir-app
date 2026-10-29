@@ -1,20 +1,40 @@
-from flask import Flask, jsonify, request
+import os
+from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 import psycopg2
 from werkzeug.security import generate_password_hash, check_password_hash
 
-app = Flask(__name__)
+# Настраиваем Flask так, чтобы он искал HTML/CSS/JS в текущей папке
+app = Flask(__name__, static_folder='.', static_url_path='')
 CORS(app)  # Разрешаем запросы с фронтенда
 
-# Подключение к базе (твои реальные параметры)
+# Подключение к базе данных
 def get_db():
-    return psycopg2.connect(
-        dbname="airline",
-        user="postgres",
-        password="2726259012",   # Твой пароль от pgAdmin
-        host="localhost",
-        port="5432"
-    )
+    # Проверяем, есть ли облачная строка подключения от Render/Neon
+    database_url = os.environ.get("DATABASE_URL")
+    
+    if database_url:
+        # Если запущено в облаке (Render), подключаемся к Neon.tech
+        return psycopg2.connect(database_url)
+    else:
+        # Если запущено локально на твоем ПК
+        return psycopg2.connect(
+            dbname="airline",
+            user="postgres",
+            password="2726259012",
+            host="localhost",
+            port="5432"
+        )
+
+# Главная страница (отдает index.html)
+@app.route('/')
+def home():
+    return send_from_directory('.', 'index.html')
+
+# Маршрут для отдачи всех остальных файлов (CSS, JS, картинки)
+@app.route('/<path:path>')
+def send_static(path):
+    return send_from_directory('.', path)
 
 # Автоматическое создание таблицы пользователей при старте (если ее еще нет)
 def init_db():
@@ -88,12 +108,10 @@ def register():
     try:
         conn = get_db()
         cur = conn.cursor()
-        # Проверяем, есть ли уже такой пользователь
         cur.execute("SELECT id FROM users WHERE email = %s;", (email,))
         if cur.fetchone():
             return jsonify({"error": "Пользователь с таким email уже существует"}), 400
 
-        # Сохраняем
         cur.execute(
             "INSERT INTO users (email, password_hash) VALUES (%s, %s) RETURNING id, email;",
             (email, password_hash)
@@ -138,7 +156,6 @@ def login():
         if not user or not user[2]:
             return jsonify({"error": "Неверный email или пароль"}), 401
 
-        # Проверяем хэш пароля
         if check_password_hash(user[2], password):
             return jsonify({
                 "message": "Успешный вход!",
@@ -158,14 +175,13 @@ def login():
         if conn:
             conn.close()
 
-# ---------------- API БРОНИРОВАНИЯ (ЗАЩИЩЕННЫЙ) ----------------
+# API БРОНИРОВАНИЯ (ЗАЩИЩЕННЫЙ)
 @app.route('/api/book', methods=['POST'])
 def book_flight():
     data = request.get_json()
     user_id = data.get('user_id')
     flight_id = data.get('flight_id')
 
-    # Жесткая проверка на бэкенде: если юзера нет, рубим запрос
     if not user_id:
         return jsonify({"error": "Доступ запрещен. Пожалуйста, войдите в систему."}), 401
 
@@ -173,16 +189,11 @@ def book_flight():
         conn = get_db()
         cur = conn.cursor()
         
-        # Проверяем, существует ли такой пользователь в базе данных
         cur.execute("SELECT id FROM users WHERE id = %s;", (user_id,))
         if not cur.fetchone():
             cur.close()
             conn.close()
             return jsonify({"error": "Недействительный пользователь"}), 401
-
-        # Здесь в будущем можно будет добавить сохранение брони в таблицу bookings
-        # cur.execute("INSERT INTO bookings (user_id, flight_id) VALUES (%s, %s);", (user_id, flight_id))
-        # conn.commit()
 
         cur.close()
         conn.close()
@@ -192,5 +203,5 @@ def book_flight():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
-    init_db()  # Создаст таблицу при запуске
+    init_db()
     app.run(debug=True)
