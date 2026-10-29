@@ -1,529 +1,276 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>enair-booking</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;700;800&family=Geist:wght@400;500;600;700&family=Inter:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="enair-booking.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>eNAir Booking</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Geist', Arial, sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      background: rgba(255,255,255,0.9);
+      border-bottom: 1px solid #e2e8f0;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .brand {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.05em;
+      cursor: pointer;
+    }
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .nav-links div, .book-now-btn {
+      cursor: pointer;
+      font-weight: 600;
+      color: #334155;
+    }
+    .book-now-btn {
+      background: linear-gradient(110deg, #06b6d4, #8b5cf6);
+      color: white;
+      border: 0;
+      border-radius: 999px;
+      padding: 12px 18px;
+      font-weight: 700;
+    }
+    .hero {
+      padding: 72px 40px 40px;
+      background: linear-gradient(135deg, #0f172a 0%, #1d4ed8 100%);
+      color: white;
+      text-align: center;
+    }
+    .eyebrow {
+      display: inline-block;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(32px, 5vw, 62px);
+      line-height: 1.05;
+    }
+    .results {
+      max-width: 1200px;
+      margin: 36px auto;
+      padding: 0 20px 60px;
+    }
+    .results-header {
+      margin-bottom: 20px;
+    }
+    .results-header h2 {
+      margin: 0 0 8px;
+      font-size: 30px;
+    }
+    .results-header p {
+      margin: 0;
+      color: #64748b;
+    }
+    .flights-list {
+      display: grid;
+      gap: 18px;
+    }
+    .flight-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+    }
+    .flight-route {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .flight-meta {
+      color: #475569;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+    .flight-price-box {
+      text-align: right;
+      min-width: 140px;
+    }
+    .flight-price {
+      display: block;
+      font-size: 28px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+    .flight-select {
+      margin-top: 10px;
+      border: 0;
+      border-radius: 999px;
+      background: #0f172a;
+      color: white;
+      padding: 10px 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .error-box {
+      background: #fff1f2;
+      color: #be123c;
+      padding: 18px 20px;
+      border: 1px solid #fecdd3;
+      border-radius: 14px;
+    }
+    @media (max-width: 700px) {
+      .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 18px 20px;
+      }
+      .nav-links {
+        gap: 12px;
+        font-size: 14px;
+      }
+      .flight-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .flight-price-box {
+        text-align: left;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="enair-booking-1">
-      <div class="sticky-navigation-2">
-        <div class="logo-group-3">
-          <div class="logo-badge-4">
-            <div class="en-5">eN</div>
-          </div>
-          <div class="enair-6">eN<span style="font-weight:300;color:#64748b">Air</span></div>
-        </div>
-        <div class="nav-links-7">
-          <div class="frame-8">
-            <div class="destinations-9">Destinations</div>
-          </div>
-          <div class="frame-10">
-            <div class="book-flights-11">Book Flights</div>
-            <div class="indicator-12">
-            </div>
-          </div>
-          <div class="frame-13">
-            <div class="our-fleet-14">Our Fleet</div>
-          </div>
-          <div class="frame-15">
-            <div class="loyalty-16">Loyalty</div>
-          </div>
-          <div class="frame-17">
-            <div class="about-enair-18">About eNAir</div>
-          </div>
-        </div>
-        <div class="book-now-cta-19">
-          <div class="book-now-20">Book Now</div>
-        </div>
-      </div>
-      <div class="booking-hero-21">
-        <div class="frame-22">
-          <div class="instant-flight-booking-23">Instant Flight Booking</div>
-          <div class="book-your-next-journey-24">Book Your Next Journey</div>
-        </div>
-        <div class="frame-25">
-          <div class="frame-26">
-            <div class="frame-27">
-              <div class="frame-28">
-                <div class="01-29">01</div>
-              </div>
-              <div class="search-flights-30">Search Flights</div>
-            </div>
-            <div class="connector-31">
-            </div>
-          </div>
-          <div class="frame-32">
-            <div class="frame-33">
-              <div class="frame-34">
-                <div class="02-35">02</div>
-              </div>
-              <div class="select-fare-36">Select Fare</div>
-            </div>
-            <div class="connector-37">
-            </div>
-          </div>
-          <div class="frame-38">
-            <div class="frame-39">
-              <div class="frame-40">
-                <div class="03-41">03</div>
-              </div>
-              <div class="passengers-42">Passengers</div>
-            </div>
-            <div class="connector-43">
-            </div>
-          </div>
-          <div class="frame-44">
-            <div class="frame-45">
-              <div class="frame-46">
-                <div class="04-47">04</div>
-              </div>
-              <div class="payment-48">Payment</div>
-            </div>
-          </div>
-        </div>
-        <div class="form-panel-49">
-          <div class="frame-50">
-            <div class="frame-51">
-              <div class="frame-52">
-                <div class="round-trip-53">Round-trip</div>
-              </div>
-              <div class="frame-54">
-                <div class="one-way-55">One-way</div>
-              </div>
-            </div>
-            <div class="frame-56">
-              <div class="frame-57">
-                <div class="economy-58">Economy</div>
-              </div>
-              <div class="frame-59">
-                <div class="premium-60">Premium</div>
-              </div>
-              <div class="frame-61">
-                <div class="business-62">Business</div>
-              </div>
-              <div class="frame-63">
-                <div class="first-64">First</div>
-              </div>
-            </div>
-          </div>
-          <div class="frame-65">
-            <div class="frame-66">
-              <div class="origin-67">Origin</div>
-              <div class="jfk-new-york-usa-68">JFK · New York, USA</div>
-            </div>
-            <div class="frame-69">
-              <div class="arrow-left-right-70">
-                <svg class="vector-71" viewBox="0 0 12 13.5" xmlns="http://www.w3.org/2000/svg"><path d="M3.71 0.71C4.1 0.32 4.1 -0.32 3.71 -0.71C3.32 -1.1 2.68 -1.1 2.29 -0.71L3 0L3.71 0.71ZM0 3L-0.71 2.29L-1.41 3L-0.71 3.71L0 3ZM2.29 6.71C2.68 7.1 3.32 7.1 3.71 6.71C4.1 6.32 4.1 5.68 3.71 5.29L3 6L2.29 6.71ZM12 4C12.55 4 13 3.55 13 3C13 2.45 12.55 2 12 2L12 3L12 4ZM8.29 12.79C7.9 13.18 7.9 13.82 8.29 14.21C8.68 14.6 9.32 14.6 9.71 14.21L9 13.5L8.29 12.79ZM12 10.5L12.71 11.21L13.41 10.5L12.71 9.79L12 10.5ZM9.71 6.79C9.32 6.4 8.68 6.4 8.29 6.79C7.9 7.18 7.9 7.82 8.29 8.21L9 7.5L9.71 6.79ZM0 9.5C-0.55 9.5 -1 9.95 -1 10.5C-1 11.05 -0.55 11.5 0 11.5L0 10.5L0 9.5ZM3 0L2.29 -0.71L-0.71 2.29L0 3L0.71 3.71L3.71 0.71L3 0ZM0 3L-0.71 3.71L2.29 6.71L3 6L3.71 5.29L0.71 2.29L0 3ZM0 3L0 4L12 4L12 3L12 2L0 2L0 3ZM9 13.5L9.71 14.21L12.71 11.21L12 10.5L11.29 9.79L8.29 12.79L9 13.5ZM12 10.5L12.71 9.79L9.71 6.79L9 7.5L8.29 8.21L11.29 11.21L12 10.5ZM12 10.5L12 9.5L0 9.5L0 10.5L0 11.5L12 11.5L12 10.5Z" fill="#8b5cf6"/></svg>
-              </div>
-            </div>
-            <div class="frame-72">
-              <div class="destination-73">Destination</div>
-              <div class="lhr-london-uk-74">LHR · London, UK</div>
-            </div>
-            <div class="frame-75">
-              <div class="departure-date-76">Departure Date</div>
-              <div class="fri-28-mar-2026-77">Fri, 28 Mar 2026</div>
-            </div>
-            <div class="frame-78">
-              <div class="return-date-79">Return Date</div>
-              <div class="fri-04-apr-2026-80">Fri, 04 Apr 2026</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- СЕКЦИЯ РЕЗУЛЬТАТОВ ПОИСКА И КОНТЕЙНЕР ДЛЯ БАЗЫ ДАННЫХ -->
-      <div class="search-results-section-81">
-        <div class="frame-82">
-          <div class="available-outbound-flights-83">Available Outbound Flights</div>
-          <div class="sorted-by-lowest-duration-84">Loaded from Database 🚀</div>
-        </div>
-        
-        <!-- Сюда JavaScript динамически загрузит рейсы из Python/PostgreSQL -->
-        <div id="flights-container"></div>
-      </div>
+  <header class="topbar">
+    <div class="brand">eNAir</div>
+    <nav class="nav-links" aria-label="Main navigation">
+      <div>Destinations</div>
+      <div>Book Flights</div>
+      <div>Our Fleet</div>
+      <div>Loyalty</div>
+      <div>About eNAir</div>
+    </nav>
+    <button class="book-now-btn" type="button">Book Now</button>
+  </header>
 
-      <div class="fare-comparison-209">
-        <div class="frame-210">
-          <div class="tailored-comfort-211">Tailored Comfort</div>
-          <div class="choose-your-fare-tier-212">Choose Your Fare Tier</div>
-        </div>
-        <div class="frame-213">
-          <div class="frame-214">
-            <div class="frame-215">
-              <div class="economy-lite-216">Economy Lite</div>
-              <div class="499-217" data-price-kzt="244510">$499</div>
-            </div>
-            <div class="divider-218">
-            </div>
-            <div class="frame-219">
-              <div class="frame-220">
-                <div class="check-circle-221">
-                  <svg class="vector-222" viewBox="0 0 13.33 13.33" xmlns="http://www.w3.org/2000/svg"><path d="M14.18 5.14C14.07 4.59 13.54 4.25 13 4.36C12.46 4.47 12.11 4.99 12.22 5.54L13.2 5.34L14.18 5.14ZM9.5 1.76C9.98 2.03 10.59 1.87 10.86 1.39C11.14 0.91 10.98 0.3 10.5 0.03L10 0.89L9.5 1.76ZM5.37 5.29C4.98 4.9 4.35 4.9 3.96 5.29C3.57 5.69 3.57 6.32 3.96 6.71L4.67 6L5.37 5.29ZM6.67 8L5.96 8.71L6.67 9.42L7.37 8.71L6.67 8ZM14.04 2.04C14.43 1.65 14.43 1.02 14.04 0.63C13.65 0.24 13.02 0.24 12.62 0.63L13.33 1.34L14.04 2.04ZM13.2 5.34L12.22 5.54C12.48 6.81 12.29 8.13 11.7 9.28L12.58 9.74L13.47 10.2C14.28 8.64 14.53 6.85 14.18 5.14L13.2 5.34ZM12.58 9.74L11.7 9.28C11.1 10.43 10.13 11.34 8.94 11.86L9.34 12.77L9.74 13.69C11.35 12.99 12.66 11.75 13.47 10.2L12.58 9.74ZM9.34 12.77L8.94 11.86C7.75 12.38 6.42 12.47 5.17 12.13L4.91 13.1L4.64 14.06C6.34 14.52 8.13 14.39 9.74 13.69L9.34 12.77ZM4.91 13.1L5.17 12.13C3.92 11.79 2.83 11.03 2.07 9.98L1.26 10.56L0.45 11.15C1.47 12.57 2.95 13.6 4.64 14.06L4.91 13.1ZM1.26 10.56L2.07 9.98C1.31 8.93 0.94 7.65 1.01 6.35L0.01 6.3L-0.99 6.24C-1.09 7.99 -0.58 9.72 0.45 11.15L1.26 10.56ZM0.01 6.3L1.01 6.35C1.08 5.06 1.59 3.83 2.46 2.87L1.72 2.2L0.98 1.53C-0.2 2.83 -0.89 4.49 -0.99 6.24L0.01 6.3ZM1.72 2.2L2.46 2.87C3.33 1.91 4.5 1.27 5.78 1.07L5.63 0.08L5.47 -0.91C3.74 -0.63 2.15 0.22 0.98 1.53L1.72 2.2ZM5.63 0.08L5.78 1.07C7.07 0.87 8.38 1.11 9.5 1.76L10 0.89L10.5 0.03C8.98 -0.85 7.21 -1.18 5.47 -0.91L5.63 0.08ZM4.67 6L3.96 6.71L5.96 8.71L6.67 8L7.37 7.29L5.37 5.29L4.67 6ZM6.67 8L7.37 8.71L14.04 2.04L13.33 1.34L12.62 0.63L5.96 7.29L6.67 8Z" fill="#06b6d4"/></svg>
-                </div>
-                <div class="carry-on-baggage-8kg-223">Carry-on baggage (8kg)</div>
-              </div>
-              <div class="frame-224">
-                <div class="check-circle-225">
-                  <svg class="vector-226" viewBox="0 0 13.33 13.33" xmlns="http://www.w3.org/2000/svg"><path d="M14.18 5.14C14.07 4.59 13.54 4.25 13 4.36C12.46 4.47 12.11 4.99 12.22 5.54L13.2 5.34L14.18 5.14ZM9.5 1.76C9.98 2.03 10.59 1.87 10.86 1.39C11.14 0.91 10.98 0.3 10.5 0.03L10 0.89L9.5 1.76ZM5.37 5.29C4.98 4.9 4.35 4.9 3.96 5.29C3.57 5.69 3.57 6.32 3.96 6.71L4.67 6L5.37 5.29ZM6.67 8L5.96 8.71L6.67 9.42L7.37 8.71L6.67 8ZM14.04 2.04C14.43 1.65 14.43 1.02 14.04 0.63C13.65 0.24 13.02 0.24 12.62 0.63L13.33 1.34L14.04 2.04ZM13.2 5.34L12.22 5.54C12.48 6.81 12.29 8.13 11.7 9.28L12.58 9.74L13.47 10.2C14.28 8.64 14.53 6.85 14.18 5.14L13.2 5.34ZM12.58 9.74L11.7 9.28C11.1 10.43 10.13 11.34 8.94 11.86L9.34 12.77L9.74 13.69C11.35 12.99 12.66 11.75 13.47 10.2L12.58 9.74ZM9.34 12.77L8.94 11.86C7.75 12.38 6.42 12.47 5.17 12.13L4.91 13.1L4.64 14.06C6.34 14.52 8.13 14.39 9.74 13.69L9.34 12.77ZM4.91 13.1L5.17 12.13C3.92 11.79 2.83 11.03 2.07 9.98L1.26 10.56L0.45 11.15C1.47 12.57 2.95 13.6 4.64 14.06L4.91 13.1ZM1.26 10.56L2.07 9.98C1.31 8.93 0.94 7.65 1.01 6.35L0.01 6.3L-0.99 6.24C-1.09 7.99 -0.58 9.72 0.45 11.15L1.26 10.56ZM0.01 6.3L1.01 6.35C1.08 5.06 1.59 3.83 2.46 2.87L1.72 2.2L0.98 1.53C-0.2 2.83 -0.89 4.49 -0.99 6.24L0.01 6.3ZM1.72 2.2L2.46 2.87C3.33 1.91 4.5 1.27 5.78 1.07L5.63 0.08L5.47 -0.91C3.74 -0.63 2.15 0.22 0.98 1.53L1.72 2.2ZM5.63 0.08L5.78 1.07C7.07 0.87 8.38 1.11 9.5 1.76L10 0.89L10.5 0.03C8.98 -0.85 7.21 -1.18 5.47 -0.91L5.63 0.08ZM4.67 6L3.96 6.71L5.96 8.71L6.67 8L7.37 7.29L5.37 5.29L4.67 6ZM6.67 8L7.37 8.71L14.04 2.04L13.33 1.34L12.62 0.63L5.96 7.29L6.67 8Z" fill="#06b6d4"/></svg>
-                </div>
-                <div class="standard-seating-selection-227">Standard seating selection</div>
-              </div>
-              <div class="frame-228">
-                <div class="check-circle-229">
-                  <svg class="vector-230" viewBox="0 0 13.33 13.33" xmlns="http://www.w3.org/2000/svg"><path d="M14.18 5.14C14.07 4.59 13.54 4.25 13 4.36C12.46 4.47 12.11 4.99 12.22 5.54L13.2 5.34L14.18 5.14ZM9.5 1.76C9.98 2.03 10.59 1.87 10.86 1.39C11.14 0.91 10.98 0.3 10.5 0.03L10 0.89L9.5 1.76ZM5.37 5.29C4.98 4.9 4.35 4.9 3.96 5.29C3.57 5.69 3.57 6.32 3.96 6.71L4.67 6L5.37 5.29ZM6.67 8L5.96 8.71L6.67 9.42L7.37 8.71L6.67 8ZM14.04 2.04C14.43 1.65 14.43 1.02 14.04 0.63C13.65 0.24 13.02 0.24 12.62 0.63L13.33 1.34L14.04 2.04ZM13.2 5.34L12.22 5.54C12.48 6.81 12.29 8.13 11.7 9.28L12.58 9.74L13.47 10.2C14.28 8.64 14.53 6.85 14.18 5.14L13.2 5.34ZM12.58 9.74L11.7 9.28C11.1 10.43 10.13 11.34 8.94 11.86L9.34 12.77L9.74 13.69C11.35 12.99 12.66 11.75 13.47 10.2L12.58 9.74ZM9.34 12.77L8.94 11.86C7.75 12.38 6.42 12.47 5.17 12.13L4.91 13.1L4.64 14.06C6.34 14.52 8.13 14.39 9.74 13.69L9.34 12.77ZM4.91 13.1L5.17 12.13C3.92 11.79 2.83 11.03 2.07 9.98L1.26 10.56L0.45 11.15C1.47 12.57 2.95 13.6 4.64 14.06L4.91 13.1ZM1.26 10.56L2.07 9.98C1.31 8.93 0.94 7.65 1.01 6.35L0.01 6.3L-0.99 6.24C-1.09 7.99 -0.58 9.72 0.45 11.15L1.26 10.56ZM0.01 6.3L1.01 6.35C1.08 5.06 1.59 3.83 2.46 2.87L1.72 2.2L0.98 1.53C-0.2 2.83 -0.89 4.49 -0.99 6.24L0.01 6.3ZM1.72 2.2L2.46 2.87C3.33 1.91 4.5 1.27 5.78 1.07L5.63 0.08L5.47 -0.91C3.74 -0.63 2.15 0.22 0.98 1.53L1.72 2.2ZM5.63 0.08L5.78 1.07C7.07 0.87 8.38 1.11 9.5 1.76L10 0.89L10.5 0.03C8.98 -0.85 7.21 -1.18 5.47 -0.91L5.63 0.08ZM4.67 6L3.96 6.71L5.96 8.71L6.67 8L7.37 7.29L5.37 5.29L4.67 6ZM6.67 8L7.37 8.71L14.04 2.04L13.33 1.34L12.62 0.63L5.96 7.29L6.67 8Z" fill="#06b6d4"/></svg>
-                </div>
-                <div class="eco-friendly-onboard-snacks-231">Eco-friendly onboard snacks</div>
-              </div>
-              <div class="frame-232">
-                <div class="check-circle-233">
-                  <svg class="vector-234" viewBox="0 0 13.33 13.33" xmlns="http://www.w3.org/2000/svg"><path d="M14.18 5.14C14.07 4.59 13.54 4.25 13 4.36C12.46 4.47 12.11 4.99 12.22 5.54L13.2 5.34L14.18 5.14ZM9.5 1.76C9.98 2.03 10.59 1.87 10.86 1.39C11.14 0.91 10.98 0.3 10.5 0.03L10 0.89L9.5 1.76ZM5.37 5.29C4.98 4.9 4.35 4.9 3.96 5.29C3.57 5.69 3.57 6.32 3.96 6.71L4.67 6L5.37 5.29ZM6.67 8L5.96 8.71L6.67 9.42L7.37 8.71L6.67 8ZM14.04 2.04C14.43 1.65 14.43 1.02 14.04 0.63C13.65 0.24 13.02 0.24 12.62 0.63L13.33 1.34L14.04 2.04ZM13.2 5.34L12.22 5.54C12.48 6.81 12.29 8.13 11.7 9.28L12.58 9.74L13.47 10.2C14.28 8.64 14.53 6.85 14.18 5.14L13.2 5.34ZM12.58 9.74L11.7 9.28C11.1 10.43 10.13 11.34 8.94 11.86L9.34 12.77L9.74 13.69C11.35 12.99 12.66 11.75 13.47 10.2L12.58 9.74ZM9.34 12.77L8.94 11.86C7.75 12.38 6.42 12.47 5.17 12.13L4.91 13.1L4.64 14.06C6.34 14.52 8.13 14.39 9.74 13.69L9.34 12.77ZM4.91 13.1L5.17 12.13C3.92 11.79 2.83 11.03 2.07 9.98L1.26 10.56L0.45 11.15C1.47 12.57 2.95 13.6 4.64 14.06L4.91 13.1ZM1.26 10.56L2.07 9.98C1.31 8.93 0.94 7.65 1.01 6.35L0.01 6.3L-0.99 6.24C-1.09 7.99 -0.58 9.72 0.45 11.15L1.26 10.56ZM0.01 6.3L1.01 6.35C1.08 5.06 1.59 3.83 2.46 2.87L1.72 2.2L0.98 1.53C-0.2 2.83 -0.89 4.49 -0.99 6.24L0.01 6.3ZM1.72 2.2L2.46 2.87C3.33 1.91 4.5 1.27 5.78 1.07L5.63 0.08L5.47 -0.91C3.74 -0.63 2.15 0.22 0.98 1.53L1.72 2.2ZM5.63 0.08L5.78 1.07C7.07 0.87 8.38 1.11 9.5 1.76L10 0.89L10.5 0.03C8.98 -0.85 7.21 -1.18 5.47 -0.91L5.63 0.08ZM4.67 6L3.96 6.71L5.96 8.71L6.67 8L7.37 7.29L5.37 5.29L4.67 6ZM6.67 8L7.37 8.71L14.04 2.04L13.33 1.34L12.62 0.63L5.96 7.29L6.67 8Z" fill="#06b6d4"/></svg>
-                </div>
-                <div class="delayed-refund-capability-ch-235">Delayed refund capability (charges apply)</div>
-              </div>
-            </div>
-            <div class="frame-236">
-              <div class="select-lite-237">Select Lite</div>
-            </div>
-          </div>
-          <div class="frame-238">
-            <div class="frame-239">
-              <div class="economy-flex-240">Economy Flex</div>
-              <div class="580-241" data-price-kzt="284200">$580</div>
-            </div>
-            <div class="divider-242">
-            </div>
-            <div class="frame-243">
-              <div class="frame-244">
-                <div class="check-circle-245">
-                  <svg class="vector-246" viewBox="0 0 13.33 13.33" xmlns="http://www.w3.org/2000/svg"><path d="M14.18 5.14C14.07 4.59 13.54 4.25 13 4.36C12.46 4.47 12.11 4.99 12.22 5.54L13.2 5.34L14.18 5.14ZM9.5 1.76C9.98 2.03 10.59 1.87 10.86 1.39C11.14 0.91 10.98 0.3 10.5 0.03L10 0.89L9.5 1.76ZM5.37 5.29C4.98 4.9 4.35 4.9 3.96 5.29C3.57 5.69 3.57 6.32 3.96 6.71L4.67 6L5.37 5.29ZM6.67 8L5.96 8.71L6.67 9.42L7.37 8.71L6.67 8ZM14.04 2.04C14.43 1.65 14.43 1.02 14.04 0.63C13.65 0.24 13.02 0.24 12.62 0.63L13.33 1.34L14.04 2.04ZM13.2 5.34L12.22 5.54C12.48 6.81 12.29 8.13 11.7 9.28L12.58 9.74L13.47 10.2C14.28 8.64 14.53 6.85 14.18 5.14L13.2 5.34ZM12.58 9.74L11.7 9.28C11.1 10.43 10.13 11.34 8.94 11.86L9.34 12.77L9.74 13.69C11.35 12.99 12.66 11.75 13.47 10.2L12.58 9.74ZM9.34 12.77L8.94 11.86C7.75 12.38 6.42 12.47 5.17 12.13L4.91 13.1L4.64 14.06C6.34 14.52 8.13 14.39 9.74 13.69L9.34 12.77ZM4.91 13.1L5.17 12.13C3.92 11.79 2.83 11.03 2.07 9.98L1.26 10.56L0.45 11.15C1.47 12.57 2.95 13.6 4.64 14.06L4.91 13.1ZM1.26 10.56L2.07 9.98C1.31 8.93 0.94 7.65 1.01 6.35L0.01 6.3L-0.99 6.24C-1.09 7.99 -0.58 9.72 0.45 11.15L1.26 10.56ZM0.01 6.3L1.01 6.35C1.08 5.06 1.59 3.83 2.46 2.87L1.72 2.2L0.98 1.53C-0.2 2.83 -0.89 4.49 -0.99 6.24L0.01 6.3ZM1.72 2.2L2.46 2.87C3.33 1.91 4.5 1.27 5.78 1.07L5.63 0.08L5.47 -0.91C3.74 -0.63 2.15 0.22 0.98 1.53L1.72 2.2ZM5.63 0.08L5.78 1.07C7.07 0.87 8.38 1.11 9.5 1.76L10 0.89L10.5 0.03C8.98 -0.85 7.21 -1.18 5.47 -0.91L5.63 0.08ZM4.67 6L3.96 6.71L5.96 8.71L6.67 8L7.37 7.29L5.37 5.29L4.67 6ZM6.67 8L7.37 8.71L14.04 2.04L13.33 1.34L12.62 0.63L5.96 7.29L6.67 8Z" fill="#06b6d4"/></svg>
-                </div>
-                <div class="cabin-baggage-12kg-1-checked-247">Cabin baggage (12kg) + 1 Checked bag</div>
-              </div>
-              <div class="frame-248">
-                <div class="check-circle-249">
-                  <svg class="vector-250" viewBox="0 0 13.33 13.33" xmlns="http://www.w3.org/2000/svg"><path d="M14.18 5.14C14.07 4.59 13.54 4.25 13 4.36C12.46 4.47 12.11 4.99 12.22 5.54L13.2 5.34L14.18 5.14ZM9.5 1.76C9.98 2.03 10.59 1.87 10.86 1.39C11.14 0.91 10.98 0.3 10.5 0.03L10 0.89L9.5 1.76ZM5.37 5.29C4.98 4.9 4.35 4.9 3.96 5.29C3.57 5.69 3.57 6.32 3.96 6.71L4.67 6L5.37 5.29ZM6.67 8L5.96 8.71L6.67 9.42L7.37 8.71L6.67 8ZM14.04 2.04C14.43 1.65 14.43 1.02 14.04 0.63C13.65 0.24 13.02 0.24 12.62 0.63L13.33 1.34L14.04 2.04ZM13.2 5.34L12.22 5.54C12.48 6.81 12.29 8.13 11.7 9.28L12.58 9.74L13.47 10.2C14.28 8.64 14.53 6.85 14.18 5.14L13.2 5.34ZM12.58 9.74L11.7 9.28C11.1 10.43 10.13 11.34 8.94 11.86L9.34 12.77L9.74 13.69C11.35 12.99 12.66 11.75 13.47 10.2L12.58 9.74ZM9.34 12.77L8.94 11.86C7.75 12.38 6.42 12.47 5.17 12.13L4.91 13.1L4.64 14.06C6.34 14.52 8.13 14.39 9.74 13.69L9.34 12.77ZM4.91 13.1L5.17 12.13C3.92 11.79 2.83 11.03 2.07 9.98L1.26 10.56L0.45 11.15C1.47 12.57 2.95 13.6 4.64 14.06L4.91 13.1ZM1.26 10.56L2.07 9.98C1.31 8.93 0.94 7.65 1.01 6.35L0.01 6.3L-0.99 6.24C-1.09 7.99 -0.58 9.72 0.45 11.15L1.26 10.56ZM0.01 6.3L1.01 6.35C1.08 5.06 1.59 3.83 2.46 2.87L1.72 2.2L0.98 1.53C-0.2 2.83 -0.89 4.49 -0.99 6.24L0.01 6.3ZM1.72 2.2L2.46 2.87C3.33 1.91 4.5 1.27 5.78 1.07L5.63 0.08L5.47 -0.91C3.74 -0.63 2.15 0.22 0.98 1.53L1.72 2.2ZM5.63 0.08L5.78 1.07C7.07 0.87 8.38 1.11 9.5 1.76L10 0.89L10.5 0.03C8.98 -0.85 7.21 -1.18 5.47 -0.91L5.63 0.08ZM4.67 6L3.96 6.71L5.96 8.71L6.67 8L7.37 7.29L5.37 5.29L4.67 6ZM6.67 8L7.37 8.71L14.04 2.04L13.33 1.34L12.62 0.63L5.96 7.29L6.67 8Z" fill="#06b6d4"/></svg>
-                </div>
-                <div class="advanced-seat-selection-251">Advanced seat selection</div>
-              </div>
-              <div class="frame-252">
-                <div class="check-circle-253">
-                  <svg class="vector-254" viewBox="0 0 13.33 13.33" xmlns="http://www.w3.org/2000/svg"><path d="M14.18 5.14C14.07 4.59 13.54 4.25 13 4.36C12.46 4.47 12.11 4.99 12.22 5.54L13.2 5.34L14.18 5.14ZM9.5 1.76C9.98 2.03 10.59 1.87 10.86 1.39C11.14 0.91 10.98 0.3 10.5 0.03L10 0.89L9.5 1.76ZM5.37 5.29C4.98 4.9 4.35 4.9 3.96 5.29C3.57 5.69 3.57 6.32 3.96 6.71L4.67 6L5.37 5.29ZM6.67 8L5.96 8.71L6.67 9.42L7.37 8.71L6.67 8ZM14.04 2.04C14.43 1.65 14.43 1.02 14.04 0.63C13.65 0.24 13.02 0.24 12.62 0.63L13.33 1.34L14.04 2.04ZM13.2 5.34L12.22 5.54C12.48 6.81 12.29 8.13 11.7 9.28L12.58 9.74L13.47 10.2C14.28 8.64 14.53 6.85 14.18 5.14L13.2 5.34ZM12.58 9.74L11.7 9.28C11.1 10.43 10.13 11.34 8.94 11.86L9.34 12.77L9.74 13.69C11.35 12.99 12.66 11.75 13.47 10.2L12.58 9.74ZM9.34 12.77L8.94 11.86C7.75 12.38 6.42 12.47 5.17 12.13L4.91 13.1L4.64 14.06C6.34 14.52 8.13 14.39 9.74 13.69L9.34 12.77ZM4.91 13.1L5.17 12.13C3.92 11.79 2.83 11.03 2.07 9.98L1.26 10.56L0.45 11.15C1.47 12.57 2.95 13.6 4.64 14.06L4.91 13.1ZM1.26 10.56L2.07 9.98C1.31 8.93 0.94 7.65 1.01 6.35L0.01 6.3L-0.99 6.24C-1.09 7.99 -0.58 9.72 0.45 11.15L1.26 10.56ZM0.01 6.3L1.01 6.35C1.08 5.06 1.59 3.83 2.46 2.87L1.72 2.2L0.98 1.53C-0.2 2.83 -0.89 4.49 -0.99 6.24L0.01 6.3ZM1.72 2.2L2.46 2.87C3.33 1.91 4.5 1.27 5.78 1.07L5.63 0.08L5.47 -0.91C3.74 -0.63 2.15 0.22 0.98 1.53L1.72 2.2ZM5.63 0.08L5.78 1.07C7.07 0.87 8.38 1.11 9.5 1.76L10 0.89L10.5 0.03C8.98 -0.85 7.21 -1.18 5.47 -0.91L5.63 0.08ZM4.67 6L3.96 6.71L5.96 8.71L6.67 8L7.37 7.29L5.37 5.29L4.67 6ZM6.67 8L7.37 8.71L14.04 2.04L13.33 1.34L12.62 0.63L5.96 7.29L6.67 8Z" fill="#06b6d4"/></svg>
-                </div>
-                <div class="fresh-curated-bio-meals-255">Fresh curated bio-meals</div>
-              </div>
-              <div class="frame-256">
-                <div class="check-circle-257">
-                  <svg class="vector-258" viewBox="0 0 13.33 13.33" xmlns="http://www.w3.org/2000/svg"><path d="M14.18 5.14C14.07 4.59 13.54 4.25 13 4.36C12.46 4.47 12.11 4.99 12.22 5.54L13.2 5.34L14.18 5.14ZM9.5 1.76C9.98 2.03 10.59 1.87 10.86 1.39C11.14 0.91 10.98 0.3 10.5 0.03L10 0.89L9.5 1.76ZM5.37 5.29C4.98 4.9 4.35 4.9 3.96 5.29C3.57 5.69 3.57 6.32 3.96 6.71L4.67 6L5.37 5.29ZM6.67 8L5.96 8.71L6.67 9.42L7.37 8.71L6.67 8ZM14.04 2.04C14.43 1.65 14.43 1.02 14.04 0.63C13.65 0.24 13.02 0.24 12.62 0.63L13.33 1.34L14.04 2.04ZM13.2 5.34L12.22 5.54C12.48 6.81 12.29 8.13 11.7 9.28L12.58 9.74L13.47 10.2C14.28 8.64 14.53 6.85 14.18 5.14L13.2 5.34ZM12.58 9.74L11.7 9.28C11.1 10.43 10.13 11.34 8.94 11.86L9.34 12.77L9.74 13.69C11.35 12.99 12.66 11.75 13.47 10.2L12.58 9.74ZM9.34 12.77L8.94 11.86C7.75 12.38 6.42 12.47 5.17 12.13L4.91 13.1L4.64 14.06C6.34 14.52 8.13 14.39 9.74 13.69L9.34 12.77ZM4.91 13.1L5.17 12.13C3.92 11.79 2.83 11.03 2.07 9.98L1.26 10.56L0.45 11.15C1.47 12.57 2.95 13.6 4.64 14.06L4.91 13.1ZM1.26 10.56L2.07 9.98C1.31 8.93 0.94 7.65 1.01 6.35L0.01 6.3L-0.99 6.24C-1.09 7.99 -0.58 9.72 0.45 11.15L1.26 10.56ZM0.01 6.3L1.01 6.35C1.08 5.06 1.59 3.83 2.46 2.87L1.72 2.2L0.98 1.53C-0.2 2.83 -0.89 4.49 -0.99 6.24L0.01 6.3ZM1.72 2.2L2.46 2.87C3.33 1.91 4.5 1.27 5.78 1.07L5.63 0.08L5.47 -0.91C3.74 -0.63 2.15 0.22 0.98 1.53L1.72 2.2ZM5.63 0.08L5.78 1.07C7.07 0.87 8.38 1.11 9.5 1.76L10 0.89L10.5 0.03C8.98 -0.85 7.21 -1.18 5.47 -0.91L5.63 0.08ZM4.67 6L3.96 6.71L5.96 8.71L6.67 8L7.37 7.29L5.37 5.29L4.67 6ZM6.67 8L7.37 8.71L14.04 2.04L13.33 1.34L12.62 0.63L5.96 7.29L6.67 8Z" fill="#06b6d4"/></svg>
-                </div>
-                <div class="unlimited-date-adjustments-w-259">Unlimited date adjustments with no penalty</div>
-              </div>
-            </div>
-            <div class="frame-260">
-              <div class="select-flex-261">Select Flex</div>
-            </div>
-          </div>
-          <div class="frame-262">
-            <div class="frame-263">
-              <div class="business-sanctuary-264">Business Sanctuary</div>
-              <div class="1-250-265" data-price-kzt="612500">$1,250</div>
-            </div>
-            <div class="divider-266">
-            </div>
-            <div class="frame-267">
-              <div class="frame-268">
-                <div class="check-circle-269">
-                  <svg class="vector-270" viewBox="0 0 13.33 13.33" xmlns="http://www.w3.org/2000/svg"><path d="M14.18 5.14C14.07 4.59 13.54 4.25 13 4.36C12.46 4.47 12.11 4.99 12.22 5.54L13.2 5.34L14.18 5.14ZM9.5 1.76C9.98 2.03 10.59 1.87 10.86 1.39C11.14 0.91 10.98 0.3 10.5 0.03L10 0.89L9.5 1.76ZM5.37 5.29C4.98 4.9 4.35 4.9 3.96 5.29C3.57 5.69 3.57 6.32 3.96 6.71L4.67 6L5.37 5.29ZM6.67 8L5.96 8.71L6.67 9.42L7.37 8.71L6.67 8ZM14.04 2.04C14.43 1.65 14.43 1.02 14.04 0.63C13.65 0.24 13.02 0.24 12.62 0.63L13.33 1.34L14.04 2.04ZM13.2 5.34L12.22 5.54C12.48 6.81 12.29 8.13 11.7 9.28L12.58 9.74L13.47 10.2C14.28 8.64 14.53 6.85 14.18 5.14L13.2 5.34ZM12.58 9.74L11.7 9.28C11.1 10.43 10.13 11.34 8.94 11.86L9.34 12.77L9.74 13.69C11.35 12.99 12.66 11.75 13.47 10.2L12.58 9.74ZM9.34 12.77L8.94 11.86C7.75 12.38 6.42 12.47 5.17 12.13L4.91 13.1L4.64 14.06C6.34 14.52 8.13 14.39 9.74 13.69L9.34 12.77ZM4.91 13.1L5.17 12.13C3.92 11.79 2.83 11.03 2.07 9.98L1.26 10.56L0.45 11.15C1.47 12.57 2.95 13.6 4.64 14.06L4.91 13.1ZM1.26 10.56L2.07 9.98C1.31 8.93 0.94 7.65 1.01 6.35L0.01 6.3L-0.99 6.24C-1.09 7.99 -0.58 9.72 0.45 11.15L1.26 10.56ZM0.01 6.3L1.01 6.35C1.08 5.06 1.59 3.83 2.46 2.87L1.72 2.2L0.98 1.53C-0.2 2.83 -0.89 4.49 -0.99 6.24L0.01 6.3ZM1.72 2.2L2.46 2.87C3.33 1.91 4.5 1.27 5.78 1.07L5.63 0.08L5.47 -0.91C3.74 -0.63 2.15 0.22 0.98 1.53L1.72 2.2ZM5.63 0.08L5.78 1.07C7.07 0.87 8.38 1.11 9.5 1.76L10 0.89L10.5 0.03C8.98 -0.85 7.21 -1.18 5.47 -0.91L5.63 0.08ZM4.67 6L3.96 6.71L5.96 8.71L6.67 8L7.37 7.29L5.37 5.29L4.67 6ZM6.67 8L7.37 8.71L14.04 2.04L13.33 1.34L12.62 0.63L5.96 7.29L6.67 8Z" fill="#06b6d4"/></svg>
-                </div>
-                <div class="2-checked-bags-express-prior-271">2 Checked bags + Express priority delivery</div>
-              </div>
-              <div class="frame-272">
-                <div class="check-circle-273">
-                  <svg class="vector-274" viewBox="0 0 13.33 13.33" xmlns="http://www.w3.org/2000/svg"><path d="M14.18 5.14C14.07 4.59 13.54 4.25 13 4.36C12.46 4.47 12.11 4.99 12.22 5.54L13.2 5.34L14.18 5.14ZM9.5 1.76C9.98 2.03 10.59 1.87 10.86 1.39C11.14 0.91 10.98 0.3 10.5 0.03L10 0.89L9.5 1.76ZM5.37 5.29C4.98 4.9 4.35 4.9 3.96 5.29C3.57 5.69 3.57 6.32 3.96 6.71L4.67 6L5.37 5.29ZM6.67 8L5.96 8.71L6.67 9.42L7.37 8.71L6.67 8ZM14.04 2.04C14.43 1.65 14.43 1.02 14.04 0.63C13.65 0.24 13.02 0.24 12.62 0.63L13.33 1.34L14.04 2.04ZM13.2 5.34L12.22 5.54C12.48 6.81 12.29 8.13 11.7 9.28L12.58 9.74L13.47 10.2C14.28 8.64 14.53 6.85 14.18 5.14L13.2 5.34ZM12.58 9.74L11.7 9.28C11.1 10.43 10.13 11.34 8.94 11.86L9.34 12.77L9.74 13.69C11.35 12.99 12.66 11.75 13.47 10.2L12.58 9.74ZM9.34 12.77L8.94 11.86C7.75 12.38 6.42 12.47 5.17 12.13L4.91 13.1L4.64 14.06C6.34 14.52 8.13 14.39 9.74 13.69L9.34 12.77ZM4.91 13.1L5.17 12.13C3.92 11.79 2.83 11.03 2.07 9.98L1.26 10.56L0.45 11.15C1.47 12.57 2.95 13.6 4.64 14.06L4.91 13.1ZM1.26 10.56L2.07 9.98C1.31 8.93 0.94 7.65 1.01 6.35L0.01 6.3L-0.99 6.24C-1.09 7.99 -0.58 9.72 0.45 11.15L1.26 10.56ZM0.01 6.3L1.01 6.35C1.08 5.06 1.59 3.83 2.46 2.87L1.72 2.2L0.98 1.53C-0.2 2.83 -0.89 4.49 -0.99 6.24L0.01 6.3ZM1.72 2.2L2.46 2.87C3.33 1.91 4.5 1.27 5.78 1.07L5.63 0.08L5.47 -0.91C3.74 -0.63 2.15 0.22 0.98 1.53L1.72 2.2ZM5.63 0.08L5.78 1.07C7.07 0.87 8.38 1.11 9.5 1.76L10 0.89L10.5 0.03C8.98 -0.85 7.21 -1.18 5.47 -0.91L5.63 0.08ZM4.67 6L3.96 6.71L5.96 8.71L6.67 8L7.37 7.29L5.37 5.29L4.67 6ZM6.67 8L7.37 8.71L14.04 2.04L13.33 1.34L12.62 0.63L5.96 7.29L6.67 8Z" fill="#06b6d4"/></svg>
-                </div>
-                <div class="full-lie-flat-private-pod-sl-275">Full lie-flat private pod sleep suites</div>
-              </div>
-              <div class="frame-276">
-                <div class="check-circle-277">
-                  <svg class="vector-278" viewBox="0 0 13.33 13.33" xmlns="http://www.w3.org/2000/svg"><path d="M14.18 5.14C14.07 4.59 13.54 4.25 13 4.36C12.46 4.47 12.11 4.99 12.22 5.54L13.2 5.34L14.18 5.14ZM9.5 1.76C9.98 2.03 10.59 1.87 10.86 1.39C11.14 0.91 10.98 0.3 10.5 0.03L10 0.89L9.5 1.76ZM5.37 5.29C4.98 4.9 4.35 4.9 3.96 5.29C3.57 5.69 3.57 6.32 3.96 6.71L4.67 6L5.37 5.29ZM6.67 8L5.96 8.71L6.67 9.42L7.37 8.71L6.67 8ZM14.04 2.04C14.43 1.65 14.43 1.02 14.04 0.63C13.65 0.24 13.02 0.24 12.62 0.63L13.33 1.34L14.04 2.04ZM13.2 5.34L12.22 5.54C12.48 6.81 12.29 8.13 11.7 9.28L12.58 9.74L13.47 10.2C14.28 8.64 14.53 6.85 14.18 5.14L13.2 5.34ZM12.58 9.74L11.7 9.28C11.1 10.43 10.13 11.34 8.94 11.86L9.34 12.77L9.74 13.69C11.35 12.99 12.66 11.75 13.47 10.2L12.58 9.74ZM9.34 12.77L8.94 11.86C7.75 12.38 6.42 12.47 5.17 12.13L4.91 13.1L4.64 14.06C6.34 14.52 8.13 14.39 9.74 13.69L9.34 12.77ZM4.91 13.1L5.17 12.13C3.92 11.79 2.83 11.03 2.07 9.98L1.26 10.56L0.45 11.15C1.47 12.57 2.95 13.6 4.64 14.06L4.91 13.1ZM1.26 10.56L2.07 9.98C1.31 8.93 0.94 7.65 1.01 6.35L0.01 6.3L-0.99 6.24C-1.09 7.99 -0.58 9.72 0.45 11.15L1.26 10.56ZM0.01 6.3L1.01 6.35C1.08 5.06 1.59 3.83 2.46 2.87L1.72 2.2L0.98 1.53C-0.2 2.83 -0.89 4.49 -0.99 6.24L0.01 6.3ZM1.72 2.2L2.46 2.87C3.33 1.91 4.5 1.27 5.78 1.07L5.63 0.08L5.47 -0.91C3.74 -0.63 2.15 0.22 0.98 1.53L1.72 2.2ZM5.63 0.08L5.78 1.07C7.07 0.87 8.38 1.11 9.5 1.76L10 0.89L10.5 0.03C8.98 -0.85 7.21 -1.18 5.47 -0.91L5.63 0.08ZM4.67 6L3.96 6.71L5.96 8.71L6.67 8L7.37 7.29L5.37 5.29L4.67 6ZM6.67 8L7.37 8.71L14.04 2.04L13.33 1.34L12.62 0.63L5.96 7.29L6.67 8Z" fill="#06b6d4"/></svg>
-                </div>
-                <div class="curated-michelin-guided-fine-279">Curated Michelin-guided fine dining</div>
-              </div>
-              <div class="frame-280">
-                <div class="check-circle-281">
-                  <svg class="vector-282" viewBox="0 0 13.33 13.33" xmlns="http://www.w3.org/2000/svg"><path d="M14.18 5.14C14.07 4.59 13.54 4.25 13 4.36C12.46 4.47 12.11 4.99 12.22 5.54L13.2 5.34L14.18 5.14ZM9.5 1.76C9.98 2.03 10.59 1.87 10.86 1.39C11.14 0.91 10.98 0.3 10.5 0.03L10 0.89L9.5 1.76ZM5.37 5.29C4.98 4.9 4.35 4.9 3.96 5.29C3.57 5.69 3.57 6.32 3.96 6.71L4.67 6L5.37 5.29ZM6.67 8L5.96 8.71L6.67 9.42L7.37 8.71L6.67 8ZM14.04 2.04C14.43 1.65 14.43 1.02 14.04 0.63C13.65 0.24 13.02 0.24 12.62 0.63L13.33 1.34L14.04 2.04ZM13.2 5.34L12.22 5.54C12.48 6.81 12.29 8.13 11.7 9.28L12.58 9.74L13.47 10.2C14.28 8.64 14.53 6.85 14.18 5.14L13.2 5.34ZM12.58 9.74L11.7 9.28C11.1 10.43 10.13 11.34 8.94 11.86L9.34 12.77L9.74 13.69C11.35 12.99 12.66 11.75 13.47 10.2L12.58 9.74ZM9.34 12.77L8.94 11.86C7.75 12.38 6.42 12.47 5.17 12.13L4.91 13.1L4.64 14.06C6.34 14.52 8.13 14.39 9.74 13.69L9.34 12.77ZM4.91 13.1L5.17 12.13C3.92 11.79 2.83 11.03 2.07 9.98L1.26 10.56L0.45 11.15C1.47 12.57 2.95 13.6 4.64 14.06L4.91 13.1ZM1.26 10.56L2.07 9.98C1.31 8.93 0.94 7.65 1.01 6.35L0.01 6.3L-0.99 6.24C-1.09 7.99 -0.58 9.72 0.45 11.15L1.26 10.56ZM0.01 6.3L1.01 6.35C1.08 5.06 1.59 3.83 2.46 2.87L1.72 2.2L0.98 1.53C-0.2 2.83 -0.89 4.49 -0.99 6.24L0.01 6.3ZM1.72 2.2L2.46 2.87C3.33 1.91 4.5 1.27 5.78 1.07L5.63 0.08L5.47 -0.91C3.74 -0.63 2.15 0.22 0.98 1.53L1.72 2.2ZM5.63 0.08L5.78 1.07C7.07 0.87 8.38 1.11 9.5 1.76L10 0.89L10.5 0.03C8.98 -0.85 7.21 -1.18 5.47 -0.91L5.63 0.08ZM4.67 6L3.96 6.71L5.96 8.71L6.67 8L7.37 7.29L5.37 5.29L4.67 6ZM6.67 8L7.37 8.71L14.04 2.04L13.33 1.34L12.62 0.63L5.96 7.29L6.67 8Z" fill="#06b6d4"/></svg>
-                </div>
-                <div class="immediate-premium-global-lou-283">Immediate premium Global Lounge entry</div>
-              </div>
-            </div>
-            <div class="frame-284">
-              <div class="select-business-285">Select Business</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="seat-map-preview-section-286">
-        <div class="frame-287">
-          <div class="configure-flight-288">Configure Flight</div>
-          <div class="seat-map-preview-289">Seat Map Preview</div>
-        </div>
-        <div class="airplane-cross-section-290">
-          <div class="frame-291">
-            <div class="frame-292">
-              <div class="rectangle-293">
-              </div>
-              <div class="available-294">Available</div>
-            </div>
-            <div class="frame-295">
-              <div class="rectangle-296">
-              </div>
-              <div class="selected-297">Selected</div>
-            </div>
-            <div class="frame-298">
-              <div class="rectangle-299">
-              </div>
-              <div class="business-suite-300">Business Suite</div>
-            </div>
-            <div class="frame-301">
-              <div class="rectangle-302">
-              </div>
-              <div class="occupied-303">Occupied</div>
-            </div>
-          </div>
-          <div class="frame-304">
-            <div class="frame-305">
-              <div class="row-1-306">Row 1</div>
-              <div class="rectangle-307">
-              </div>
-              <div class="rectangle-308">
-              </div>
-              <div class="aisle-309">
-              </div>
-              <div class="rectangle-310">
-              </div>
-              <div class="rectangle-311">
-              </div>
-            </div>
-            <div class="frame-312">
-              <div class="row-2-313">Row 2</div>
-              <div class="rectangle-314">
-              </div>
-              <div class="rectangle-315">
-              </div>
-              <div class="aisle-316">
-              </div>
-              <div class="rectangle-317">
-              </div>
-              <div class="rectangle-318">
-              </div>
-            </div>
-            <div class="line-319"></div>
-            <div class="frame-320">
-              <div class="row-3-321">Row 3</div>
-              <div class="rectangle-322">
-              </div>
-              <div class="rectangle-323">
-              </div>
-              <div class="rectangle-324">
-              </div>
-              <div class="aisle-325">
-              </div>
-              <div class="rectangle-326">
-              </div>
-              <div class="rectangle-327">
-              </div>
-              <div class="rectangle-328">
-              </div>
-            </div>
-            <div class="frame-329">
-              <div class="row-4-330">Row 4</div>
-              <div class="rectangle-331">
-              </div>
-              <div class="rectangle-332">
-              </div>
-              <div class="rectangle-333">
-              </div>
-              <div class="aisle-334">
-              </div>
-              <div class="rectangle-335">
-              </div>
-              <div class="rectangle-336">
-              </div>
-              <div class="rectangle-337">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="footer-338">
-        <div class="footer-content-339">
-          <div class="footer-brand-col-340">
-            <div class="logo-group-341">
-              <div class="logo-badge-342">
-                <div class="en-343">eN</div>
-              </div>
-              <div class="enair-344">eN<span style="font-weight:300;color:#64748b">Air</span></div>
-            </div>
-            <div class="redefining-next-generation-a-345">Redefining next-generation aerospace with zero-emission flights, AI-powered systems, and next-level luxury. Travel beyond your imagination.</div>
-            <div class="social-icons-346">
-              <div class="frame-347">
-                <div class="instagram-348">
-                  <svg class="vector-349" viewBox="0 0 13.33 13.33" xmlns="http://www.w3.org/2000/svg"><path d="M10.33 2C9.78 2 9.33 2.45 9.33 3C9.33 3.55 9.78 4 10.33 4L10.33 3L10.33 2ZM10.34 4C10.89 4 11.34 3.55 11.34 3C11.34 2.45 10.89 2 10.34 2L10.34 3L10.34 4ZM9.33 6.25L8.34 6.39L9.33 6.25ZM7.09 4L6.94 4.99L7.09 4ZM10.33 3L10.33 4L10.34 4L10.34 3L10.34 2L10.33 2L10.33 3ZM3.33 0L3.33 1L10 1L10 0L10 -1L3.33 -1L3.33 0ZM10 0L10 1C11.29 1 12.33 2.04 12.33 3.33L13.33 3.33L14.33 3.33C14.33 0.94 12.39 -1 10 -1L10 0ZM13.33 3.33L12.33 3.33L12.33 10L13.33 10L14.33 10L14.33 3.33L13.33 3.33ZM13.33 10L12.33 10C12.33 11.29 11.29 12.33 10 12.33L10 13.33L10 14.33C12.39 14.33 14.33 12.39 14.33 10L13.33 10ZM10 13.33L10 12.33L3.33 12.33L3.33 13.33L3.33 14.33L10 14.33L10 13.33ZM3.33 13.33L3.33 12.33C2.04 12.33 1 11.29 1 10L0 10L-1 10C-1 12.39 0.94 14.33 3.33 14.33L3.33 13.33ZM0 10L1 10L1 3.33L0 3.33L-1 3.33L-1 10L0 10ZM0 3.33L1 3.33C1 2.04 2.04 1 3.33 1L3.33 0L3.33 -1C0.94 -1 -1 0.94 -1 3.33L0 3.33ZM9.33 6.25L8.34 6.39C8.4 6.74 8.34 7.1 8.18 7.41L9.06 7.87L9.95 8.33C10.31 7.64 10.44 6.86 10.32 6.1L9.33 6.25ZM9.06 7.87L8.18 7.41C8.01 7.72 7.76 7.97 7.45 8.13L7.89 9.02L8.34 9.91C9.03 9.57 9.6 9.01 9.95 8.33L9.06 7.87ZM7.89 9.02L7.45 8.13C7.13 8.29 6.78 8.34 6.43 8.28L6.27 9.27L6.11 10.26C6.87 10.38 7.66 10.26 8.34 9.91L7.89 9.02ZM6.27 9.27L6.43 8.28C6.08 8.23 5.77 8.07 5.52 7.82L4.81 8.52L4.1 9.23C4.65 9.78 5.35 10.14 6.11 10.26L6.27 9.27ZM4.81 8.52L5.52 7.82C5.27 7.57 5.11 7.25 5.05 6.9L4.06 7.06L3.08 7.22C3.2 7.98 3.56 8.69 4.1 9.23L4.81 8.52ZM4.06 7.06L5.05 6.9C4.99 6.56 5.05 6.2 5.21 5.89L4.31 5.44L3.42 4.99C3.07 5.68 2.95 6.46 3.08 7.22L4.06 7.06ZM4.31 5.44L5.21 5.89C5.36 5.58 5.62 5.32 5.93 5.16L5.47 4.27L5.01 3.38C4.32 3.74 3.77 4.3 3.42 4.99L4.31 5.44ZM5.47 4.27L5.93 5.16C6.24 5 6.59 4.94 6.94 4.99L7.09 4L7.23 3.01C6.47 2.9 5.69 3.03 5.01 3.38L5.47 4.27ZM7.09 4L6.94 4.99C7.29 5.04 7.62 5.21 7.87 5.46L8.58 4.75L9.29 4.05C8.73 3.49 8.01 3.13 7.23 3.01L7.09 4ZM8.58 4.75L7.87 5.46C8.13 5.71 8.29 6.04 8.34 6.39L9.33 6.25L10.32 6.1C10.21 5.32 9.85 4.6 9.29 4.05L8.58 4.75Z" fill="#0f172a"/></svg>
-                </div>
-              </div>
-              <div class="frame-350">
-                <div class="twitter-351">
-                  <svg class="vector-352" viewBox="0 0 13.33 11.34" xmlns="http://www.w3.org/2000/svg"><path d="M13.33 0.01L14.28 0.32L15.17 -2.34L12.8 -0.84L13.33 0.01ZM12 2.27L11.29 1.56L10.93 1.93L11.01 2.43L12 2.27ZM0 10.01L0.05 9.01L-3.56 8.84L-0.55 10.84L0 10.01ZM4 8.67L4.66 9.42L6.02 8.23L4.29 7.71L4 8.67ZM0.67 0.67L1.43 0.03L0.49 -1.09L-0.21 0.19L0.67 0.67ZM6.67 3.34L6.7 4.34L7.9 4.3L7.65 3.13L6.67 3.34ZM11.33 0.81L10.65 1.54L10.94 1.81L11.33 1.81L11.33 0.81ZM13.33 0.01C12.39 -0.31 12.39 -0.31 12.39 -0.31C12.39 -0.31 12.39 -0.31 12.39 -0.31C12.39 -0.31 12.39 -0.31 12.39 -0.31C12.39 -0.31 12.39 -0.31 12.39 -0.31C12.39 -0.31 12.39 -0.31 12.39 -0.31C12.39 -0.31 12.39 -0.31 12.38 -0.31C12.38 -0.3 12.38 -0.29 12.37 -0.27C12.36 -0.24 12.34 -0.19 12.32 -0.13C12.27 -0.01 12.19 0.17 12.1 0.37C11.89 0.79 11.61 1.24 11.29 1.56L12 2.27L12.71 2.98C13.25 2.43 13.64 1.75 13.89 1.25C14.02 1 14.11 0.77 14.18 0.61C14.21 0.52 14.24 0.46 14.25 0.41C14.26 0.38 14.27 0.36 14.27 0.35C14.28 0.34 14.28 0.34 14.28 0.33C14.28 0.33 14.28 0.33 14.28 0.33C14.28 0.32 14.28 0.32 14.28 0.32C14.28 0.32 14.28 0.32 14.28 0.32C14.28 0.32 14.28 0.32 13.33 0.01ZM12 2.27L11.01 2.43C11.95 8.25 5.54 12.48 0.55 9.17L0 10.01L-0.55 10.84C5.92 15.13 14.19 9.62 12.99 2.11L12 2.27ZM0 10.01L-0.05 11C1.65 11.08 3.38 10.55 4.66 9.42L4 8.67L3.34 7.92C2.49 8.67 1.28 9.06 0.05 9.01L0 10.01ZM4 8.67L4.29 7.71C1.55 6.89 0.19 3.65 1.55 1.15L0.67 0.67L-0.21 0.19C-2.19 3.83 -0.22 8.45 3.71 9.63L4 8.67ZM0.67 0.67L-0.1 1.32C1.57 3.29 4.13 4.41 6.7 4.34L6.67 3.34L6.64 2.34C4.67 2.4 2.7 1.52 1.43 0.03L0.67 0.67ZM6.67 3.34L7.65 3.13C7.45 2.2 7.87 1.53 8.49 1.21C9.13 0.87 9.98 0.91 10.65 1.54L11.33 0.81L12.02 0.07C10.69 -1.17 8.91 -1.26 7.56 -0.56C6.2 0.15 5.29 1.68 5.69 3.55L6.67 3.34ZM11.33 0.81L11.33 1.81C11.68 1.81 12.01 1.72 12.28 1.63C12.55 1.53 12.82 1.41 13.05 1.3C13.28 1.19 13.48 1.08 13.62 1C13.7 0.96 13.76 0.92 13.8 0.89C13.82 0.88 13.83 0.87 13.85 0.86C13.85 0.86 13.86 0.86 13.86 0.86C13.86 0.85 13.86 0.85 13.87 0.85C13.87 0.85 13.87 0.85 13.87 0.85C13.87 0.85 13.87 0.85 13.87 0.85C13.87 0.85 13.87 0.85 13.33 0.01C12.8 -0.84 12.8 -0.84 12.8 -0.84C12.8 -0.84 12.8 -0.84 12.8 -0.84C12.8 -0.84 12.8 -0.84 12.8 -0.84C12.8 -0.84 12.8 -0.84 12.8 -0.84C12.8 -0.84 12.8 -0.84 12.79 -0.84C12.79 -0.83 12.78 -0.82 12.76 -0.82C12.73 -0.8 12.68 -0.77 12.63 -0.74C12.51 -0.67 12.35 -0.58 12.17 -0.49C11.99 -0.4 11.8 -0.32 11.64 -0.27C11.46 -0.21 11.36 -0.19 11.33 -0.19L11.33 0.81Z" fill="#0f172a"/></svg>
-                </div>
-              </div>
-              <div class="frame-353">
-                <div class="linkedin-354">
-                  <svg class="vector-355" viewBox="0 0 13.33 12.67" xmlns="http://www.w3.org/2000/svg"><path d="M9.33 4L9.33 3L9.33 4ZM13.33 12.67L13.33 13.67L14.33 13.67L14.33 12.67L13.33 12.67ZM10.67 12.67L9.67 12.67L9.67 13.67L10.67 13.67L10.67 12.67ZM8 12.67L8 13.67L9 13.67L9 12.67L8 12.67ZM5.33 12.67L4.33 12.67L4.33 13.67L5.33 13.67L5.33 12.67ZM0 4.67L0 3.67L-1 3.67L-1 4.67L0 4.67ZM2.67 4.67L3.67 4.67L3.67 3.67L2.67 3.67L2.67 4.67ZM2.67 12.67L2.67 13.67L3.67 13.67L3.67 12.67L2.67 12.67ZM0 12.67L-1 12.67L-1 13.67L0 13.67L0 12.67ZM9.33 4L9.33 5C10.13 5 10.89 5.32 11.46 5.88L12.16 5.17L12.87 4.46C11.93 3.53 10.66 3 9.33 3L9.33 4ZM12.16 5.17L11.46 5.88C12.02 6.44 12.33 7.2 12.33 8L13.33 8L14.33 8C14.33 6.67 13.81 5.4 12.87 4.46L12.16 5.17ZM13.33 8L12.33 8L12.33 12.67L13.33 12.67L14.33 12.67L14.33 8L13.33 8ZM13.33 12.67L13.33 11.67L10.67 11.67L10.67 12.67L10.67 13.67L13.33 13.67L13.33 12.67ZM10.67 12.67L11.67 12.67L11.67 8L10.67 8L9.67 8L9.67 12.67L10.67 12.67ZM10.67 8L11.67 8C11.67 7.38 11.42 6.79 10.98 6.35L10.28 7.06L9.57 7.76C9.63 7.83 9.67 7.91 9.67 8L10.67 8ZM10.28 7.06L10.98 6.35C10.55 5.91 9.95 5.67 9.33 5.67L9.33 6.67L9.33 7.67C9.42 7.67 9.51 7.7 9.57 7.76L10.28 7.06ZM9.33 6.67L9.33 5.67C8.72 5.67 8.12 5.91 7.68 6.35L8.39 7.06L9.1 7.76C9.16 7.7 9.25 7.67 9.33 7.67L9.33 6.67ZM8.39 7.06L7.68 6.35C7.25 6.79 7 7.38 7 8L8 8L9 8C9 7.91 9.04 7.83 9.1 7.76L8.39 7.06ZM8 8L7 8L7 12.67L8 12.67L9 12.67L9 8L8 8ZM8 12.67L8 11.67L5.33 11.67L5.33 12.67L5.33 13.67L8 13.67L8 12.67ZM5.33 12.67L6.33 12.67L6.33 8L5.33 8L4.33 8L4.33 12.67L5.33 12.67ZM5.33 8L6.33 8C6.33 7.2 6.65 6.44 7.21 5.88L6.51 5.17L5.8 4.46C4.86 5.4 4.33 6.67 4.33 8L5.33 8ZM6.51 5.17L7.21 5.88C7.78 5.32 8.54 5 9.33 5L9.33 4L9.33 3C8.01 3 6.74 3.53 5.8 4.46L6.51 5.17ZM0 4.67L0 5.67L2.67 5.67L2.67 4.67L2.67 3.67L0 3.67L0 4.67ZM2.67 4.67L1.67 4.67L1.67 12.67L2.67 12.67L3.67 12.67L3.67 4.67L2.67 4.67ZM2.67 12.67L2.67 11.67L0 11.67L0 12.67L0 13.67L2.67 13.67L2.67 12.67ZM0 12.67L1 12.67L1 4.67L0 4.67L-1 4.67L-1 12.67L0 12.67ZM2.67 1.33L1.67 1.33C1.67 1.52 1.52 1.67 1.33 1.67L1.33 2.67L1.33 3.67C2.62 3.67 3.67 2.62 3.67 1.33L2.67 1.33ZM1.33 2.67L1.33 1.67C1.15 1.67 1 1.52 1 1.33L0 1.33L-1 1.33C-1 2.62 0.04 3.67 1.33 3.67L1.33 2.67ZM0 1.33L1 1.33C1 1.15 1.15 1 1.33 1L1.33 0L1.33 -1C0.04 -1 -1 0.04 -1 1.33L0 1.33ZM1.33 0L1.33 1C1.52 1 1.67 1.15 1.67 1.33L2.67 1.33L3.67 1.33C3.67 0.04 2.62 -1 1.33 -1L1.33 0Z" fill="#0f172a"/></svg>
-                </div>
-              </div>
-              <div class="frame-356">
-                <div class="youtube-357">
-                  <svg class="vector-358" viewBox="0 0 13.36 9.42" xmlns="http://www.w3.org/2000/svg"><path d="M0.35 8.04L-0.63 8.25L-0.62 8.28L-0.62 8.31L0.35 8.04ZM0.35 1.38L-0.62 1.11L-0.62 1.14L-0.63 1.17L0.35 1.38ZM1.28 0.44L1.12 -0.54L1.07 -0.53L1.02 -0.52L1.28 0.44ZM12.08 0.44L12.35 -0.52L12.3 -0.53L12.25 -0.54L12.08 0.44ZM13.02 1.38L13.99 1.17L13.99 1.14L13.98 1.11L13.02 1.38ZM13.02 8.04L13.98 8.31L13.99 8.28L13.99 8.25L13.02 8.04ZM12.08 8.98L12.25 9.96L12.3 9.95L12.35 9.94L12.08 8.98ZM1.28 8.98L1.02 9.94L1.07 9.95L1.12 9.96L1.28 8.98ZM5.35 6.71L4.35 6.71L4.35 8.48L5.86 7.57L5.35 6.71ZM8.68 4.71L9.2 5.57L10.63 4.71L9.2 3.85L8.68 4.71ZM5.35 2.71L5.86 1.85L4.35 0.94L4.35 2.71L5.35 2.71ZM0.35 8.04L1.33 7.84C0.89 5.78 0.89 3.65 1.33 1.58L0.35 1.38L-0.63 1.17C-1.12 3.5 -1.12 5.92 -0.63 8.25L0.35 8.04ZM0.35 1.38L1.31 1.64C1.33 1.59 1.36 1.54 1.4 1.49L0.69 0.79L-0.01 0.08C-0.3 0.37 -0.51 0.72 -0.62 1.11L0.35 1.38ZM0.69 0.79L1.4 1.49C1.44 1.45 1.49 1.42 1.55 1.41L1.28 0.44L1.02 -0.52C0.63 -0.41 0.27 -0.21 -0.01 0.08L0.69 0.79ZM1.28 0.44L1.45 1.43C4.91 0.86 8.45 0.86 11.92 1.43L12.08 0.44L12.25 -0.54C8.56 -1.15 4.8 -1.15 1.12 -0.54L1.28 0.44ZM12.08 0.44L11.82 1.41C11.87 1.42 11.92 1.45 11.97 1.49L12.67 0.79L13.38 0.08C13.09 -0.21 12.74 -0.41 12.35 -0.52L12.08 0.44ZM12.67 0.79L11.97 1.49C12.01 1.54 12.04 1.59 12.05 1.64L13.02 1.38L13.98 1.11C13.87 0.72 13.67 0.37 13.38 0.08L12.67 0.79ZM13.02 1.38L12.04 1.58C12.47 3.65 12.47 5.78 12.04 7.84L13.02 8.04L13.99 8.25C14.49 5.92 14.49 3.5 13.99 1.17L13.02 1.38ZM13.02 8.04L12.05 7.78C12.04 7.83 12.01 7.89 11.97 7.93L12.67 8.63L13.38 9.34C13.67 9.05 13.87 8.7 13.98 8.31L13.02 8.04ZM12.67 8.63L11.97 7.93C11.92 7.97 11.87 8 11.82 8.01L12.08 8.98L12.35 9.94C12.74 9.83 13.09 9.63 13.38 9.34L12.67 8.63ZM12.08 8.98L11.92 7.99C8.45 8.56 4.91 8.56 1.45 7.99L1.28 8.98L1.12 9.96C4.8 10.57 8.56 10.57 12.25 9.96L12.08 8.98ZM1.28 8.98L1.55 8.01C1.49 8 1.44 7.97 1.4 7.93L0.69 8.63L-0.01 9.34C0.27 9.63 0.63 9.83 1.02 9.94L1.28 8.98ZM0.69 8.63L1.4 7.93C1.36 7.89 1.33 7.83 1.31 7.78L0.35 8.04L-0.62 8.31C-0.51 8.7 -0.3 9.05 -0.01 9.34L0.69 8.63ZM5.35 6.71L5.86 7.57L9.2 5.57L8.68 4.71L8.17 3.85L4.83 5.85L5.35 6.71ZM8.68 4.71L9.2 3.85L5.86 1.85L5.35 2.71L4.83 3.57L8.17 5.57L8.68 4.71ZM5.35 2.71L4.35 2.71L4.35 6.71L5.35 6.71L6.35 6.71L6.35 2.71L5.35 2.71Z" fill="#0f172a"/></svg>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="frame-359">
-            <div class="company-360">Company</div>
-            <div class="frame-361">
-              <div class="about-us-362">About Us</div>
-              <div class="fleet-details-363">Fleet Details</div>
-              <div class="sustainability-364">Sustainability</div>
-              <div class="careers-365">Careers</div>
-              <div class="pressroom-366">Pressroom</div>
-            </div>
-          </div>
-          <div class="frame-367">
-            <div class="travel-options-368">Travel Options</div>
-            <div class="frame-369">
-              <div class="destinations-370">Destinations</div>
-              <div class="corporate-travel-371">Corporate Travel</div>
-              <div class="global-lounge-network-372">Global Lounge Network</div>
-              <div class="loyalty-programs-373">Loyalty Programs</div>
-              <div class="partner-flights-374">Partner Flights</div>
-            </div>
-          </div>
-          <div class="frame-375">
-            <div class="support-376">Support</div>
-            <div class="frame-377">
-              <div class="help-center-378">Help Center</div>
-              <div class="baggage-claim-379">Baggage Claim</div>
-              <div class="flight-status-380">Flight Status</div>
-              <div class="refund-policies-381">Refund Policies</div>
-              <div class="accessible-travel-382">Accessible Travel</div>
-            </div>
-          </div>
-          <div class="frame-383">
-            <div class="connect-384">Connect</div>
-            <div class="frame-385">
-              <div class="contact-support-386">Contact Support</div>
-              <div class="corporate-offices-387">Corporate Offices</div>
-              <div class="affiliate-inquiries-388">Affiliate Inquiries</div>
-              <div class="strategic-alliances-389">Strategic Alliances</div>
-              <div class="developer-api-390">Developer API</div>
-            </div>
-          </div>
-        </div>
-        <div class="footer-bottom-391">
-          <div class="divider-392">
-          </div>
-          <div class="frame-393">
-            <div class="2026-enair-technologies-inc--394">© 2026 eNAir Technologies Inc. All rights reserved.</div>
-            <div class="frame-395">
-              <div class="privacy-policy-396">Privacy Policy</div>
-              <div class="terms-of-use-397">Terms of Use</div>
-              <div class="regulatory-filings-398">Regulatory Filings</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+  <main>
+    <section class="hero">
+      <div class="eyebrow">Instant flight booking</div>
+      <h1>Book your next journey</h1>
+    </section>
 
-    <!-- СКРИПТ ДЛЯ ПОЛУЧЕНИЯ ДАННЫХ ИЗ БАЗЫ ДАННЫХ И ОТРИСОВКИ КАРТОЧЕК -->
-    <script>
+    <section class="results">
+      <div class="results-header">
+        <h2>Available Outbound Flights</h2>
+        <p>Loaded from Database 🚀</p>
+      </div>
+      <div id="flights-container" class="flights-list"></div>
+    </section>
+  </main>
+
+  <script>
     async function loadFlightsFromDB() {
-        try {
-            const response = await fetch('http://127.0.0.1:5000/api/flights');
-            if (!response.ok) throw new Error(`Flight request failed (${response.status})`);
-            const flights = await response.json();
+      const container = document.getElementById('flights-container');
+      if (!container) return;
 
-            const container = document.getElementById('flights-container');
-            if (!container) return;
-            container.replaceChildren();
+      try {
+        const response = await fetch('/api/flights', {
+          method: 'GET',
+          headers: { 'Accept': 'application/json' }
+        });
 
-            if (!Array.isArray(flights)) throw new Error('Flight API returned an invalid response');
-            if (flights.length === 0) {
-                const emptyState = document.createElement('p');
-                emptyState.className = 'enair-db-flight-empty';
-                emptyState.textContent = 'No outbound flights are currently available.';
-                container.appendChild(emptyState);
-                return;
-            }
-
-            flights.forEach(flight => {
-                const card = document.createElement('div');
-                card.className = 'enair-db-flight-card';
-
-                const details = document.createElement('div');
-                details.className = 'enair-db-flight-details';
-                const number = document.createElement('h3');
-                number.textContent = `Flight ${flight.flight_number || ''}`;
-                const route = document.createElement('p');
-                route.textContent = `${flight.departure_city || 'Origin'} → ${flight.arrival_city || 'Destination'}`;
-                const times = document.createElement('p');
-                times.textContent = `Departure: ${flight.departure_time || '—'} · Arrival: ${flight.arrival_time || '—'}`;
-                const seats = document.createElement('p');
-                seats.textContent = `Seats available: ${flight.seats_available != null ? flight.seats_available : '—'}`;
-                details.append(number, route, times, seats);
-
-                const action = document.createElement('div');
-                action.className = 'enair-db-flight-action';
-                const price = document.createElement('strong');
-                price.className = 'enair-db-flight-price';
-                price.dataset.priceKzt = String(flight.price);
-                const select = document.createElement('button');
-                select.type = 'button';
-                select.className = 'enair-db-flight-select';
-                select.textContent = 'Select';
-                select.addEventListener('click', () => {
-                    if (typeof window.enairSelectDatabaseFlight !== 'function') {
-                        console.error('The eNAir booking handler is unavailable.');
-                        return;
-                    }
-                    window.enairSelectDatabaseFlight(flight);
-                });
-                action.append(price, select);
-                card.append(details, action);
-                container.appendChild(card);
-            });
-            if (typeof window.enairUpdateCurrencyPrices === 'function') {
-                window.enairUpdateCurrencyPrices(container);
-            }
-
-        } catch (error) {
-            console.error('Unable to load flights from the Flask API:', error);
-            const container = document.getElementById('flights-container');
-            if (container) {
-                container.replaceChildren();
-                const errorMessage = document.createElement('p');
-                errorMessage.className = 'enair-db-flight-error';
-                errorMessage.textContent = 'Unable to load flights. Check that the Flask server is running and try again.';
-                container.appendChild(errorMessage);
-            }
+        if (!response.ok) {
+          throw new Error(`Flight request failed with status ${response.status}`);
         }
+
+        const flights = await response.json();
+        container.innerHTML = '';
+
+        if (!Array.isArray(flights) || flights.length === 0) {
+          const empty = document.createElement('p');
+          empty.className = 'error-box';
+          empty.textContent = 'No outbound flights are currently available.';
+          container.appendChild(empty);
+          return;
+        }
+
+        flights.forEach((flight) => {
+          const card = document.createElement('article');
+          card.className = 'flight-card';
+
+          const left = document.createElement('div');
+          left.innerHTML = `
+            <div class="flight-route">${flight.departure_city || 'Origin'} → ${flight.arrival_city || 'Destination'}</div>
+            <div class="flight-meta">
+              Flight ${flight.flight_number || '—'}<br>
+              Departure: ${flight.departure_time || '—'}<br>
+              Arrival: ${flight.arrival_time || '—'}<br>
+              Seats available: ${flight.seats_available != null ? flight.seats_available : '—'}
+            </div>
+          `;
+
+          const priceBox = document.createElement('div');
+          priceBox.className = 'flight-price-box';
+
+          const price = document.createElement('span');
+          price.className = 'flight-price';
+          price.textContent = `$${Number(flight.price || 0).toFixed(0)}`;
+
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'flight-select';
+          button.textContent = 'Select';
+          button.addEventListener('click', () => {
+            if (typeof window.enairSelectDatabaseFlight === 'function') {
+              window.enairSelectDatabaseFlight(flight);
+              return;
+            }
+            console.log('Selected flight:', flight);
+          });
+
+          priceBox.appendChild(price);
+          priceBox.appendChild(button);
+          card.appendChild(left);
+          card.appendChild(priceBox);
+          container.appendChild(card);
+        });
+      } catch (error) {
+        console.error('Unable to load flights from the Flask API:', error);
+        container.innerHTML = '';
+        const msg = document.createElement('p');
+        msg.className = 'error-box';
+        msg.textContent = 'Unable to load flights. Check that the Flask server is running and try again.';
+        container.appendChild(msg);
+      }
     }
 
+    window.enairSelectDatabaseFlight = function (flight) {
+      console.log('Selected DB flight:', flight);
+      alert(`Selected ${flight.flight_number} for ${flight.departure_city} → ${flight.arrival_city}`);
+    };
+
     document.addEventListener('DOMContentLoaded', loadFlightsFromDB);
-    </script>
-    <script src="navigation.js"></script>
+  </script>
+
+  <script src="navigation.js"></script>
 </body>
 </html>
