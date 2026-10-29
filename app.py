@@ -1,4 +1,5 @@
 import os
+from datetime import datetime, timedelta
 from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 import psycopg2
@@ -12,7 +13,7 @@ CORS(app)  # Разрешаем запросы с фронтенда
 def get_db():
     # Проверяем, есть ли облачная строка подключения от Render/Neon
     database_url = os.environ.get("DATABASE_URL")
-    
+
     if database_url:
         # Если запущено в облаке (Render), подключаемся к Neon.tech
         return psycopg2.connect(database_url)
@@ -41,11 +42,12 @@ def send_static(path):
 def serve_images(filename):
     return send_from_directory('.', filename)
 
-# Автоматическое создание таблицы пользователей при старте (если ее еще нет)
+# Автоматическое создание таблиц при старте (если их еще нет)
 def init_db():
     try:
         conn = get_db()
         cur = conn.cursor()
+
         cur.execute("""
             CREATE TABLE IF NOT EXISTS users (
                 id SERIAL PRIMARY KEY,
@@ -56,19 +58,57 @@ def init_db():
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         """)
+
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS flights (
+                id SERIAL PRIMARY KEY,
+                flight_number VARCHAR(50) NOT NULL,
+                departure_city VARCHAR(120) NOT NULL,
+                arrival_city VARCHAR(120) NOT NULL,
+                departure_time TIMESTAMP NOT NULL,
+                arrival_time TIMESTAMP NOT NULL,
+                price NUMERIC(10,2) NOT NULL DEFAULT 0,
+                seats_available INTEGER NOT NULL DEFAULT 0
+            );
+        """)
+
         cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS name VARCHAR(255);")
         cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS password VARCHAR(255);")
         cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS password_hash VARCHAR(255);")
         cur.execute("ALTER TABLE users ALTER COLUMN name DROP NOT NULL;")
         cur.execute("ALTER TABLE users ALTER COLUMN password DROP NOT NULL;")
+
+        # База должна всегда быть готова для страницы поиска рейсов
+        now = datetime.utcnow()
+        demo_flights = [
+            ("EN-101", "New York", "London", now + timedelta(days=14), now + timedelta(days=14, hours=8), 2450.00, 120),
+            ("EN-108", "New York", "London", now + timedelta(days=15), now + timedelta(days=15, hours=8, minutes=30), 2548.00, 98),
+            ("EN-214", "New York", "Paris", now + timedelta(days=18), now + timedelta(days=18, hours=7, minutes=0), 2352.00, 85),
+            ("EN-305", "London", "Athens", now + timedelta(days=12), now + timedelta(days=12, hours=5, minutes=20), 420.00, 64),
+        ]
+
+        for flight_number, dep_city, arr_city, dep_time, arr_time, price, seats in demo_flights:
+            cur.execute(
+                "SELECT 1 FROM flights WHERE flight_number = %s LIMIT 1;",
+                (flight_number,)
+            )
+            if cur.fetchone() is None:
+                cur.execute(
+                    """
+                    INSERT INTO flights (flight_number, departure_city, arrival_city, departure_time, arrival_time, price, seats_available)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s);
+                    """,
+                    (flight_number, dep_city, arr_city, dep_time, arr_time, price, seats)
+                )
+
         conn.commit()
         cur.close()
         conn.close()
-        print("Таблица пользователей проверена/создана успешно!")
+        print("Таблицы пользователей и рейсов проверены/созданы успешно!")
     except Exception:
-        app.logger.exception("Unable to initialize the users table")
+        app.logger.exception("Unable to initialize the database tables")
 
-# API по��учения рейсов
+# API получения рейсов
 @app.route("/api/flights")
 def flights():
     conn = get_db()
@@ -193,7 +233,7 @@ def book_flight():
     try:
         conn = get_db()
         cur = conn.cursor()
-        
+
         cur.execute("SELECT id FROM users WHERE id = %s;", (user_id,))
         if not cur.fetchone():
             cur.close()
