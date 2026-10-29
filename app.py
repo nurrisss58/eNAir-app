@@ -36,6 +36,11 @@ def home():
 def send_static(path):
     return send_from_directory('.', path)
 
+# Совместимость с путями вида /images/filename.jpg, когда файлы лежат в корне проекта
+@app.route('/images/<path:filename>')
+def serve_images(filename):
+    return send_from_directory('.', filename)
+
 # Автоматическое создание таблицы пользователей при старте (если ее еще нет)
 def init_db():
     try:
@@ -63,7 +68,7 @@ def init_db():
     except Exception:
         app.logger.exception("Unable to initialize the users table")
 
-# API получения рейсов
+# API по��учения рейсов
 @app.route("/api/flights")
 def flights():
     conn = get_db()
