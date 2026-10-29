@@ -135,22 +135,22 @@
       .enair-clickable{cursor:pointer!important;transition:filter .15s,transform .15s,box-shadow .15s}.enair-clickable:hover{filter:brightness(.97);transform:translateY(-1px)}
       .enair-clickable:focus-visible{outline:2px solid #06b6d4;outline-offset:3px}
       .enair-selected{box-shadow:0 0 0 2px #06b6d4 inset!important}
-      .enair-toast{position:fixed;z-index:99999;left:50%;bottom:28px;transform:translateX(-50%);background:#0f172a;color:#fff;padding:12px 18px;border-radius:12px;font:600 14px system-ui;box-shadow:0 10px 30px rgba(15,23,42,.25)}
+      .enair-toast{position:fixed;z-index:99999;left:50%;bottom:28px;transform:translateX(-50%);background:#0f172a;color:#fff;padding:12px 18px;border-radius:12px;font:600 14px system-ui;box-shadow:0 12px 35px rgba(15,23,42,.25)}
       .enair-modal-backdrop{position:fixed;inset:0;z-index:99990;background:rgba(15,23,42,.38);backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;padding:20px}
-      .enair-modal{width:min(560px,calc(100vw - 40px));max-height:80vh;overflow:auto;background:#fff;border-radius:20px;padding:24px;box-shadow:0 24px 80px rgba(15,23,42,.28);font:14px system-ui;color:#0f172a}
+      .enair-modal{width:min(560px,calc(100vw - 40px));max-height:80vh;overflow:auto;background:#fff;border-radius:20px;padding:24px;box-shadow:0 24px 80px rgba(15,23,42,.28);font:14px system-ui;}
       .enair-modal h3{margin:0 0 6px;font-size:22px}.enair-modal p{color:#64748b;margin:0 0 18px}.enair-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
       .enair-choice{border:1px solid #e2e8f0;background:#fff;border-radius:12px;padding:12px;text-align:left;cursor:pointer}.enair-choice:hover{border-color:#06b6d4;background:#f8fafc}
-      .enair-choice strong{display:block}.enair-choice span{color:#64748b;font-size:12px}.enair-modal-close{float:right;border:0;background:#f1f5f9;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:18px}
-      .enair-filter-hidden{display:none!important}.enair-card-hover{transition:transform .18s,box-shadow .18s}.enair-card-hover:hover{transform:translateY(-3px);box-shadow:0 14px 35px rgba(15,23,42,.10)}
+      .enair-choice strong{display:block}.enair-choice span{color:#64748b;font-size:12px}.enair-modal-close{float:right;border:0;background:#f1f5f9;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:22px}
+      .enair-filter-hidden{display:none!important}.enair-card-hover{transition:transform .18s,box-shadow .18s}.enair-card-hover:hover{transform:translateY(-3px);box-shadow:0 14px 35px rgba(15,23,42,.11)}
       .enair-editable{cursor:text!important}.enair-editable:focus{outline:2px solid #06b6d4;border-radius:4px}
-      .enair-confirm{position:fixed;inset:0;z-index:100000;background:rgba(15,23,42,.55);display:flex;align-items:center;justify-content:center;padding:20px}.enair-confirm-card{background:#fff;border-radius:24px;padding:32px;max-width:480px;text-align:center;box-shadow:0 30px 100px rgba(0,0,0,.3)}
-      .enair-confirm-icon{width:64px;height:64px;border-radius:50%;background:#ecfeff;color:#0891b2;display:grid;place-items:center;font-size:30px;margin:0 auto 16px}.enair-confirm-card h2{margin:0 0 8px}.enair-confirm-card p{color:#64748b;line-height:1.6}.enair-confirm-card button{border:0;background:#0f172a;color:#fff;border-radius:10px;padding:11px 18px;cursor:pointer}
+      .enair-confirm{position:fixed;inset:0;z-index:100000;background:rgba(15,23,42,.55);display:flex;align-items:center;justify-content:center;padding:20px}.enair-confirm-card{background:#fff;border-radius:24px;padding:26px;max-width:420px;width:min(100%,420px);text-align:center;box-shadow:0 28px 90px rgba(15,23,42,.33)}
+      .enair-confirm-icon{width:64px;height:64px;border-radius:50%;background:#ecfeff;color:#0891b2;display:grid;place-items:center;font-size:30px;margin:0 auto 16px}.enair-confirm-card h2{margin:0 0 8px;font:800 28px 'Outfit',sans-serif}.enair-confirm-card p{color:#64748b;line-height:1.6;margin:0}
       .enair-auth-actions{display:flex;align-items:center;gap:10px;flex-shrink:0;margin-left:12px;font:500 13px 'Geist',sans-serif}
       .enair-auth-email{max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#334155}
       .enair-auth-trigger,.enair-auth-logout{border:1px solid #e2e8f0;border-radius:999px;background:#fff;color:#0f172a;padding:10px 14px;font:600 13px 'Geist',sans-serif;white-space:nowrap;cursor:pointer}
       .enair-auth-trigger{background:#0f172a;color:#fff;border-color:#0f172a}
       .enair-auth-backdrop{position:fixed;inset:0;z-index:100001;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(15,23,42,.56);backdrop-filter:blur(6px)}
-      .enair-auth-dialog{position:relative;width:min(420px,100%);box-sizing:border-box;border:1px solid #e2e8f0;border-radius:24px;background:#fff;padding:32px;box-shadow:0 28px 90px rgba(15,23,42,.28);font:14px 'Geist',sans-serif;color:#0f172a}
+      .enair-auth-dialog{position:relative;width:min(420px,100%);box-sizing:border-box;border:1px solid #e2e8f0;border-radius:24px;background:#fff;padding:32px;box-shadow:0 28px 90px rgba(15,23,42,.28)}
       .enair-auth-close{position:absolute;top:16px;right:16px;width:36px;height:36px;border:0;border-radius:50%;background:#f1f5f9;color:#334155;font-size:22px;cursor:pointer}
       .enair-auth-dialog h2{margin:0 40px 8px 0;font:700 26px 'Outfit',sans-serif}
       .enair-auth-description{margin:0 0 22px;color:#64748b;line-height:1.5}
@@ -170,7 +170,7 @@
       .menu-mobile{display:none;border:1px solid #e2e8f0;border-radius:10px;background:#fff;padding:10px 14px;color:#0f172a;font:600 14px 'Geist',sans-serif;cursor:pointer}
       @media(max-width:900px){.enair-auth-actions{margin-left:0}.enair-auth-email{max-width:120px}}
       @media(max-width:900px){.enair-header-controls{margin-left:0}.menu-mobile{display:block}.navigation-2>[class^="book-now-"]{display:none!important}}
-      @media(max-width:480px){.enair-header-controls{gap:4px}.enair-auth-actions{gap:4px}.enair-auth-trigger,.enair-auth-logout{padding:8px;font-size:12px}.enair-auth-email{max-width:56px}.enair-currency-select{padding:8px 6px;font-size:11px}.enair-auth-dialog{padding:26px 20px}.menu-mobile{padding:8px 10px!important;font-size:12px!important}}
+      @media(max-width:480px){.enair-header-controls{gap:4px}.enair-auth-actions{gap:4px}.enair-auth-trigger,.enair-auth-logout{padding:8px;font-size:12px}.enair-auth-email{max-width:56px}.enair-[...]
       @media(max-width:360px){.sticky-navigation-2 .logo-group-3,.navigation-2 .brand-3{width:40px!important}.sticky-navigation-2 .enair-6,.navigation-2 .wordmark-6{display:none!important}}
       @media(max-width:900px){
         body{overflow-x:clip}
@@ -186,7 +186,7 @@
     `; document.head.appendChild(s);
   }
 
-  function toast(msg) { const old = document.querySelector('.enair-toast'); if(old) old.remove(); const t=document.createElement('div'); t.className='enair-toast'; t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),2200); }
+  function toast(msg) { const old = document.querySelector('.enair-toast'); if(old) old.remove(); const t=document.createElement('div'); t.className='enair-toast'; t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),2600); }
   function clickable(el, handler) {
     if(!el || el.dataset.enairBound) return; el.dataset.enairBound='1'; el.classList.add('enair-clickable');
     if (!/^(A|BUTTON|INPUT|SELECT|TEXTAREA)$/.test(el.tagName)) {
@@ -398,7 +398,7 @@
       message.textContent = '';
       const requestMode = mode;
       try {
-        const response = await fetch(`http://127.0.0.1:5000/api/${requestMode}`, {
+        const response = await fetch(`/api/${requestMode}`, {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({email: emailInput.value.trim(), password: passwordInput.value})
@@ -517,21 +517,21 @@
 
   function airportPicker(target){
     const wrap=document.createElement('div'); const grid=document.createElement('div'); grid.className='enair-grid';
-    airports.forEach(([code,name])=>{const b=document.createElement('button');b.className='enair-choice';b.innerHTML=`<strong>${code}</strong><span>${name}</span>`;b.onclick=()=>{state[target]=code;state[target+'Name']=name;save();close();updateDisplayedRoute();toast(`${target==='from'?'From':'To'}: ${code}`)};grid.append(b)});
+    airports.forEach(([code,name])=>{const b=document.createElement('button');b.className='enair-choice';b.innerHTML=`<strong>${code}</strong><span>${name}</span>`;b.onclick=()=>{state[target]=code;state[target==='from'?'fromName':'toName']=name;save();updateDisplayedRoute();back.remove();};grid.appendChild(b);});
     const back=modal(target==='from'?'Choose departure airport':'Choose destination airport','Select an airport for your search',grid); const close=()=>back.remove();
     back.querySelector('.enair-modal-close').onclick=close; return back;
   }
   function datePicker(kind){
     const body=document.createElement('div');
     const current=(kind==='departure'?state.departureDate:state.returnDate);
-    body.innerHTML=`<label style="display:block;margin-bottom:14px">${kind==='departure'?'Departure':'Return'} date<br><input id="edate" type="date" value="${current}" min="${dateValue(today)}" style="margin-top:8px;width:100%;box-sizing:border-box;padding:12px;border:1px solid #e2e8f0;border-radius:10px"></label><button id="savedate" style="border:0;background:#0f172a;color:#fff;border-radius:10px;padding:12px 18px">Apply date</button>`;
+    body.innerHTML=`<label style="display:block;margin-bottom:14px">${kind==='departure'?'Departure':'Return'} date<br><input id="edate" type="date" value="${current}" min="${dateValue(today)}" style="width:100%;margin-top:8px;padding:10px;border:1px solid #dbe4ec;border-radius:10px"></label><button id="savedate" type="button" style="width:100%;margin-top:12px;padding:10px;border:0;border-radius:10px;background:linear-gradient(110deg,#06b6d4,#8b5cf6);color:#fff;font:700 14px system-ui;cursor:pointer">Save date</button>`;
     const back=modal(`${kind==='departure'?'Departure':'Return'} date`,'Choose a date for your trip',body);
-    body.querySelector('#savedate').onclick=()=>{const value=body.querySelector('#edate').value;if(!value){toast('Choose a valid date first');return}if(kind==='departure'){state.departureDate=value;if(state.returnDate<value)state.returnDate=dateValue(addDays(new Date(`${value}T00:00:00`),7))}else{if(value<state.departureDate){toast('Return date must follow departure');return}state.returnDate=value}save();updateDisplayedDates();back.remove();toast('Date updated')};
+    body.querySelector('#savedate').onclick=()=>{const value=body.querySelector('#edate').value;if(!value){toast('Choose a valid date first');return}if(kind==='departure'){state.departureDate=value;}else{state.returnDate=value;}save();updateDisplayedDates();back.remove();};
   }
   function passengerPicker(){
-    const body=document.createElement('div'); body.innerHTML=`<div style="display:grid;gap:12px"><label>Adults <input id="ea" type="number" min="1" max="9" value="${state.adults}" style="float:right;width:80px"></label><label>Children <input id="ec" type="number" min="0" max="9" value="${state.children}" style="float:right;width:80px"></label><label>Cabin <select id="eac" style="float:right"><option>Economy</option><option>Premium</option><option>Business</option><option>First</option></select></label><button id="savep" style="margin-top:8px;border:0;background:#0f172a;color:#fff;border-radius:10px;padding:12px">Apply</button></div>`;
+    const body=document.createElement('div'); body.innerHTML=`<div style="display:grid;gap:12px"><label>Adults <input id="ea" type="number" min="1" max="9" value="${state.adults}" style="float:right;width:96px;padding:8px;border-radius:8px;border:1px solid #dbe4ec"></label><label>Children <input id="ec" type="number" min="0" max="9" value="${state.children}" style="float:right;width:96px;padding:8px;border-radius:8px;border:1px solid #dbe4ec"></label><label>Cabin<select id="eac" style="float:right;width:140px;padding:8px;border-radius:8px;border:1px solid #dbe4ec"><option>Economy</option><option>Premium</option><option>Business</option><option>First</option></select></label></div><button id="savep" type="button" style="width:100%;margin-top:16px;padding:10px;border:0;border-radius:10px;background:linear-gradient(110deg,#06b6d4,#8b5cf6);color:#fff;font:700 14px system-ui;cursor:pointer">Save passengers</button>`;
     body.querySelector('#eac').value=state.cabin; const back=modal('Passengers & cabin','Choose who is travelling and your cabin',body);
-    body.querySelector('#savep').onclick=()=>{state.adults=+body.querySelector('#ea').value||1;state.children=+body.querySelector('#ec').value||0;state.cabin=body.querySelector('#eac').value;save();back.remove();updateDisplayedRoute();toast('Passenger settings updated')};
+    body.querySelector('#savep').onclick=()=>{state.adults=+body.querySelector('#ea').value||1;state.children=+body.querySelector('#ec').value||0;state.cabin=body.querySelector('#eac').value;save();updateDisplayedRoute();back.remove();};
   }
   function updateDisplayedRoute(){
     const fromText=`${state.from} · ${state.fromName}`, toText=`${state.to} · ${state.toName}`;
@@ -668,7 +668,7 @@
     if(searchButton)clickable(searchButton,()=>go(routes.search));
     const from=find('JFK · New York, USA')||find('JFK · New York'); const to=find('LHR · London, UK')||find('LHR · London'); const pax=find('2 Adults · Economy')||find('2 Adults · Economy Flex')||find('2 Adults');
     clickable(from,()=>airportPicker('from')); clickable(to,()=>airportPicker('to')); clickable(pax,passengerPicker);
-    document.querySelectorAll('[class*="arrow-left-right"],[class*="arrow-up-down"]').forEach(el=>clickable(el,()=>{[state.from,state.to]=[state.to,state.from];[state.fromName,state.toName]=[state.toName,state.fromName];save();updateDisplayedRoute();toast('Departure and destination swapped')}));
+    document.querySelectorAll('[class*="arrow-left-right"],[class*="arrow-up-down"]').forEach(el=>clickable(el,()=>{[state.from,state.to]=[state.to,state.from];[state.fromName,state.toName]=[state.toName,state.fromName];save();updateDisplayedRoute();toast('Route updated');}));
     updateDisplayedDates(); bindDateFields();
     const tripOptions=[['Round-trip','.frame-52'],['One-way','.frame-54']];
     const cabinOptions=[['Economy','.frame-57'],['Premium','.frame-59'],['Business','.frame-61'],['First','.frame-63']];
@@ -812,7 +812,7 @@
   }
   function destinationsPage(){
     const imageMap={
-      'Rome':'images/9134a0cea18f0b0e423a89ff57c3ce28b6d7f591.jpg','Kyoto':'images/a22cfbb76932af50c4f91e0b1590bbed057d9cf0.jpg','New York':'images/61cb408922fc1a437c78374d6412f9ba8ec7b287.jpg','Sydney':'images/79af2a35c0154e8b361f34a4475f13194c5270c9.jpg','Barcelona':'images/8e5213b1360978f7e11e35e857922cdc1d5ee45c.jpg','Singapore':'images/43fef7c1149e5fbd383aefd82f9967f3f38b1495.jpg','Rio de Janeiro':'images/f4771602086106f3a210ef7b4894d6c7d181e915.jpg','Auckland':'images/622f3a0f01074858135b882a69a8aaa73aa57aec.jpg'
+      'Rome':'images/9134a0cea18f0b0e423a89ff57c3ce28b6d7f591.jpg','Kyoto':'images/a22cfbb76932af50c4f91e0b1590bbed057d9cf0.jpg','New York':'images/61cb408922fc1a437c78374d6412f9ba8ec7b287.jpg','[...']
     };
     const meta={Rome:'Cultural',Kyoto:'Cultural','New York':'City',Singapore:'City',Sydney:'Beach','Rio de Janeiro':'Beach',Auckland:'Adventure',Barcelona:'Cultural'};
     const region={Rome:'Europe',Kyoto:'Asia','New York':'Americas',Singapore:'Asia',Sydney:'Oceania','Rio de Janeiro':'Americas',Auckland:'Oceania',Barcelona:'Europe'};
@@ -887,7 +887,7 @@
       if(!location)return;
       const button=document.createElement('button');button.type='button';button.className='enair-destination-map-city';button.textContent=city;button.dataset.city=city;button.setAttribute('aria-pressed','false');
       button.addEventListener('click',()=>selectMapCity(city));mapPicker.append(button);
-      const label=cards.find(item=>item.city===city)?.el.querySelector('[class^="rome-"],[class^="kyoto-"],[class^="new-york-"],[class^="sydney-"],[class^="barcelona-"],[class^="singapore-"],[class^="rio-de-janeiro-"],[class^="auckland-"]');
+      const label=cards.find(item=>item.city===city)?.el.querySelector('[class^="rome-"],[class^="kyoto-"],[class^="new-york-"],[class^="sydney-"],[class^="barcelona-"],[class^="singapore-"],[class^="rio-"]');
       if(label){label.title=`Show ${location.name} on the map`;clickable(label,()=>selectMapCity(city));}
     });
     selectMapCity('Kyoto');
@@ -909,14 +909,12 @@
   }
 
   function searchPage(){
-    // Turn the exported fields into controls.
     findAll('Round-trip').forEach(el=>clickable(el,()=>{state.trip='Round-trip';save();toast('Round-trip selected')}));
     findAll('One-way').forEach(el=>clickable(el,()=>{state.trip='One-way';save();toast('One-way selected')}));
     const fields=[['JFK · New York, USA','from'],['LHR · London, UK','to']]; fields.forEach(([t,k])=>{const el=find(t);clickable(el,()=>airportPicker(k))});
     const cabin=find('Economy  ·  Premium  ·  Business  ·  First'); if(cabin)clickable(cabin,passengerPicker);
     updateDisplayedDates(); bindDateFields();
-    // Make every flight row selectable, not only its text button.
-    document.querySelectorAll('[class^="flight-option-"]').forEach((row,i)=>{row.classList.add('enair-card-hover');clickable(row,()=>requireAuthentication(()=>{state.flight=flights[i%flights.length];save();go(routes.fare)}));});
+    document.querySelectorAll('[class^="flight-option-"]').forEach((row,i)=>{row.classList.add('enair-card-hover');clickable(row,()=>requireAuthentication(()=>{state.flight=flights[i%flights.length];save();go(routes.fare);}));});
     updateDisplayedRoute();
   }
 
@@ -933,12 +931,11 @@
     updateCurrencyPrices();
     ['Select Lite','Select Flex','Select Business'].forEach(t=>bindText(t,()=>{state.fare=t.replace('Select ','');save();go(routes.passengers)}));
     findAll('Choose fare').forEach(el=>clickable(el,()=>go(routes.passengers)));
-    // Make the entire fare card selectable.
-    document.querySelectorAll('[class^="card-"]').forEach(card=>{const txt=clean(card.textContent);const tier=['Lite','Flex','Business'].find(x=>txt.includes(x));if(tier){card.classList.add('enair-card-hover');clickable(card,()=>{state.fare=tier;save();go(routes.passengers)})}});
+    document.querySelectorAll('[class^="card-"]').forEach(card=>{const txt=clean(card.textContent);const tier=['Lite','Flex','Business'].find(x=>txt.includes(x));if(tier){card.classList.add('enair-card-hover');clickable(card,()=>{state.fare=tier;save();go(routes.passengers);});}});
   }
 
   function makeEditableValues(){
-    document.querySelectorAll('[class^="value-"]').forEach(el=>{if(clean(el.textContent) && !el.querySelector('svg') && !el.dataset.enairEditable){el.dataset.enairEditable='1';el.classList.add('enair-editable');el.title='Click to edit';el.addEventListener('click',()=>{el.contentEditable='true';el.focus()});el.addEventListener('blur',()=>{el.contentEditable='false';});}});
+    document.querySelectorAll('[class^="value-"]').forEach(el=>{if(clean(el.textContent) && !el.querySelector('svg') && !el.dataset.enairEditable){el.dataset.enairEditable='1';el.classList.add('enair-editable');}});
   }
   function currentPriceBreakdown(){
     const storedPrice=Number(state.flight&&state.flight.price);
@@ -987,7 +984,8 @@
   }
   function completeBooking(){
     const code='EN'+Math.floor(100000+Math.random()*899999); state.confirmation=code; save();
-    const wrap=document.createElement('div');wrap.className='enair-confirm';wrap.innerHTML=`<div class="enair-confirm-card"><div class="enair-confirm-icon">✓</div><h2>Booking confirmed</h2><p>This is a prototype checkout. No real payment was processed.<br><strong>Confirmation: ${code}</strong></p><button>Back to eNAir home</button></div>`;document.body.append(wrap);wrap.querySelector('button').onclick=()=>go(routes.home);
+    const wrap=document.createElement('div');wrap.className='enair-confirm';wrap.innerHTML=`<div class="enair-confirm-card"><div class="enair-confirm-icon">✓</div><h2>Booking confirmed</h2><p>Your confirmation code is <strong>${code}</strong>. Your itinerary is saved in this browser for this prototype.</p></div>`;
+    document.body.append(wrap); setTimeout(()=>wrap.remove(),4000);
   }
 
   function fleetPage(){
@@ -1004,7 +1002,6 @@
   }
   function loyaltyPage(){
     bindText('Join eNAir Rewards',()=>go(routes.enrollment));
-    // Tier cards show a useful detail panel when clicked.
     ['Silver','Gold','Platinum'].forEach(t=>findAll(t).forEach(el=>clickable(el,()=>toast(`${t} tier selected`))));
     const controls=[
       ['.new-york-jfk-154','airport','JFK','Departure airport'],
@@ -1130,17 +1127,17 @@
       'Privacy Policy':'This prototype does not collect or transmit personal information. Booking details are stored only in this browser so the sample booking flow can keep your selections between pages.',
       'Terms of Use':'eNAir is a demonstration website. Fares, schedules, route availability, and service descriptions are illustrative and are not a real offer to transport passengers.',
       'Sustainability':'eNAir is designed around hydrogen-hybrid aircraft, lower-emission operations, and AI-assisted routing. The sustainability figures shown on this prototype are concept illustrations.',
-      'Careers':'Explore future roles in aerospace engineering, sustainable aviation, customer experience, and digital product development. This prototype is not connected to a live recruitment system.',
-      'Pressroom':'The eNAir pressroom would provide company announcements, media resources, leadership contacts, and the latest fleet and route news. For this prototype, contact the team through About & Contact.',
-      'Press Room':'The eNAir pressroom would provide company announcements, media resources, leadership contacts, and the latest fleet and route news. For this prototype, contact the team through About & Contact.',
+      'Careers':'Explore future roles in aerospace engineering, sustainable aviation, customer experience, and digital product development. This prototype is not connected to a live recruitment pipeline.',
+      'Pressroom':'The eNAir pressroom would provide company announcements, media resources, leadership contacts, and the latest fleet and route news. For this prototype, contact the team through the About page.',
+      'Press Room':'The eNAir pressroom would provide company announcements, media resources, leadership contacts, and the latest fleet and route news. For this prototype, contact the team through the About page.',
       'Corporate Travel':'Plan business travel with flexible fares, consolidated passenger details, and itinerary support. Start a sample booking with Book Flights.',
-      'Global Lounge Network':'eNAir lounge access is planned around quiet work areas, private rest spaces, and curated dining at major network hubs. Availability depends on fare and destination.',
-      'Partner Flights':'Partner-flight information would include eligible airline connections, transfer guidance, and through-ticket options. This prototype currently demonstrates eNAir-operated routes only.',
+      'Global Lounge Network':'eNAir lounge access is planned around quiet work areas, private rest spaces, and curated dining at major network hubs. Availability depends on fare and destination planning.',
+      'Partner Flights':'Partner-flight information would include eligible airline connections, transfer guidance, and through-ticket options. This prototype currently demonstrates eNAir-operated flights only.',
       'Help Center':'Find help with booking changes, travel documents, check-in, and account access. For personal assistance in this prototype, use the Contact Support link.',
       'Flight Status':'Flight status is not connected to live airline data in this prototype. Choose a flight in the booking flow to see the sample itinerary details.',
       'Baggage Claim':'For a delayed or missing bag, keep your baggage tag and travel itinerary available and contact the arrival airport baggage desk. This prototype does not submit real claims.',
-      'Refund Policies':'Refund eligibility depends on fare conditions, cancellation timing, and applicable passenger-protection rules. Review the selected fare before booking; this prototype does not process real refunds.',
-      'Accessible Travel':'Request mobility assistance, accessible seating, or support for sensory and communication needs before travel. Contact the airline support team in advance so arrangements can be confirmed.',
+      'Refund Policies':'Refund eligibility depends on fare conditions, cancellation timing, and applicable passenger-protection rules. Review the selected fare before booking; this prototype does not process real payments.',
+      'Accessible Travel':'Request mobility assistance, accessible seating, or support for sensory and communication needs before travel. Contact the airline support team in advance so arrangements can be made.',
       'Corporate Offices':'eNAir corporate operations are represented as a global aerospace company in this concept. Contact Support can route general questions to the appropriate team.',
       'Affiliate Inquiries':'Affiliate partners can request information about referral tracking, approved brand materials, and commission terms. No affiliate accounts are active in this prototype.',
       'Strategic Alliances':'Airline, airport, and technology partners can discuss network connectivity, sustainable aviation, and customer-service integrations with the eNAir partnerships team.',
