@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Join eNAir Rewards</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="enair-rewards-enrollment.css">
+</head>
+<body>
+  <main class="enrollment-page">
+    <header class="enrollment-nav">
+      <a class="enrollment-brand" href="enair-homepage.html" aria-label="eNAir home"><span>eN</span> eNAir</a>
+      <a class="enrollment-back" href="enair-loyalty.html">Back to Loyalty</a>
+    </header>
+    <section class="enrollment-content">
+      <div class="enrollment-copy">
+        <p class="enrollment-eyebrow">MEMBERSHIP ENROLLMENT</p>
+        <h1>Your next journey should take you further.</h1>
+        <p class="enrollment-description">Join eNAir Rewards to start earning eNMiles on every trip and unlock thoughtful benefits as you travel.</p>
+        <ul class="enrollment-benefits">
+          <li>Earn miles on every eligible flight</li>
+          <li>Track your progress across membership tiers</li>
+          <li>Explore rewards for future journeys</li>
+        </ul>
+      </div>
+      <form class="enrollment-form">
+        <h2>Create your rewards profile</h2>
+        <p>Your details stay in this browser in this demonstration.</p>
+        <label for="rewards-name">Full name</label>
+        <input id="rewards-name" name="name" type="text" autocomplete="name" placeholder="Your full name" required>
+        <label for="rewards-email">Email address</label>
+        <input id="rewards-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+        <label for="rewards-tier">Preferred membership tier</label>
+        <select id="rewards-tier" name="tier">
+          <option>Silver</option>
+          <option>Gold</option>
+          <option>Platinum</option>
+          <option>Diamond</option>
+        </select>
+        <button type="submit">Create rewards profile</button>
+        <small>This is a demo sign-up; no account is created on a server.</small>
+      </form>
+      <section class="enrollment-success" aria-live="polite" hidden>
+        <span class="enrollment-success-icon" aria-hidden="true">✓</span>
+        <p class="enrollment-eyebrow">WELCOME ABOARD</p>
+        <h2 class="enrollment-success-title">Your rewards profile is ready.</h2>
+        <p class="enrollment-success-copy"></p>
+        <a href="enair-loyalty.html">Explore eNAir Rewards</a>
+      </section>
+    </section>
+    <footer class="enrollment-footer">eNAir Rewards · Sample membership experience</footer>
+  </main>
+  <script src="navigation.js"></script>
+</body>
+</html>

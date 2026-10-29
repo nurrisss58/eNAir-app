@@ -1,0 +1,110 @@
+*{margin:0;padding:0}
+body{width:100%;min-width:320px;background:#fff;-webkit-font-smoothing:antialiased}
+body>div{margin:0 auto}
+img,svg{display:block}
+.nair-high-user-personas-1{position:relative;width:100%;max-width:1440px;min-height:100vh;height:auto;margin:0 auto;background:#f8fafc;overflow:visible;display:flex;flex-direction:column;align-items:flex-start;box-sizing:border-box}
+.navigation-2{position:relative;height:72px;align-self:stretch;flex-shrink:0;background:rgba(255,255,255,0.91);border-bottom:1px solid #e2e8f0;box-sizing:border-box;overflow:hidden;display:flex;flex-direction:row;justify-content:space-between;align-items:center;padding:0px 80px 0px 80px;box-sizing:border-box}
+.brand-3{position:relative;width:147px;flex-shrink:0;overflow:hidden;display:flex;flex-direction:row;align-items:center;gap:12px;box-sizing:border-box}
+.logo-4{position:relative;width:40px;height:40px;flex-shrink:0;border-radius:12px;background:linear-gradient(135deg, #06b6d4 0%, #8b5cf6 100%);overflow:hidden;display:flex;flex-direction:column;justify-content:center;align-items:center;box-sizing:border-box}
+.monogram-5{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:17px;font-weight:800;line-height:21.42px;white-space:nowrap;color:#ffffff}
+.wordmark-6{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:22px;font-weight:400;line-height:28px;white-space:nowrap;color:#0f172a}
+.context-7{position:relative;height:37px;flex-shrink:0;border-radius:100px;background:#f1ebff;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;padding:10px 18px 10px 18px;box-sizing:border-box}
+.label-8{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:17px;white-space:nowrap;color:#8b5cf6}
+.content-9{position:relative;height:891px;align-self:stretch;flex-shrink:0;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:40px;padding:56px 80px 72px 80px;box-sizing:border-box}
+.introduction-10{position:relative;align-self:stretch;flex-shrink:0;overflow:hidden;display:flex;flex-direction:row;justify-content:space-between;align-items:flex-end;box-sizing:border-box}
+.heading-11{position:relative;width:760px;height:153px;flex-shrink:0;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:12px;box-sizing:border-box}
+.eyebrow-12{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:700;line-height:17px;letter-spacing:1.6px;text-transform:uppercase;white-space:nowrap;color:#06b6d4}
+.title-13{position:relative;align-self:stretch;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:48px;font-weight:800;line-height:60.48px;letter-spacing:-1.4px;white-space:pre-wrap;color:#0f172a}
+.description-14{position:relative;width:680px;flex-shrink:0;font-family:'Geist',sans-serif;font-size:17px;font-weight:400;line-height:26px;white-space:pre-wrap;color:#64748b}
+.persona-count-15{position:relative;height:63px;flex-shrink:0;overflow:hidden;display:flex;flex-direction:column;align-items:flex-end;gap:4px;box-sizing:border-box}
+.count-16{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:34px;font-weight:800;line-height:43px;white-space:nowrap;color:#8b5cf6}
+.label-17{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:12px;font-weight:400;line-height:16px;letter-spacing:1.2px;text-transform:uppercase;white-space:nowrap;color:#64748b}
+.persona-cards-18{position:relative;height:570px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;align-items:flex-start;gap:24px;box-sizing:border-box}
+.persona-card-19{position:relative;flex:1 1 0;min-width:0;align-self:stretch;border-radius:24px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;box-shadow:0px 12px 32px 0px rgba(139,92,246,0.07);overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;box-sizing:border-box}
+.profile-20{position:relative;height:244px;align-self:stretch;flex-shrink:0;background:#e6f9fc;overflow:hidden;display:flex;flex-direction:row;align-items:center;gap:24px;padding:28px 28px 28px 28px;box-sizing:border-box}
+.portrait-21{position:relative;width:184px;height:188px;flex-shrink:0;border-radius:16px;background:url("images/32789180795462509a785337183e890cf99a4fe4.jpg") center / cover no-repeat}
+.identity-22{position:relative;height:145px;flex:1 1 0;min-width:0;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:12px;box-sizing:border-box}
+.user-type-23{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:12px;font-weight:700;line-height:16px;letter-spacing:1.4px;text-transform:uppercase;white-space:nowrap;color:#06b6d4}
+.name-24{position:relative;align-self:stretch;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:34px;font-weight:800;line-height:43px;letter-spacing:-0.8px;white-space:pre-wrap;color:#0f172a}
+.age-25{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:15px;font-weight:400;line-height:20px;white-space:nowrap;color:#64748b}
+.tags-26{position:relative;align-self:stretch;flex-shrink:0;overflow:hidden;display:flex;flex-direction:row;align-items:flex-start;gap:8px;flex-wrap:wrap;row-gap:8px;box-sizing:border-box}
+.role-tag-27{position:relative;height:30px;flex-shrink:0;border-radius:100px;background:#ffffff;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;padding:7px 12px 7px 12px;box-sizing:border-box}
+.label-28{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:12px;font-weight:400;line-height:16px;white-space:nowrap;color:#0f172a}
+.role-tag-29{position:relative;height:30px;flex-shrink:0;border-radius:100px;background:#06b6d4;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;padding:7px 12px 7px 12px;box-sizing:border-box}
+.label-30{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:12px;font-weight:400;line-height:16px;white-space:nowrap;color:#ffffff}
+.insights-31{position:relative;flex:1 1 0;min-height:0;align-self:stretch;overflow:hidden;display:flex;flex-direction:row;align-items:flex-start;gap:28px;padding:28px 28px 28px 28px;box-sizing:border-box}
+.goals-32{position:relative;height:135px;flex:1 1 0;min-width:0;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:16px;box-sizing:border-box}
+.section-title-33{position:relative;width:64px;flex-shrink:0;overflow:hidden;display:flex;flex-direction:row;align-items:center;gap:9px;box-sizing:border-box}
+.accent-34{position:relative;width:8px;height:8px;flex-shrink:0;border-radius:50%;background:#06b6d4}
+.goals-35{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:18px;font-weight:400;line-height:23px;white-space:nowrap;color:#0f172a}
+.goal-list-36{position:relative;height:96px;align-self:stretch;flex-shrink:0;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:12px;box-sizing:border-box}
+.list-item-37{position:relative;align-self:stretch;flex-shrink:0;overflow:hidden;display:flex;flex-direction:row;align-items:center;gap:10px;box-sizing:border-box}
+.marker-38{position:relative;width:24px;height:24px;flex-shrink:0;border-radius:12px;background:#e6f9fc;overflow:hidden;display:flex;flex-direction:column;justify-content:center;align-items:center;box-sizing:border-box}
+.symbol-39{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:800;line-height:17px;white-space:nowrap;color:#06b6d4}
+.item-40{position:relative;flex:1 1 0;min-width:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:20px;white-space:pre-wrap;color:#0f172a}
+.list-item-41{position:relative;align-self:stretch;flex-shrink:0;overflow:hidden;display:flex;flex-direction:row;align-items:center;gap:10px;box-sizing:border-box}
+.marker-42{position:relative;width:24px;height:24px;flex-shrink:0;border-radius:12px;background:#e6f9fc;overflow:hidden;display:flex;flex-direction:column;justify-content:center;align-items:center;box-sizing:border-box}
+.symbol-43{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:800;line-height:17px;white-space:nowrap;color:#06b6d4}
+.item-44{position:relative;flex:1 1 0;min-width:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:20px;white-space:pre-wrap;color:#0f172a}
+.list-item-45{position:relative;align-self:stretch;flex-shrink:0;overflow:hidden;display:flex;flex-direction:row;align-items:center;gap:10px;box-sizing:border-box}
+.marker-46{position:relative;width:24px;height:24px;flex-shrink:0;border-radius:12px;background:#e6f9fc;overflow:hidden;display:flex;flex-direction:column;justify-content:center;align-items:center;box-sizing:border-box}
+.symbol-47{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:800;line-height:17px;white-space:nowrap;color:#06b6d4}
+.item-48{position:relative;flex:1 1 0;min-width:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:20px;white-space:pre-wrap;color:#0f172a}
+.divider-49{position:relative;width:1px;align-self:stretch;flex-shrink:0;background:#e2e8f0}
+.pain-points-50{position:relative;height:99px;flex:1 1 0;min-width:0;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:16px;box-sizing:border-box}
+.section-title-51{position:relative;width:105px;flex-shrink:0;overflow:hidden;display:flex;flex-direction:row;align-items:center;gap:9px;box-sizing:border-box}
+.accent-52{position:relative;width:8px;height:8px;flex-shrink:0;border-radius:50%;background:#e25570}
+.pain-points-53{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:18px;font-weight:400;line-height:23px;white-space:nowrap;color:#0f172a}
+.pain-point-list-54{position:relative;height:60px;align-self:stretch;flex-shrink:0;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:12px;box-sizing:border-box}
+.list-item-55{position:relative;align-self:stretch;flex-shrink:0;overflow:hidden;display:flex;flex-direction:row;align-items:center;gap:10px;box-sizing:border-box}
+.marker-56{position:relative;width:24px;height:24px;flex-shrink:0;border-radius:12px;background:#fff0f3;overflow:hidden;display:flex;flex-direction:column;justify-content:center;align-items:center;box-sizing:border-box}
+.symbol-57{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:800;line-height:17px;white-space:nowrap;color:#e25570}
+.item-58{position:relative;flex:1 1 0;min-width:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:20px;white-space:pre-wrap;color:#0f172a}
+.list-item-59{position:relative;align-self:stretch;flex-shrink:0;overflow:hidden;display:flex;flex-direction:row;align-items:center;gap:10px;box-sizing:border-box}
+.marker-60{position:relative;width:24px;height:24px;flex-shrink:0;border-radius:12px;background:#fff0f3;overflow:hidden;display:flex;flex-direction:column;justify-content:center;align-items:center;box-sizing:border-box}
+.symbol-61{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:800;line-height:17px;white-space:nowrap;color:#e25570}
+.item-62{position:relative;flex:1 1 0;min-width:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:20px;white-space:pre-wrap;color:#0f172a}
+.persona-card-63{position:relative;flex:1 1 0;min-width:0;align-self:stretch;border-radius:24px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;box-shadow:0px 12px 32px 0px rgba(139,92,246,0.07);overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;box-sizing:border-box}
+.profile-64{position:relative;height:244px;align-self:stretch;flex-shrink:0;background:#f1ebff;overflow:hidden;display:flex;flex-direction:row;align-items:center;gap:24px;padding:28px 28px 28px 28px;box-sizing:border-box}
+.portrait-65{position:relative;width:184px;height:188px;flex-shrink:0;border-radius:16px;background:url("images/32ac8e1e8b5a2aee899dfd120f10a902439c222e.jpg") center / cover no-repeat}
+.identity-66{position:relative;height:145px;flex:1 1 0;min-width:0;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:12px;box-sizing:border-box}
+.user-type-67{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:12px;font-weight:700;line-height:16px;letter-spacing:1.4px;text-transform:uppercase;white-space:nowrap;color:#8b5cf6}
+.name-68{position:relative;align-self:stretch;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:34px;font-weight:800;line-height:43px;letter-spacing:-0.8px;white-space:pre-wrap;color:#0f172a}
+.age-69{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:15px;font-weight:400;line-height:20px;white-space:nowrap;color:#64748b}
+.tags-70{position:relative;align-self:stretch;flex-shrink:0;overflow:hidden;display:flex;flex-direction:row;align-items:flex-start;gap:8px;flex-wrap:wrap;row-gap:8px;box-sizing:border-box}
+.role-tag-71{position:relative;height:30px;flex-shrink:0;border-radius:100px;background:#ffffff;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;padding:7px 12px 7px 12px;box-sizing:border-box}
+.label-72{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:12px;font-weight:400;line-height:16px;white-space:nowrap;color:#0f172a}
+.role-tag-73{position:relative;height:30px;flex-shrink:0;border-radius:100px;background:#8b5cf6;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;padding:7px 12px 7px 12px;box-sizing:border-box}
+.label-74{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:12px;font-weight:400;line-height:16px;white-space:nowrap;color:#ffffff}
+.insights-75{position:relative;flex:1 1 0;min-height:0;align-self:stretch;overflow:hidden;display:flex;flex-direction:row;align-items:flex-start;gap:28px;padding:28px 28px 28px 28px;box-sizing:border-box}
+.goals-76{position:relative;height:135px;flex:1 1 0;min-width:0;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:16px;box-sizing:border-box}
+.section-title-77{position:relative;width:64px;flex-shrink:0;overflow:hidden;display:flex;flex-direction:row;align-items:center;gap:9px;box-sizing:border-box}
+.accent-78{position:relative;width:8px;height:8px;flex-shrink:0;border-radius:50%;background:#8b5cf6}
+.goals-79{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:18px;font-weight:400;line-height:23px;white-space:nowrap;color:#0f172a}
+.goal-list-80{position:relative;height:96px;align-self:stretch;flex-shrink:0;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:12px;box-sizing:border-box}
+.list-item-81{position:relative;align-self:stretch;flex-shrink:0;overflow:hidden;display:flex;flex-direction:row;align-items:center;gap:10px;box-sizing:border-box}
+.marker-82{position:relative;width:24px;height:24px;flex-shrink:0;border-radius:12px;background:#f1ebff;overflow:hidden;display:flex;flex-direction:column;justify-content:center;align-items:center;box-sizing:border-box}
+.symbol-83{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:800;line-height:17px;white-space:nowrap;color:#8b5cf6}
+.item-84{position:relative;flex:1 1 0;min-width:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:20px;white-space:pre-wrap;color:#0f172a}
+.list-item-85{position:relative;align-self:stretch;flex-shrink:0;overflow:hidden;display:flex;flex-direction:row;align-items:center;gap:10px;box-sizing:border-box}
+.marker-86{position:relative;width:24px;height:24px;flex-shrink:0;border-radius:12px;background:#f1ebff;overflow:hidden;display:flex;flex-direction:column;justify-content:center;align-items:center;box-sizing:border-box}
+.symbol-87{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:800;line-height:17px;white-space:nowrap;color:#8b5cf6}
+.item-88{position:relative;flex:1 1 0;min-width:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:20px;white-space:pre-wrap;color:#0f172a}
+.list-item-89{position:relative;align-self:stretch;flex-shrink:0;overflow:hidden;display:flex;flex-direction:row;align-items:center;gap:10px;box-sizing:border-box}
+.marker-90{position:relative;width:24px;height:24px;flex-shrink:0;border-radius:12px;background:#f1ebff;overflow:hidden;display:flex;flex-direction:column;justify-content:center;align-items:center;box-sizing:border-box}
+.symbol-91{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:800;line-height:17px;white-space:nowrap;color:#8b5cf6}
+.item-92{position:relative;flex:1 1 0;min-width:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:20px;white-space:pre-wrap;color:#0f172a}
+.divider-93{position:relative;width:1px;align-self:stretch;flex-shrink:0;background:#e2e8f0}
+.pain-points-94{position:relative;height:99px;flex:1 1 0;min-width:0;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:16px;box-sizing:border-box}
+.section-title-95{position:relative;width:105px;flex-shrink:0;overflow:hidden;display:flex;flex-direction:row;align-items:center;gap:9px;box-sizing:border-box}
+.accent-96{position:relative;width:8px;height:8px;flex-shrink:0;border-radius:50%;background:#e25570}
+.pain-points-97{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:18px;font-weight:400;line-height:23px;white-space:nowrap;color:#0f172a}
+.pain-point-list-98{position:relative;height:60px;align-self:stretch;flex-shrink:0;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:12px;box-sizing:border-box}
+.list-item-99{position:relative;align-self:stretch;flex-shrink:0;overflow:hidden;display:flex;flex-direction:row;align-items:center;gap:10px;box-sizing:border-box}
+.marker-100{position:relative;width:24px;height:24px;flex-shrink:0;border-radius:12px;background:#fff0f3;overflow:hidden;display:flex;flex-direction:column;justify-content:center;align-items:center;box-sizing:border-box}
+.symbol-101{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:800;line-height:17px;white-space:nowrap;color:#e25570}
+.item-102{position:relative;flex:1 1 0;min-width:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:20px;white-space:pre-wrap;color:#0f172a}
+.list-item-103{position:relative;align-self:stretch;flex-shrink:0;overflow:hidden;display:flex;flex-direction:row;align-items:center;gap:10px;box-sizing:border-box}
+.marker-104{position:relative;width:24px;height:24px;flex-shrink:0;border-radius:12px;background:#fff0f3;overflow:hidden;display:flex;flex-direction:column;justify-content:center;align-items:center;box-sizing:border-box}
+.symbol-105{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:800;line-height:17px;white-space:nowrap;color:#e25570}
+.item-106{position:relative;flex:1 1 0;min-width:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:20px;white-space:pre-wrap;color:#0f172a}

@@ -1,0 +1,90 @@
+*{margin:0;padding:0}
+body{width:100%;min-width:320px;background:#fff;-webkit-font-smoothing:antialiased}
+body>div{margin:0 auto}
+img,svg{display:block}
+.booking-payment-1{position:relative;width:100%;max-width:1440px;min-height:100vh;height:auto;margin:0 auto;background:#f8fafc;overflow:visible;display:flex;flex-direction:column;align-items:flex-start;box-sizing:border-box}
+.navigation-2{position:relative;height:72px;align-self:stretch;flex-shrink:0;background:rgba(255,255,255,0.95);border-bottom:1px solid #e2e8f0;box-sizing:border-box;overflow:hidden;display:flex;flex-direction:row;justify-content:space-between;align-items:center;padding:0px 80px 0px 80px;box-sizing:border-box}
+.brand-3{position:relative;width:108px;flex-shrink:0;overflow:hidden;display:flex;flex-direction:row;align-items:center;gap:10px;box-sizing:border-box}
+.logo-badge-4{position:relative;width:40px;height:40px;flex-shrink:0;border-radius:11px;background:linear-gradient(135deg, #06b6d4 0%, #8b5cf6 100%);overflow:hidden;display:flex;flex-direction:column;justify-content:center;align-items:center;box-sizing:border-box}
+.monogram-5{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:19px;font-weight:800;line-height:24px;white-space:nowrap;color:#ffffff}
+.wordmark-6{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:22px;font-weight:700;line-height:28px;white-space:nowrap;color:#0f172a}
+.links-7{position:relative;width:505px;flex-shrink:0;overflow:hidden;display:flex;flex-direction:row;align-items:flex-start;gap:38px;box-sizing:border-box}
+.link-8{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:500;line-height:18.2px;white-space:nowrap;color:#0f172a}
+.link-9{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:nowrap;color:#8b5cf6}
+.link-10{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:500;line-height:18.2px;white-space:nowrap;color:#0f172a}
+.link-11{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:500;line-height:18.2px;white-space:nowrap;color:#0f172a}
+.link-12{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:500;line-height:18.2px;white-space:nowrap;color:#0f172a}
+.book-now-13{position:relative;height:42px;flex-shrink:0;border-radius:100px;background:linear-gradient(110.06deg, #06b6d4 0%, #8b5cf6 100%);overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;padding:12px 24px 12px 24px;box-sizing:border-box}
+.label-14{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:nowrap;color:#ffffff}
+.header-15{position:relative;height:261px;align-self:stretch;flex-shrink:0;background:#ffffff;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:28px;padding:58px 80px 40px 80px;box-sizing:border-box}
+.eyebrow-16{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:700;line-height:17px;letter-spacing:1.4px;text-transform:uppercase;white-space:nowrap;color:#8b5cf6}
+.title-17{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:46px;font-weight:800;line-height:58px;white-space:nowrap;color:#0f172a}
+.booking-progress-18{position:relative;align-self:stretch;flex-shrink:0;overflow:hidden;display:flex;flex-direction:row;align-items:center;gap:12px;box-sizing:border-box}
+.step-19{position:relative;flex:1 1 0;min-width:0;overflow:hidden;display:flex;flex-direction:row;align-items:center;gap:10px;box-sizing:border-box}
+.number-20{position:relative;width:32px;height:32px;flex-shrink:0;border-radius:100px;background:#8b5cf6;overflow:hidden;display:flex;flex-direction:column;justify-content:center;align-items:center;box-sizing:border-box}
+.value-21{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:12px;font-weight:700;line-height:16px;white-space:nowrap;color:#ffffff}
+.label-22{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:500;line-height:17px;white-space:nowrap;color:#64748b}
+.connector-23{position:relative;height:2px;flex:1 1 0;min-width:0;background:#8b5cf6}
+.step-24{position:relative;flex:1 1 0;min-width:0;overflow:hidden;display:flex;flex-direction:row;align-items:center;gap:10px;box-sizing:border-box}
+.number-25{position:relative;width:32px;height:32px;flex-shrink:0;border-radius:100px;background:#8b5cf6;overflow:hidden;display:flex;flex-direction:column;justify-content:center;align-items:center;box-sizing:border-box}
+.value-26{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:12px;font-weight:700;line-height:16px;white-space:nowrap;color:#ffffff}
+.label-27{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:500;line-height:17px;white-space:nowrap;color:#64748b}
+.connector-28{position:relative;height:2px;flex:1 1 0;min-width:0;background:#8b5cf6}
+.step-29{position:relative;flex:1 1 0;min-width:0;overflow:hidden;display:flex;flex-direction:row;align-items:center;gap:10px;box-sizing:border-box}
+.number-30{position:relative;width:32px;height:32px;flex-shrink:0;border-radius:100px;background:#8b5cf6;overflow:hidden;display:flex;flex-direction:column;justify-content:center;align-items:center;box-sizing:border-box}
+.value-31{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:12px;font-weight:700;line-height:16px;white-space:nowrap;color:#ffffff}
+.label-32{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:500;line-height:17px;white-space:nowrap;color:#64748b}
+.connector-33{position:relative;height:2px;flex:1 1 0;min-width:0;background:#8b5cf6}
+.step-34{position:relative;width:98px;flex-shrink:0;overflow:hidden;display:flex;flex-direction:row;align-items:center;gap:10px;box-sizing:border-box}
+.number-35{position:relative;width:32px;height:32px;flex-shrink:0;border-radius:100px;background:#8b5cf6;overflow:hidden;display:flex;flex-direction:column;justify-content:center;align-items:center;box-sizing:border-box}
+.value-36{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:12px;font-weight:700;line-height:16px;white-space:nowrap;color:#ffffff}
+.label-37{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:700;line-height:17px;white-space:nowrap;color:#0f172a}
+.content-38{position:relative;height:1315px;align-self:stretch;flex-shrink:0;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:30px;padding:48px 80px 80px 80px;box-sizing:border-box}
+.trip-summary-39{position:relative;height:163px;align-self:stretch;flex-shrink:0;border-radius:20px;background:#f3eeff;overflow:hidden;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:24px;padding:24px 24px 24px 24px;box-sizing:border-box}
+.route-40{position:relative;height:45px;align-self:stretch;flex-shrink:0;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:5px;box-sizing:border-box}
+.flight-41{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:18px;font-weight:700;line-height:23px;white-space:nowrap;color:#0f172a}
+.details-42{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:17px;white-space:nowrap;color:#64748b}
+.fare-43{position:relative;height:46px;flex-shrink:0;overflow:hidden;display:flex;flex-direction:column;align-items:flex-end;box-sizing:border-box}
+.tier-44{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:12px;font-weight:400;line-height:16px;white-space:nowrap;color:#64748b}
+.price-45{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:24px;font-weight:800;line-height:30.24px;white-space:nowrap;color:#8b5cf6}
+.payment-layout-46{position:relative;height:994px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:24px;box-sizing:border-box}
+.payment-form-47{position:relative;height:528px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:18px;box-sizing:border-box}
+.card-48{position:relative;height:528px;align-self:stretch;flex-shrink:0;border-radius:20px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;box-shadow:0px 8px 24px 0px rgba(139,92,246,0.07);overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:18px;padding:24px 24px 24px 24px;box-sizing:border-box}
+.header-49{position:relative;height:44px;align-self:stretch;flex-shrink:0;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;box-sizing:border-box}
+.title-50{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:22px;font-weight:400;line-height:28px;white-space:nowrap;color:#0f172a}
+.security-51{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:12px;font-weight:400;line-height:16px;white-space:nowrap;color:#10b981}
+.field-52{position:relative;height:70px;align-self:stretch;flex-shrink:0;border-radius:12px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:7px;padding:16px 16px 16px 16px;box-sizing:border-box}
+.label-53{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:10px;font-weight:400;line-height:13px;text-transform:uppercase;white-space:nowrap;color:#64748b}
+.value-54{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:600;line-height:18.2px;white-space:pre-wrap;color:#0f172a}
+.field-55{position:relative;height:70px;align-self:stretch;flex-shrink:0;border-radius:12px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:7px;padding:16px 16px 16px 16px;box-sizing:border-box}
+.label-56{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:10px;font-weight:400;line-height:13px;text-transform:uppercase;white-space:nowrap;color:#64748b}
+.value-57{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:600;line-height:18.2px;white-space:pre-wrap;color:#0f172a}
+.card-details-58{position:relative;height:154px;align-self:stretch;flex-shrink:0;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:14px;box-sizing:border-box}
+.field-59{position:relative;height:70px;align-self:stretch;flex-shrink:0;border-radius:12px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:7px;padding:16px 16px 16px 16px;box-sizing:border-box}
+.label-60{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:10px;font-weight:400;line-height:13px;text-transform:uppercase;white-space:nowrap;color:#64748b}
+.value-61{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:600;line-height:18.2px;white-space:pre-wrap;color:#0f172a}
+.field-62{position:relative;height:70px;align-self:stretch;flex-shrink:0;border-radius:12px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:7px;padding:16px 16px 16px 16px;box-sizing:border-box}
+.label-63{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:10px;font-weight:400;line-height:13px;text-transform:uppercase;white-space:nowrap;color:#64748b}
+.value-64{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:600;line-height:18.2px;white-space:pre-wrap;color:#0f172a}
+.field-65{position:relative;height:70px;align-self:stretch;flex-shrink:0;border-radius:12px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:7px;padding:16px 16px 16px 16px;box-sizing:border-box}
+.label-66{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:10px;font-weight:400;line-height:13px;text-transform:uppercase;white-space:nowrap;color:#64748b}
+.value-67{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:600;line-height:18.2px;white-space:pre-wrap;color:#0f172a}
+.order-summary-68{position:relative;width:360px;height:442px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:18px;box-sizing:border-box}
+.card-69{position:relative;height:442px;align-self:stretch;flex-shrink:0;border-radius:20px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;box-shadow:0px 8px 24px 0px rgba(139,92,246,0.07);overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:18px;padding:24px 24px 24px 24px;box-sizing:border-box}
+.title-70{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:20px;font-weight:400;line-height:25.2px;white-space:nowrap;color:#0f172a}
+.line-item-71{position:relative;height:36px;align-self:stretch;flex-shrink:0;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;box-sizing:border-box}
+.label-72{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:nowrap;color:#64748b}
+.amount-73{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:nowrap;color:#0f172a}
+.line-item-74{position:relative;height:36px;align-self:stretch;flex-shrink:0;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;box-sizing:border-box}
+.label-75{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:nowrap;color:#64748b}
+.amount-76{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:nowrap;color:#0f172a}
+.line-item-77{position:relative;height:36px;align-self:stretch;flex-shrink:0;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;box-sizing:border-box}
+.label-78{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:nowrap;color:#64748b}
+.amount-79{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:nowrap;color:#0f172a}
+.divider-80{position:relative;height:1px;align-self:stretch;flex-shrink:0;background:#e2e8f0}
+.total-81{position:relative;height:58px;align-self:stretch;flex-shrink:0;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;box-sizing:border-box}
+.label-82{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:18px;font-weight:700;line-height:23px;white-space:nowrap;color:#0f172a}
+.amount-83{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:28px;font-weight:800;line-height:35.28px;white-space:nowrap;color:#8b5cf6}
+.button-84{position:relative;height:46px;flex-shrink:0;border-radius:12px;background:#8b5cf6;overflow:hidden;display:flex;flex-direction:column;align-items:center;padding:14px 24px 14px 24px;box-sizing:border-box}
+.label-85{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:nowrap;color:#ffffff}
+.terms-86{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:11px;font-weight:400;line-height:15px;text-align:center;white-space:pre-wrap;color:#64748b}

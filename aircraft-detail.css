@@ -1,0 +1,28 @@
+*{box-sizing:border-box}
+body{margin:0;min-width:320px;background:#f8fafc;color:#0f172a;font-family:'Geist',Arial,sans-serif;-webkit-font-smoothing:antialiased}
+.aircraft-page{max-width:1440px;min-height:100vh;margin:0 auto}
+.aircraft-nav{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:16px clamp(20px,5.5vw,80px);background:rgba(255,255,255,.95);border-bottom:1px solid #e2e8f0}
+.aircraft-brand{font:800 24px 'Outfit',sans-serif;color:#0f172a;text-decoration:none}
+.aircraft-nav nav{display:flex;align-items:center;gap:clamp(12px,3vw,40px)}
+.aircraft-nav nav a{color:#334155;text-decoration:none;font-size:14px;font-weight:600}
+.aircraft-nav button,.aircraft-cta button{border:0;border-radius:999px;background:linear-gradient(110deg,#06b6d4,#8b5cf6);padding:13px 22px;color:#fff;font:700 14px 'Geist',sans-serif;cursor:pointer}
+.aircraft-hero{min-height:470px;padding:clamp(48px,8vw,112px);display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:18px;background-position:center;background-size:cover;color:#fff}
+.aircraft-hero>span{border:1px solid rgba(255,255,255,.35);border-radius:999px;background:rgba(15,23,42,.3);padding:8px 14px;font-size:13px;font-weight:700;letter-spacing:.7px}
+.aircraft-hero h1{max-width:900px;margin:0;font:800 clamp(40px,7vw,72px)/1.06 'Outfit',sans-serif;text-wrap:balance}
+.aircraft-hero p{max-width:680px;margin:0;color:rgba(255,255,255,.92);font-size:18px;line-height:1.65}
+.aircraft-content{padding:48px clamp(20px,5.5vw,80px) 80px}
+.aircraft-back{display:inline-block;margin-bottom:36px;color:#475569;font-weight:600;text-decoration:none}
+.aircraft-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-bottom:68px}
+.aircraft-stats article,.aircraft-cabins article{display:flex;flex-direction:column;gap:8px;padding:24px;border:1px solid #e2e8f0;border-radius:20px;background:#fff}
+.aircraft-stats strong{font:800 clamp(20px,3vw,30px) 'Outfit',sans-serif;color:#8b5cf6}
+.aircraft-stats span{color:#64748b;font-size:14px}
+.aircraft-content>h2,.aircraft-cta h2{margin:0 0 24px;font:800 clamp(28px,4vw,40px)/1.15 'Outfit',sans-serif}
+.aircraft-cabins{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.aircraft-cabins article{min-height:220px;padding:28px}
+.aircraft-cabins article>span{color:#06b6d4;font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase}
+.aircraft-cabins h3{margin:4px 0;font:700 22px 'Outfit',sans-serif}
+.aircraft-cabins p,.aircraft-cta p{margin:0;color:#64748b;line-height:1.65}
+.aircraft-cta{display:flex;justify-content:space-between;align-items:center;gap:28px;margin-top:56px;padding:36px;border-radius:24px;background:#fff;border:1px solid #e2e8f0}
+.aircraft-cta h2{margin-bottom:8px;font-size:28px}
+.aircraft-footer{padding:28px 20px;border-top:1px solid #e2e8f0;text-align:center;color:#64748b;font-size:13px}
+@media(max-width:700px){.aircraft-nav{align-items:flex-start}.aircraft-nav nav{flex-wrap:wrap;justify-content:flex-end}.aircraft-nav nav a{display:none}.aircraft-hero{min-height:400px}.aircraft-stats,.aircraft-cabins{grid-template-columns:1fr}.aircraft-stats{margin-bottom:48px}.aircraft-cta{align-items:flex-start;flex-direction:column;padding:26px}.aircraft-content{padding-bottom:56px}}

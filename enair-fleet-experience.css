@@ -1,0 +1,323 @@
+*{margin:0;padding:0}
+body{width:100%;min-width:320px;background:#fff;-webkit-font-smoothing:antialiased}
+body>div{margin:0 auto}
+img,svg{display:block}
+.enair-fleet-experience-1{position:relative;width:100%;max-width:1440px;min-height:100vh;height:auto;margin:0 auto;background:#f8fafc;display:flex;flex-direction:column;align-items:flex-start;box-sizing:border-box;overflow-x:clip}
+.menu-mobile{display:none;border:1px solid #e2e8f0;border-radius:10px;background:#fff;padding:10px 14px;color:#0f172a;font:600 14px 'Geist',sans-serif;cursor:pointer}
+.sticky-navigation-2{position:relative;align-self:stretch;flex-shrink:0;background:rgba(255,255,255,0.7);border-bottom:1px solid #e2e8f0;box-sizing:border-box;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:flex;flex-direction:row;justify-content:space-between;align-items:center;padding:16px 80px 16px 80px;box-sizing:border-box}
+.logo-group-3{position:relative;width:110px;flex-shrink:0;display:flex;flex-direction:row;align-items:center;gap:12px;box-sizing:border-box}
+.logo-badge-4{position:relative;width:40px;height:40px;flex-shrink:0;border-radius:12px;background:linear-gradient(135deg, #06b6d4 0%, #8b5cf6 100%);box-shadow:0px 4px 16px 0px rgba(6,182,212,0.2);display:flex;flex-direction:column;justify-content:center;align-items:center;box-sizing:border-box}
+.en-5{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:20px;font-weight:800;line-height:25.2px;white-space:nowrap;color:#ffffff}
+.enair-6{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:22px;font-weight:700;line-height:28px;letter-spacing:-0.5px;white-space:nowrap;color:#0f172a}
+.nav-links-7{position:relative;width:542px;flex-shrink:0;display:flex;flex-direction:row;align-items:center;gap:40px;box-sizing:border-box}
+.frame-8{position:relative;height:20px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:4px;box-sizing:border-box}
+.destinations-9{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:15px;font-weight:500;line-height:20px;white-space:nowrap;color:#0f172a}
+.frame-10{position:relative;height:20px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:4px;box-sizing:border-box}
+.book-flights-11{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:15px;font-weight:500;line-height:20px;white-space:nowrap;color:#0f172a}
+.frame-12{position:relative;height:27px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:4px;box-sizing:border-box}
+.our-fleet-13{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:15px;font-weight:600;line-height:20px;white-space:nowrap;color:#8b5cf6}
+.indicator-14{position:relative;width:16px;height:3px;flex-shrink:0;border-radius:1.5px;background:#8b5cf6}
+.frame-15{position:relative;height:20px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:4px;box-sizing:border-box}
+.loyalty-16{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:15px;font-weight:500;line-height:20px;white-space:nowrap;color:#0f172a}
+.frame-17{position:relative;height:20px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:4px;box-sizing:border-box}
+.about-enair-18{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:15px;font-weight:500;line-height:20px;white-space:nowrap;color:#0f172a}
+.book-now-cta-19{position:relative;width:117px;flex-shrink:0;border-radius:100px;background:linear-gradient(109.75deg, #06b6d4 0%, #8b5cf6 100%);box-shadow:0px 4px 16px 0px rgba(139,92,246,0.15);display:flex;flex-direction:row;justify-content:center;align-items:center;padding:12px 24px 12px 24px;box-sizing:border-box}
+.book-now-20{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:600;line-height:18.2px;white-space:nowrap;color:#ffffff}
+.fleet-hero-21{position:relative;height:520px;align-self:stretch;flex-shrink:0;background:rgba(15,23,42,0.25);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:40px;padding:80px 80px 80px 80px;box-sizing:border-box}
+.hero-copy-22{position:relative;height:181px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:16px;box-sizing:border-box}
+.tag-23{position:relative;width:167px;flex-shrink:0;border-radius:100px;background:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.56);box-sizing:border-box;display:flex;flex-direction:row;align-items:flex-start;padding:8px 16px 8px 16px;box-sizing:border-box}
+.the-next-gen-fleet-24{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:600;line-height:17px;letter-spacing:1.5px;text-transform:uppercase;white-space:nowrap;color:#8b5cf6}
+.experience-the-future-of-fli-25{position:relative;align-self:stretch;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:56px;font-weight:800;line-height:70.56px;letter-spacing:-1.5px;text-align:center;white-space:pre-wrap;color:#ffffff}
+.enair-operates-an-exclusive--26{position:relative;width:700px;flex-shrink:0;opacity:0.95;font-family:'Geist',sans-serif;font-size:18px;font-weight:400;line-height:27px;text-align:center;white-space:pre-wrap;color:#ffffff}
+.fleet-lineup-27{position:relative;height:821px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:56px;padding:100px 80px 100px 80px;box-sizing:border-box}
+.frame-28{position:relative;height:80px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:12px;box-sizing:border-box}
+.eco-aviation-precision-29{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:700;line-height:18.2px;letter-spacing:1.5px;text-align:center;text-transform:uppercase;white-space:nowrap;color:#06b6d4}
+.our-hydrogen-hybrid-fleet-30{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:40px;font-weight:800;line-height:50.4px;text-align:center;white-space:nowrap;color:#0f172a}
+.frame-31{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;align-items:flex-start;gap:24px;box-sizing:border-box}
+.frame-32{position:relative;height:463px;flex:1 1 0;min-width:0;border-radius:24px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;box-shadow:0px 8px 24px 0px rgba(139,92,246,0.03);overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;box-sizing:border-box}
+.rectangle-33{position:relative;height:220px;align-self:stretch;flex-shrink:0;background:url("images/d608dc38269e72681e40e4c655c0537a01239e3e.jpg") center / cover no-repeat}
+.frame-34{position:relative;height:243px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:20px;padding:28px 28px 28px 28px;box-sizing:border-box}
+.frame-35{position:relative;height:51px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:6px;box-sizing:border-box}
+.enair-a350neo-h2-36{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:22px;font-weight:700;line-height:28px;white-space:nowrap;color:#0f172a}
+.next-gen-hydrogen-electric-37{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:600;line-height:17px;text-transform:uppercase;white-space:nowrap;color:#06b6d4}
+.ultra-long-range-pioneer-uti-38{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:22px;white-space:pre-wrap;color:#64748b}
+.frame-39{position:relative;align-self:stretch;flex-shrink:0;border-top:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;justify-content:space-between;align-items:flex-start;padding:16px 0px 0px 0px;box-sizing:border-box}
+.frame-40{position:relative;height:36px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:2px;box-sizing:border-box}
+.range-41{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:11px;font-weight:600;line-height:14.3px;text-transform:uppercase;white-space:nowrap;color:#64748b}
+[class~="8-200-nm-42"]{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:16px;font-weight:700;line-height:20.16px;white-space:nowrap;color:#0f172a}
+.frame-43{position:relative;height:36px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:2px;box-sizing:border-box}
+.capacity-44{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:11px;font-weight:600;line-height:14.3px;text-transform:uppercase;white-space:nowrap;color:#64748b}
+[class~="310-passengers-45"]{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:16px;font-weight:700;line-height:20.16px;white-space:nowrap;color:#0f172a}
+.frame-46{position:relative;width:78px;flex-shrink:0;display:flex;flex-direction:row;align-items:center;gap:4px;padding:0px 0px 0px 12px;box-sizing:border-box}
+.explore-47{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:600;line-height:17px;white-space:nowrap;color:#8b5cf6}
+.vector-48{position:relative;width:14px;height:14px;flex-shrink:0;overflow:visible}
+.frame-49{position:relative;height:463px;flex:1 1 0;min-width:0;border-radius:24px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;box-shadow:0px 8px 24px 0px rgba(139,92,246,0.03);overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;box-sizing:border-box}
+.rectangle-50{position:relative;height:220px;align-self:stretch;flex-shrink:0;background:url("images/62ec7bf9da4efc7134742690c125724b4420d850.jpg") center / cover no-repeat}
+.frame-51{position:relative;height:243px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:20px;padding:28px 28px 28px 28px;box-sizing:border-box}
+.frame-52{position:relative;height:51px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:6px;box-sizing:border-box}
+.enair-787-dreamliner-e-53{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:22px;font-weight:700;line-height:28px;white-space:nowrap;color:#0f172a}
+.advanced-hybrid-electric-54{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:600;line-height:17px;text-transform:uppercase;white-space:nowrap;color:#06b6d4}
+.enhanced-with-ultra-quiet-el-55{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:22px;white-space:pre-wrap;color:#64748b}
+.frame-56{position:relative;align-self:stretch;flex-shrink:0;border-top:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;justify-content:space-between;align-items:flex-start;padding:16px 0px 0px 0px;box-sizing:border-box}
+.frame-57{position:relative;height:36px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:2px;box-sizing:border-box}
+.range-58{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:11px;font-weight:600;line-height:14.3px;text-transform:uppercase;white-space:nowrap;color:#64748b}
+[class~="7-400-nm-59"]{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:16px;font-weight:700;line-height:20.16px;white-space:nowrap;color:#0f172a}
+.frame-60{position:relative;height:36px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:2px;box-sizing:border-box}
+.capacity-61{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:11px;font-weight:600;line-height:14.3px;text-transform:uppercase;white-space:nowrap;color:#64748b}
+[class~="260-passengers-62"]{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:16px;font-weight:700;line-height:20.16px;white-space:nowrap;color:#0f172a}
+.frame-63{position:relative;width:78px;flex-shrink:0;display:flex;flex-direction:row;align-items:center;gap:4px;padding:0px 0px 0px 12px;box-sizing:border-box}
+.explore-64{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:600;line-height:17px;white-space:nowrap;color:#8b5cf6}
+.vector-65{position:relative;width:14px;height:14px;flex-shrink:0;overflow:visible}
+.frame-66{position:relative;height:485px;flex:1 1 0;min-width:0;border-radius:24px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;box-shadow:0px 8px 24px 0px rgba(139,92,246,0.03);overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;box-sizing:border-box}
+.rectangle-67{position:relative;height:220px;align-self:stretch;flex-shrink:0;background:url("images/942f2e23c438c67fb8d1bc703d85cbc649067b0e.jpg") center / cover no-repeat}
+.frame-68{position:relative;height:265px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:20px;padding:28px 28px 28px 28px;box-sizing:border-box}
+.frame-69{position:relative;height:51px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:6px;box-sizing:border-box}
+.enair-a380-superjumbo-x-70{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:22px;font-weight:700;line-height:28px;white-space:nowrap;color:#0f172a}
+.curated-double-deck-luxury-71{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:600;line-height:17px;text-transform:uppercase;white-space:nowrap;color:#06b6d4}
+.the-pinnacle-of-our-fleet-fe-72{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:22px;white-space:pre-wrap;color:#64748b}
+.frame-73{position:relative;align-self:stretch;flex-shrink:0;border-top:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;justify-content:space-between;align-items:flex-start;padding:16px 0px 0px 0px;box-sizing:border-box}
+.frame-74{position:relative;height:36px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:2px;box-sizing:border-box}
+.range-75{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:11px;font-weight:600;line-height:14.3px;text-transform:uppercase;white-space:nowrap;color:#64748b}
+[class~="8-500-nm-76"]{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:16px;font-weight:700;line-height:20.16px;white-space:nowrap;color:#0f172a}
+.frame-77{position:relative;height:36px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:2px;box-sizing:border-box}
+.capacity-78{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:11px;font-weight:600;line-height:14.3px;text-transform:uppercase;white-space:nowrap;color:#64748b}
+[class~="480-passengers-79"]{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:16px;font-weight:700;line-height:20.16px;white-space:nowrap;color:#0f172a}
+.frame-80{position:relative;width:78px;flex-shrink:0;display:flex;flex-direction:row;align-items:center;gap:4px;padding:0px 0px 0px 12px;box-sizing:border-box}
+.explore-81{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:600;line-height:17px;white-space:nowrap;color:#8b5cf6}
+.vector-82{position:relative;width:14px;height:14px;flex-shrink:0;overflow:visible}
+.cabin-classes-83{position:relative;height:1764px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:48px;padding:0px 80px 100px 80px;box-sizing:border-box}
+.frame-84{position:relative;height:80px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:12px;box-sizing:border-box}
+.aerospace-comfort-85{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:700;line-height:18.2px;letter-spacing:1.5px;text-align:center;text-transform:uppercase;white-space:nowrap;color:#06b6d4}
+.the-cabins-rest-restoration-86{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:40px;font-weight:800;line-height:50.4px;text-align:center;white-space:nowrap;color:#0f172a}
+.frame-87{position:relative;height:1536px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:32px;box-sizing:border-box}
+.frame-88{position:relative;height:360px;align-self:stretch;flex-shrink:0;border-radius:32px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;box-shadow:0px 8px 24px 0px rgba(139,92,246,0.03);overflow:hidden;display:flex;flex-direction:row;align-items:flex-start;box-sizing:border-box}
+.rectangle-89{position:relative;width:600px;align-self:stretch;flex-shrink:0;background:url("images/ce4d3849d0e5dc047dd2c912628c136935ecfb25.jpg") center / cover no-repeat}
+.frame-90{position:relative;flex:1 1 0;min-width:0;align-self:stretch;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;padding:48px 48px 48px 48px;box-sizing:border-box}
+.frame-91{position:relative;height:99px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:16px;box-sizing:border-box}
+.frame-92{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;justify-content:space-between;align-items:center;box-sizing:border-box}
+.first-class-sanctuary-93{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:28px;font-weight:800;line-height:35.28px;white-space:nowrap;color:#0f172a}
+.frame-94{position:relative;width:112px;flex-shrink:0;border-radius:100px;background:rgba(6,182,212,0.1);display:flex;flex-direction:row;align-items:flex-start;padding:6px 14px 6px 14px;box-sizing:border-box}
+[class~="100-privacy-95"]{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:600;line-height:17px;white-space:nowrap;color:#06b6d4}
+.an-isolated-private-room-wit-96{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:15px;font-weight:400;line-height:24px;white-space:pre-wrap;color:#64748b}
+.frame-97{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;align-items:flex-start;gap:12px;flex-wrap:wrap;row-gap:12px;box-sizing:border-box}
+.frame-98{position:relative;width:169px;flex-shrink:0;border-radius:100px;background:#f8fafc;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;align-items:flex-start;padding:8px 16px 8px 16px;box-sizing:border-box}
+.enclosed-private-suite-99{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:500;line-height:17px;white-space:nowrap;color:#0f172a}
+.frame-100{position:relative;width:159px;flex-shrink:0;border-radius:100px;background:#f8fafc;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;align-items:flex-start;padding:8px 16px 8px 16px;box-sizing:border-box}
+.biometric-smart-bed-101{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:500;line-height:17px;white-space:nowrap;color:#0f172a}
+.frame-102{position:relative;width:217px;flex-shrink:0;border-radius:100px;background:#f8fafc;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;align-items:flex-start;padding:8px 16px 8px 16px;box-sizing:border-box}
+.michelin-curated-caviar-menu-103{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:500;line-height:17px;white-space:nowrap;color:#0f172a}
+.frame-104{position:relative;width:205px;flex-shrink:0;border-radius:100px;background:#f8fafc;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;align-items:flex-start;padding:8px 16px 8px 16px;box-sizing:border-box}
+.immersive-vr-cinema-setup-105{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:500;line-height:17px;white-space:nowrap;color:#0f172a}
+.frame-106{position:relative;height:360px;align-self:stretch;flex-shrink:0;border-radius:32px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;box-shadow:0px 8px 24px 0px rgba(139,92,246,0.03);overflow:hidden;display:flex;flex-direction:row;align-items:flex-start;box-sizing:border-box}
+.rectangle-107{position:relative;width:600px;align-self:stretch;flex-shrink:0;background:url("images/eeaad6608267be357855f93e359ccfde762b642b.jpg") center / cover no-repeat}
+.frame-108{position:relative;flex:1 1 0;min-width:0;align-self:stretch;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;padding:48px 48px 48px 48px;box-sizing:border-box}
+.frame-109{position:relative;height:99px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:16px;box-sizing:border-box}
+.frame-110{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;justify-content:space-between;align-items:center;box-sizing:border-box}
+.business-sanctuary-pods-111{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:28px;font-weight:800;line-height:35.28px;white-space:nowrap;color:#0f172a}
+.frame-112{position:relative;width:112px;flex-shrink:0;border-radius:100px;background:rgba(6,182,212,0.1);display:flex;flex-direction:row;align-items:flex-start;padding:6px 14px 6px 14px;box-sizing:border-box}
+[class~="42-pod-pitch-113"]{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:600;line-height:17px;white-space:nowrap;color:#06b6d4}
+.sleek-biometric-pods-that-ad-114{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:15px;font-weight:400;line-height:24px;white-space:pre-wrap;color:#64748b}
+.frame-115{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;align-items:flex-start;gap:12px;flex-wrap:wrap;row-gap:12px;box-sizing:border-box}
+.frame-116{position:relative;width:175px;flex-shrink:0;border-radius:100px;background:#f8fafc;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;align-items:flex-start;padding:8px 16px 8px 16px;box-sizing:border-box}
+.biometric-seating-pods-117{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:500;line-height:17px;white-space:nowrap;color:#0f172a}
+.frame-118{position:relative;width:176px;flex-shrink:0;border-radius:100px;background:#f8fafc;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;align-items:flex-start;padding:8px 16px 8px 16px;box-sizing:border-box}
+.full-lie-flat-conversion-119{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:500;line-height:17px;white-space:nowrap;color:#0f172a}
+.frame-120{position:relative;width:241px;flex-shrink:0;border-radius:100px;background:#f8fafc;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;align-items:flex-start;padding:8px 16px 8px 16px;box-sizing:border-box}
+.glassmorphic-cocktail-bar-ac-121{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:500;line-height:17px;white-space:nowrap;color:#0f172a}
+.frame-122{position:relative;width:182px;flex-shrink:0;border-radius:100px;background:#f8fafc;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;align-items:flex-start;padding:8px 16px 8px 16px;box-sizing:border-box}
+.studio-acoustics-wi-fi-123{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:500;line-height:17px;white-space:nowrap;color:#0f172a}
+.frame-124{position:relative;height:360px;align-self:stretch;flex-shrink:0;border-radius:32px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;box-shadow:0px 8px 24px 0px rgba(139,92,246,0.03);overflow:hidden;display:flex;flex-direction:row;align-items:flex-start;box-sizing:border-box}
+.rectangle-125{position:relative;width:600px;align-self:stretch;flex-shrink:0;background:url("images/ca4d0fceb7cc88e353ddc70524861f0ec7cb565a.jpg") center / cover no-repeat}
+.frame-126{position:relative;flex:1 1 0;min-width:0;align-self:stretch;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;padding:48px 48px 48px 48px;box-sizing:border-box}
+.frame-127{position:relative;height:99px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:16px;box-sizing:border-box}
+.frame-128{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;justify-content:space-between;align-items:center;box-sizing:border-box}
+.premium-space-economy-129{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:28px;font-weight:800;line-height:35.28px;white-space:nowrap;color:#0f172a}
+.frame-130{position:relative;width:108px;flex-shrink:0;border-radius:100px;background:rgba(6,182,212,0.1);display:flex;flex-direction:row;align-items:flex-start;padding:6px 14px 6px 14px;box-sizing:border-box}
+[class~="38-legroom-131"]{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:600;line-height:17px;white-space:nowrap;color:#06b6d4}
+.generous-legroom-meets-speci-132{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:15px;font-weight:400;line-height:24px;white-space:pre-wrap;color:#64748b}
+.frame-133{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;align-items:flex-start;gap:12px;flex-wrap:wrap;row-gap:12px;box-sizing:border-box}
+.frame-134{position:relative;width:160px;flex-shrink:0;border-radius:100px;background:#f8fafc;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;align-items:flex-start;padding:8px 16px 8px 16px;box-sizing:border-box}
+.extending-calf-rests-135{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:500;line-height:17px;white-space:nowrap;color:#0f172a}
+.frame-136{position:relative;width:194px;flex-shrink:0;border-radius:100px;background:#f8fafc;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;align-items:flex-start;padding:8px 16px 8px 16px;box-sizing:border-box}
+[class~="13-3-inch-4k-smart-screen-137"]{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:500;line-height:17px;white-space:nowrap;color:#0f172a}
+.frame-138{position:relative;width:236px;flex-shrink:0;border-radius:100px;background:#f8fafc;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;align-items:flex-start;padding:8px 16px 8px 16px;box-sizing:border-box}
+.gourmet-healthy-meal-selecti-139{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:500;line-height:17px;white-space:nowrap;color:#0f172a}
+.frame-140{position:relative;width:204px;flex-shrink:0;border-radius:100px;background:#f8fafc;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;align-items:flex-start;padding:8px 16px 8px 16px;box-sizing:border-box}
+.dedicated-usb-c-fast-ports-141{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:500;line-height:17px;white-space:nowrap;color:#0f172a}
+.frame-142{position:relative;height:360px;align-self:stretch;flex-shrink:0;border-radius:32px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;box-shadow:0px 8px 24px 0px rgba(139,92,246,0.03);overflow:hidden;display:flex;flex-direction:row;align-items:flex-start;box-sizing:border-box}
+.rectangle-143{position:relative;width:600px;align-self:stretch;flex-shrink:0;background:url("images/fafef836bb78074b019671a3741c92f8a0dd6e6b.jpg") center / cover no-repeat}
+.frame-144{position:relative;flex:1 1 0;min-width:0;align-self:stretch;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;padding:48px 48px 48px 48px;box-sizing:border-box}
+.frame-145{position:relative;height:99px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:16px;box-sizing:border-box}
+.frame-146{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;justify-content:space-between;align-items:center;box-sizing:border-box}
+.comfort-economy-147{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:28px;font-weight:800;line-height:35.28px;white-space:nowrap;color:#0f172a}
+.frame-148{position:relative;width:136px;flex-shrink:0;border-radius:100px;background:rgba(6,182,212,0.1);display:flex;flex-direction:row;align-items:flex-start;padding:6px 14px 6px 14px;box-sizing:border-box}
+[class~="32-clear-stretch-149"]{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:600;line-height:17px;white-space:nowrap;color:#06b6d4}
+.redesigning-the-standard-dyn-150{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:15px;font-weight:400;line-height:24px;white-space:pre-wrap;color:#64748b}
+.frame-151{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;align-items:flex-start;gap:12px;flex-wrap:wrap;row-gap:12px;box-sizing:border-box}
+.frame-152{position:relative;width:203px;flex-shrink:0;border-radius:100px;background:#f8fafc;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;align-items:flex-start;padding:8px 16px 8px 16px;box-sizing:border-box}
+.self-adapting-neck-cradles-153{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:500;line-height:17px;white-space:nowrap;color:#0f172a}
+.frame-154{position:relative;width:219px;flex-shrink:0;border-radius:100px;background:#f8fafc;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;align-items:flex-start;padding:8px 16px 8px 16px;box-sizing:border-box}
+.ultra-thin-space-saving-shel-155{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:500;line-height:17px;white-space:nowrap;color:#0f172a}
+.frame-156{position:relative;width:221px;flex-shrink:0;border-radius:100px;background:#f8fafc;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;align-items:flex-start;padding:8px 16px 8px 16px;box-sizing:border-box}
+.curated-wellness-snack-packs-157{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:500;line-height:17px;white-space:nowrap;color:#0f172a}
+.frame-158{position:relative;width:217px;flex-shrink:0;border-radius:100px;background:#f8fafc;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;align-items:flex-start;padding:8px 16px 8px 16px;box-sizing:border-box}
+.personal-byod-device-mounts-159{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:500;line-height:17px;white-space:nowrap;color:#0f172a}
+.entertainment-section-160{position:relative;align-self:stretch;flex-shrink:0;background:#ffffff;border-top:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;align-items:center;gap:48px;padding:80px 80px 80px 80px;box-sizing:border-box}
+.frame-161{position:relative;height:363px;flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:32px;box-sizing:border-box}
+.frame-162{position:relative;height:80px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:12px;box-sizing:border-box}
+.connected-aerospace-163{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:700;line-height:18.2px;letter-spacing:1.5px;text-transform:uppercase;white-space:nowrap;color:#06b6d4}
+.en-touch-smart-system-164{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:40px;font-weight:800;line-height:50.4px;white-space:nowrap;color:#0f172a}
+.our-next-generation-in-fligh-165{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:16px;font-weight:400;line-height:26px;white-space:pre-wrap;color:#64748b}
+.frame-166{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;align-items:flex-start;gap:24px;box-sizing:border-box}
+.frame-167{position:relative;height:141px;flex:1 1 0;min-width:0;border-radius:16px;background:#f8fafc;display:flex;flex-direction:column;align-items:flex-start;gap:12px;padding:20px 20px 20px 20px;box-sizing:border-box}
+.personal-4k-oleds-168{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:16px;font-weight:700;line-height:20.16px;white-space:nowrap;color:#0f172a}
+[class~="32-inch-displays-169"]{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:18px;font-weight:600;line-height:23.4px;white-space:nowrap;color:#8b5cf6}
+.true-black-high-contrast-imm-170{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:17px;white-space:pre-wrap;color:#64748b}
+.frame-171{position:relative;height:141px;flex:1 1 0;min-width:0;border-radius:16px;background:#f8fafc;display:flex;flex-direction:column;align-items:flex-start;gap:12px;padding:20px 20px 20px 20px;box-sizing:border-box}
+.gigabit-satellite-172{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:16px;font-weight:700;line-height:20.16px;white-space:nowrap;color:#0f172a}
+.zero-latency-wi-fi-173{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:18px;font-weight:600;line-height:23.4px;white-space:nowrap;color:#8b5cf6}
+.work-stream-or-gaming-at-35--174{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:17px;white-space:pre-wrap;color:#64748b}
+.frame-175{position:relative;height:141px;flex:1 1 0;min-width:0;border-radius:16px;background:#f8fafc;display:flex;flex-direction:column;align-items:flex-start;gap:12px;padding:20px 20px 20px 20px;box-sizing:border-box}
+.sync-ecosystem-176{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:16px;font-weight:700;line-height:20.16px;white-space:nowrap;color:#0f172a}
+.app-integration-177{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:18px;font-weight:600;line-height:23.4px;white-space:nowrap;color:#8b5cf6}
+.adjust-lighting-and-track-fl-178{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:17px;white-space:pre-wrap;color:#64748b}
+.rectangle-179{position:relative;width:540px;height:400px;flex-shrink:0;border-radius:24px;background:url("images/c7237bb749c914103a2a4e270ecbb2a26e9b9089.jpg") center / cover no-repeat}
+.sustainability-section-180{position:relative;height:696px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:56px;padding:100px 100px 100px 100px;box-sizing:border-box}
+.frame-181{position:relative;height:80px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:12px;box-sizing:border-box}
+.flying-greener-182{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:700;line-height:18.2px;letter-spacing:1.5px;text-align:center;text-transform:uppercase;white-space:nowrap;color:#06b6d4}
+.our-blueprint-for-absolute-z-183{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:40px;font-weight:800;line-height:50.4px;text-align:center;white-space:nowrap;color:#0f172a}
+.frame-184{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;align-items:center;gap:48px;box-sizing:border-box}
+.rectangle-185{position:relative;width:540px;height:360px;flex-shrink:0;border-radius:32px;background:url("images/566fca3b8d4645a7f014ef455d2eb4987b76364b.jpg") center / cover no-repeat}
+.frame-186{position:relative;height:273px;flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:32px;box-sizing:border-box}
+.enair-is-dedicated-to-decoup-187{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:16px;font-weight:400;line-height:26px;white-space:pre-wrap;color:#64748b}
+.frame-188{position:relative;height:163px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:20px;box-sizing:border-box}
+.frame-189{position:relative;height:41px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:8px;box-sizing:border-box}
+.frame-190{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;justify-content:space-between;align-items:flex-end;box-sizing:border-box}
+.carbon-reduction-rate-191{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;line-height:19px;white-space:nowrap;color:#0f172a}
+.frame-192{position:relative;width:171px;flex-shrink:0;display:flex;flex-direction:row;align-items:baseline;gap:8px;box-sizing:border-box}
+[class~="94-2-193"]{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:20px;font-weight:800;line-height:25.2px;white-space:nowrap;color:#06b6d4}
+.goal-100-by-2028-194{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:12px;font-weight:400;line-height:16px;white-space:nowrap;color:#64748b}
+.frame-195{position:relative;height:8px;align-self:stretch;flex-shrink:0;border-radius:4px;background:#e2e8f0;overflow:hidden;display:flex;flex-direction:row;align-items:flex-start;box-sizing:border-box}
+.rectangle-196{position:relative;width:490px;align-self:stretch;flex-shrink:0;background:linear-gradient(90.94deg, #06b6d4 0%, #8b5cf6 100%)}
+.frame-197{position:relative;height:41px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:8px;box-sizing:border-box}
+.frame-198{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;justify-content:space-between;align-items:flex-end;box-sizing:border-box}
+.saf-integration-in-hybrid-fl-199{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;line-height:19px;white-space:nowrap;color:#0f172a}
+.frame-200{position:relative;width:171px;flex-shrink:0;display:flex;flex-direction:row;align-items:baseline;gap:8px;box-sizing:border-box}
+[class~="85-0-201"]{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:20px;font-weight:800;line-height:25.2px;white-space:nowrap;color:#06b6d4}
+.goal-100-by-2027-202{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:12px;font-weight:400;line-height:16px;white-space:nowrap;color:#64748b}
+.frame-203{position:relative;height:8px;align-self:stretch;flex-shrink:0;border-radius:4px;background:#e2e8f0;overflow:hidden;display:flex;flex-direction:row;align-items:flex-start;box-sizing:border-box}
+.rectangle-204{position:relative;width:442px;align-self:stretch;flex-shrink:0;background:linear-gradient(91.04deg, #06b6d4 0%, #8b5cf6 100%)}
+.frame-205{position:relative;height:41px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:8px;box-sizing:border-box}
+.frame-206{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;justify-content:space-between;align-items:flex-end;box-sizing:border-box}
+.aerodynamic-efficiency-index-207{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;line-height:19px;white-space:nowrap;color:#0f172a}
+.frame-208{position:relative;width:225px;flex-shrink:0;display:flex;flex-direction:row;align-items:baseline;gap:8px;box-sizing:border-box}
+[class~="32-8-209"]{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:20px;font-weight:800;line-height:25.2px;white-space:nowrap;color:#06b6d4}
+.compared-to-legacy-fleets-210{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:12px;font-weight:400;line-height:16px;white-space:nowrap;color:#64748b}
+.frame-211{position:relative;height:8px;align-self:stretch;flex-shrink:0;border-radius:4px;background:#e2e8f0;overflow:hidden;display:flex;flex-direction:row;align-items:flex-start;box-sizing:border-box}
+.rectangle-212{position:relative;width:374px;align-self:stretch;flex-shrink:0;background:linear-gradient(91.23deg, #06b6d4 0%, #8b5cf6 100%)}
+.footer-213{position:relative;height:408px;align-self:stretch;flex-shrink:0;background:#f8fafc;border-top:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:column;align-items:flex-start;gap:60px;padding:80px 80px 40px 80px;box-sizing:border-box}
+.footer-content-214{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;justify-content:space-between;align-items:flex-start;box-sizing:border-box}
+.footer-brand-col-215{position:relative;width:320px;height:186px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:24px;box-sizing:border-box}
+.logo-group-216{position:relative;width:101px;flex-shrink:0;display:flex;flex-direction:row;align-items:center;gap:12px;box-sizing:border-box}
+.logo-badge-217{position:relative;width:36px;height:36px;flex-shrink:0;border-radius:10px;background:linear-gradient(135deg, #06b6d4 0%, #8b5cf6 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;box-sizing:border-box}
+.en-218{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:18px;font-weight:800;line-height:23px;white-space:nowrap;color:#ffffff}
+.enair-219{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:20px;font-weight:700;line-height:25.2px;letter-spacing:-0.5px;white-space:nowrap;color:#0f172a}
+.redefining-next-generation-a-220{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:22px;white-space:pre-wrap;color:#64748b}
+.social-icons-221{position:relative;width:192px;flex-shrink:0;display:flex;flex-direction:row;align-items:flex-start;gap:16px;box-sizing:border-box}
+.frame-222{position:relative;width:36px;height:36px;flex-shrink:0;border-radius:18px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;justify-content:center;align-items:center;box-sizing:border-box}
+.vector-223{position:relative;width:16px;height:16px;flex-shrink:0;overflow:visible}
+.frame-224{position:relative;width:36px;height:36px;flex-shrink:0;border-radius:18px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;justify-content:center;align-items:center;box-sizing:border-box}
+.vector-225{position:relative;width:16px;height:16px;flex-shrink:0;overflow:visible}
+.frame-226{position:relative;width:36px;height:36px;flex-shrink:0;border-radius:18px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;justify-content:center;align-items:center;box-sizing:border-box}
+.vector-227{position:relative;width:16px;height:16px;flex-shrink:0;overflow:visible}
+.frame-228{position:relative;width:36px;height:36px;flex-shrink:0;border-radius:18px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;justify-content:center;align-items:center;box-sizing:border-box}
+.vector-229{position:relative;width:16px;height:16px;flex-shrink:0;overflow:visible}
+.frame-230{position:relative;width:180px;height:177px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:20px;box-sizing:border-box}
+.company-231{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;line-height:19px;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;color:#0f172a}
+.frame-232{position:relative;height:138px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:12px;box-sizing:border-box}
+.about-us-233{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.fleet-details-234{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.sustainability-235{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.careers-236{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.pressroom-237{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.frame-238{position:relative;width:180px;height:57px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:20px;box-sizing:border-box}
+.experiexperience-239{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;line-height:19px;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;color:#0f172a}
+.frame-240{position:relative;height:18px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:12px;box-sizing:border-box}
+.personas-241{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.frame-242{position:relative;width:180px;height:177px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:20px;box-sizing:border-box}
+.support-243{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;line-height:19px;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;color:#0f172a}
+.frame-244{position:relative;height:138px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:12px;box-sizing:border-box}
+.help-center-245{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.baggage-claim-246{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.flight-status-247{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.refund-policies-248{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.accessible-travel-249{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.frame-250{position:relative;width:180px;height:177px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:20px;box-sizing:border-box}
+.connect-251{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;line-height:19px;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;color:#0f172a}
+.frame-252{position:relative;height:138px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:12px;box-sizing:border-box}
+.contact-support-253{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.corporate-offices-254{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.affiliate-inquiries-255{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.strategic-alliances-256{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.developer-api-257{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.footer-bottom-258{position:relative;height:42px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:24px;box-sizing:border-box}
+.divider-259{position:relative;height:1px;align-self:stretch;flex-shrink:0;background:#e2e8f0}
+.frame-260{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;justify-content:space-between;align-items:center;box-sizing:border-box}
+[class~="2026-enair-technologies-inc--261"]{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:17px;white-space:nowrap;color:#64748b}
+.frame-262{position:relative;width:317px;flex-shrink:0;display:flex;flex-direction:row;align-items:flex-start;gap:24px;box-sizing:border-box}
+.privacy-policy-263{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:17px;white-space:nowrap;color:#64748b}
+.terms-of-use-264{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:17px;white-space:nowrap;color:#64748b}
+.regulatory-filings-265{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:17px;white-space:nowrap;color:#64748b}
+@media(max-width:900px){
+  .sticky-navigation-2{padding:16px 24px}
+  .nav-links-7{display:none}
+  .menu-mobile{display:block}
+  .enair-operates-an-exclusive--26{width:100%;max-width:700px}
+  .fleet-lineup-27,.entertainment-section-160,.sustainability-section-180{height:auto;padding:64px 24px}
+  .entertainment-section-160{flex-direction:column;align-items:stretch}
+  .cabin-classes-83{height:auto;padding:0 24px 64px}
+  .frame-87{height:auto}
+  .frame-88,.frame-106,.frame-124,.frame-142{height:auto;flex-direction:column}
+  .rectangle-89,.rectangle-107,.rectangle-125,.rectangle-143{width:100%;height:240px;flex:none}
+  .frame-90,.frame-108,.frame-126,.frame-144{width:100%;height:auto;min-height:0;flex:none;justify-content:flex-start;gap:24px;padding:32px}
+  .frame-92,.frame-110,.frame-128,.frame-146{flex-wrap:wrap;gap:12px}
+  .frame-31,.frame-166,.frame-184{width:100%;flex-direction:column;align-items:stretch}
+  .frame-32,.frame-49,.frame-66{width:100%;height:auto;min-height:463px;flex:none}
+  .frame-161,.frame-186{width:100%;height:auto;flex:none}
+  .rectangle-179,.rectangle-185{width:100%;max-width:540px}
+  .rectangle-179{align-self:center}
+  .frame-108{padding:32px}
+}
+@media(max-width:600px){
+  .sticky-navigation-2{padding:12px 20px}
+  .fleet-lineup-27,.entertainment-section-160,.sustainability-section-180{padding:48px 20px}
+  .frame-108{padding:24px}
+  .frame-39,.frame-56,.frame-73{flex-wrap:wrap;gap:12px}
+  .frame-46,.frame-63,.frame-80{margin-left:auto}
+}
+@media(max-width:900px){
+  .footer-213{height:auto;padding:56px 24px 32px;gap:40px}
+  .footer-content-214{width:100%;flex-wrap:wrap;gap:32px}
+  .footer-brand-col-215{width:min(100%,320px);height:auto;flex:1 1 240px}
+  .footer-content-214>*:not(.footer-brand-col-215){width:auto;height:auto;flex:1 1 150px;min-width:0}
+  .footer-bottom-258{width:100%;height:auto}
+  .divider-259{width:100%}
+  .frame-260{width:100%;flex-wrap:wrap;gap:16px}
+  .frame-262{width:auto;flex-wrap:wrap;gap:12px 20px}
+}
+@media(max-width:600px){
+  .footer-213{padding:48px 20px 28px}
+  .experience-the-future-of-fli-25{font-size:clamp(36px,9vw,56px);line-height:1.15}
+  .the-cabins-rest-restoration-86,.our-blueprint-for-absolute-z-183,.en-touch-smart-system-164{max-width:100%;white-space:normal;text-wrap:balance}
+  .rectangle-196,.rectangle-204,.rectangle-212{width:100%}
+  .frame-190,.frame-198,.frame-206{flex-wrap:wrap;gap:8px}
+  .frame-192,.frame-200,.frame-208{width:auto;max-width:100%;flex-wrap:wrap;gap:4px}
+  .goal-100-by-2027-202,.compared-to-legacy-fleets-210{white-space:normal}
+}
+.fleet-hero-21{background:linear-gradient(rgba(15,23,42,.48),rgba(15,23,42,.48)),url("images/d608dc38269e72681e40e4c655c0537a01239e3e.jpg") center 48%/cover no-repeat}
+.tag-23{width:max-content;max-width:100%;align-items:center}
+.the-next-gen-fleet-24{white-space:normal;text-align:center}
+.experience-the-future-of-fli-25{white-space:normal;text-wrap:balance}
+.enair-operates-an-exclusive--26{max-width:100%;white-space:normal;text-wrap:balance}
+.our-hydrogen-hybrid-fleet-30{max-width:100%;white-space:normal}
+.frame-39,.frame-63,.frame-80{cursor:pointer}

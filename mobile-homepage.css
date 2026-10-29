@@ -1,0 +1,73 @@
+*{margin:0;padding:0}
+body{width:100%;min-width:320px;background:#fff;-webkit-font-smoothing:antialiased}
+body>div{margin:0 auto}
+img,svg{display:block}
+.mobile-homepage-1{position:relative;width:100%;max-width:401px;min-height:100vh;height:auto;margin:0 auto;background:#f8fafc;overflow:visible;display:flex;flex-direction:column;align-items:flex-start;box-sizing:border-box}
+.navigation-2{position:relative;height:64px;align-self:stretch;flex-shrink:0;background:rgba(255,255,255,0.95);border-bottom:1px solid #e2e8f0;box-sizing:border-box;overflow:hidden;display:flex;flex-direction:row;justify-content:space-between;align-items:center;padding:0px 20px 0px 20px;box-sizing:border-box}
+.brand-3{position:relative;width:94px;flex-shrink:0;overflow:hidden;display:flex;flex-direction:row;align-items:center;gap:10px;box-sizing:border-box}
+.logo-badge-4{position:relative;width:34px;height:34px;flex-shrink:0;border-radius:11px;background:linear-gradient(135deg, #06b6d4 0%, #8b5cf6 100%);overflow:hidden;display:flex;flex-direction:column;justify-content:center;align-items:center;box-sizing:border-box}
+.monogram-5{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:16px;font-weight:800;line-height:20.16px;white-space:nowrap;color:#ffffff}
+.wordmark-6{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:19px;font-weight:700;line-height:24px;white-space:nowrap;color:#0f172a}
+.menu-7{position:relative;width:22px;height:22px;flex-shrink:0;overflow:hidden}
+.vector-8{position:absolute;left:3.67px;top:4.58px;width:14.67px;height:12.83px;overflow:visible}
+.hero-9{position:relative;height:570px;align-self:stretch;flex-shrink:0;background:linear-gradient(rgba(255,255,255,0.3),rgba(255,255,255,0.3)), url("images/2c0e2f3a5230af3a420c346a0d8fc31223b5e3c1.jpg") center / cover no-repeat;display:flex;flex-direction:column;justify-content:space-between;align-items:center;padding:64px 20px 24px 20px;box-sizing:border-box}
+.hero-copy-10{position:relative;height:189px;align-self:stretch;flex-shrink:0;overflow:hidden;display:flex;flex-direction:column;align-items:center;gap:14px;box-sizing:border-box}
+.tag-11{position:relative;height:27px;flex-shrink:0;border-radius:100px;background:rgba(255,255,255,0.85);overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;padding:7px 12px 7px 12px;box-sizing:border-box}
+.label-12{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:10px;font-weight:700;line-height:13px;text-transform:uppercase;white-space:nowrap;color:#8b5cf6}
+.title-13{position:relative;align-self:stretch;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:42px;font-weight:800;line-height:52.92px;letter-spacing:-1.2px;text-align:center;white-space:pre-wrap;color:#0f172a}
+.description-14{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:15px;font-weight:400;line-height:23px;text-align:center;white-space:pre-wrap;color:#0f172a}
+.quick-search-15{position:relative;height:402px;align-self:stretch;flex-shrink:0;border-radius:20px;background:rgba(255,255,255,0.91);overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:12px;padding:16px 16px 16px 16px;box-sizing:border-box}
+.route-16{position:relative;height:150px;align-self:stretch;flex-shrink:0;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:10px;box-sizing:border-box}
+.field-17{position:relative;height:70px;align-self:stretch;flex-shrink:0;border-radius:12px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:7px;padding:16px 16px 16px 16px;box-sizing:border-box}
+.label-18{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:10px;font-weight:400;line-height:13px;text-transform:uppercase;white-space:nowrap;color:#64748b}
+.value-19{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:600;line-height:18.2px;white-space:pre-wrap;color:#0f172a}
+.field-20{position:relative;height:70px;align-self:stretch;flex-shrink:0;border-radius:12px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:7px;padding:16px 16px 16px 16px;box-sizing:border-box}
+.label-21{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:10px;font-weight:400;line-height:13px;text-transform:uppercase;white-space:nowrap;color:#64748b}
+.value-22{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:600;line-height:18.2px;white-space:pre-wrap;color:#0f172a}
+.trip-23{position:relative;height:150px;align-self:stretch;flex-shrink:0;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:10px;box-sizing:border-box}
+.field-24{position:relative;height:70px;align-self:stretch;flex-shrink:0;border-radius:12px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:7px;padding:16px 16px 16px 16px;box-sizing:border-box}
+.label-25{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:10px;font-weight:400;line-height:13px;text-transform:uppercase;white-space:nowrap;color:#64748b}
+.value-26{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:600;line-height:18.2px;white-space:pre-wrap;color:#0f172a}
+.field-27{position:relative;height:70px;align-self:stretch;flex-shrink:0;border-radius:12px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:7px;padding:16px 16px 16px 16px;box-sizing:border-box}
+.label-28{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:10px;font-weight:400;line-height:13px;text-transform:uppercase;white-space:nowrap;color:#64748b}
+.value-29{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:600;line-height:18.2px;white-space:pre-wrap;color:#0f172a}
+.button-30{position:relative;height:46px;flex-shrink:0;border-radius:12px;background:#8b5cf6;overflow:hidden;display:flex;flex-direction:column;align-items:center;padding:14px 24px 14px 24px;box-sizing:border-box}
+.label-31{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:nowrap;color:#ffffff}
+.benefits-32{position:relative;height:797px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:24px;padding:52px 20px 52px 20px;box-sizing:border-box}
+.heading-33{position:relative;height:60px;align-self:stretch;flex-shrink:0;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:8px;box-sizing:border-box}
+.eyebrow-34{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:11px;font-weight:700;line-height:14.3px;text-transform:uppercase;white-space:nowrap;color:#06b6d4}
+.title-35{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:30px;font-weight:800;line-height:38px;white-space:nowrap;color:#0f172a}
+.card-36{position:relative;height:194px;align-self:stretch;flex-shrink:0;border-radius:20px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;box-shadow:0px 8px 24px 0px rgba(139,92,246,0.07);overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:18px;padding:24px 24px 24px 24px;box-sizing:border-box}
+.icon-37{position:relative;width:44px;height:44px;flex-shrink:0;border-radius:12px;background:rgba(6,182,212,0.1);overflow:hidden;display:flex;flex-direction:column;justify-content:center;align-items:center;box-sizing:border-box}
+.zap-38{position:relative;width:21px;height:21px;flex-shrink:0;overflow:hidden}
+.vector-39{position:absolute;left:2.62px;top:1.75px;width:15.75px;height:17.51px;overflow:visible}
+.title-40{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:19px;font-weight:700;line-height:24px;white-space:nowrap;color:#0f172a}
+.description-41{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:21px;white-space:pre-wrap;color:#64748b}
+.card-42{position:relative;height:194px;align-self:stretch;flex-shrink:0;border-radius:20px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;box-shadow:0px 8px 24px 0px rgba(139,92,246,0.07);overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:18px;padding:24px 24px 24px 24px;box-sizing:border-box}
+.icon-43{position:relative;width:44px;height:44px;flex-shrink:0;border-radius:12px;background:rgba(6,182,212,0.1);overflow:hidden;display:flex;flex-direction:column;justify-content:center;align-items:center;box-sizing:border-box}
+.zap-44{position:relative;width:21px;height:21px;flex-shrink:0;overflow:hidden}
+.vector-45{position:absolute;left:2.62px;top:1.75px;width:15.75px;height:17.51px;overflow:visible}
+.title-46{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:19px;font-weight:700;line-height:24px;white-space:nowrap;color:#0f172a}
+.description-47{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:21px;white-space:pre-wrap;color:#64748b}
+.card-48{position:relative;height:173px;align-self:stretch;flex-shrink:0;border-radius:20px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;box-shadow:0px 8px 24px 0px rgba(139,92,246,0.07);overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:18px;padding:24px 24px 24px 24px;box-sizing:border-box}
+.icon-49{position:relative;width:44px;height:44px;flex-shrink:0;border-radius:12px;background:rgba(6,182,212,0.1);overflow:hidden;display:flex;flex-direction:column;justify-content:center;align-items:center;box-sizing:border-box}
+.zap-50{position:relative;width:21px;height:21px;flex-shrink:0;overflow:hidden}
+.vector-51{position:absolute;left:2.62px;top:1.75px;width:15.75px;height:17.51px;overflow:visible}
+.title-52{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:19px;font-weight:700;line-height:24px;white-space:nowrap;color:#0f172a}
+.description-53{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:21px;white-space:pre-wrap;color:#64748b}
+.popular-destinations-54{position:relative;height:758px;align-self:stretch;flex-shrink:0;background:#ffffff;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:22px;padding:48px 20px 56px 20px;box-sizing:border-box}
+.title-55{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:30px;font-weight:800;line-height:38px;white-space:nowrap;color:#0f172a}
+.destination-card-56{position:relative;height:286px;align-self:stretch;flex-shrink:0;border-radius:20px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;box-sizing:border-box}
+.image-57{position:relative;height:190px;align-self:stretch;flex-shrink:0;background:url("images/b9078e797ebfd96b58ebd704b7114cf04ce413f6.jpg") center / cover no-repeat}
+.details-58{position:relative;height:96px;align-self:stretch;flex-shrink:0;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;padding:18px 18px 18px 18px;box-sizing:border-box}
+.place-59{position:relative;height:43px;flex-shrink:0;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;box-sizing:border-box}
+.city-60{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:21px;font-weight:700;line-height:26.46px;white-space:nowrap;color:#0f172a}
+.fare-61{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:17px;white-space:nowrap;color:#8b5cf6}
+.action-62{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:700;line-height:17px;white-space:nowrap;color:#06b6d4}
+.destination-card-63{position:relative;height:286px;align-self:stretch;flex-shrink:0;border-radius:20px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;box-sizing:border-box}
+.image-64{position:relative;height:190px;align-self:stretch;flex-shrink:0;background:url("images/3313b4cd03a3d8166870d739f71a72fd8d39a2a1.jpg") center / cover no-repeat}
+.details-65{position:relative;height:96px;align-self:stretch;flex-shrink:0;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;padding:18px 18px 18px 18px;box-sizing:border-box}
+.place-66{position:relative;height:43px;flex-shrink:0;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;box-sizing:border-box}
+.city-67{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:21px;font-weight:700;line-height:26.46px;white-space:nowrap;color:#0f172a}
+.fare-68{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:17px;white-space:nowrap;color:#8b5cf6}
+.action-69{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:700;line-height:17px;white-space:nowrap;color:#06b6d4}

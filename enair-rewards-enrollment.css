@@ -1,0 +1,34 @@
+*{box-sizing:border-box}
+body{margin:0;min-width:320px;background:#f8fafc;color:#0f172a;font-family:'Geist',sans-serif;-webkit-font-smoothing:antialiased}
+.enrollment-page{min-height:100vh}
+.enrollment-nav{height:80px;display:flex;align-items:center;justify-content:space-between;padding:0 max(24px,calc((100vw - 1200px)/2));background:rgba(255,255,255,.9);border-bottom:1px solid #e2e8f0}
+.enrollment-brand{display:inline-flex;align-items:center;gap:10px;color:#0f172a;text-decoration:none;font:700 22px 'Outfit',sans-serif}
+.enrollment-brand span{display:grid;width:38px;height:38px;place-items:center;border-radius:12px;background:linear-gradient(135deg,#06b6d4,#8b5cf6);color:#fff;font-size:17px}
+.enrollment-back{color:#475569;text-decoration:none;font-size:14px;font-weight:600}
+.enrollment-back:hover{color:#7c3aed}
+.enrollment-content{width:min(1120px,calc(100% - 48px));min-height:calc(100vh - 140px);margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) minmax(340px,460px);align-items:center;gap:clamp(40px,8vw,112px);padding:64px 0}
+.enrollment-copy{max-width:520px}
+.enrollment-eyebrow{margin:0 0 16px;color:#0891b2;font-size:12px;font-weight:700;letter-spacing:1.7px}
+.enrollment-copy h1{max-width:520px;margin:0;font:800 clamp(38px,5vw,60px)/1.06 'Outfit',sans-serif;letter-spacing:-1.5px}
+.enrollment-description{max-width:470px;margin:24px 0;color:#64748b;font-size:17px;line-height:1.7}
+.enrollment-benefits{display:grid;gap:14px;margin:28px 0 0;padding:0;list-style:none;color:#334155;font-size:14px}
+.enrollment-benefits li{display:flex;align-items:center;gap:12px}
+.enrollment-benefits li:before{content:"✓";display:grid;width:24px;height:24px;place-items:center;border-radius:50%;background:rgba(6,182,212,.12);color:#0891b2;font-weight:700}
+.enrollment-form,.enrollment-success{display:flex;flex-direction:column;gap:12px;padding:36px;border:1px solid #e2e8f0;border-radius:24px;background:#fff;box-shadow:0 24px 70px rgba(15,23,42,.08)}
+.enrollment-form h2,.enrollment-success h2{margin:0;font:700 27px/1.2 'Outfit',sans-serif}
+.enrollment-form p{margin:0 0 8px;color:#64748b;font-size:14px;line-height:1.6}
+.enrollment-form label{margin-top:8px;color:#334155;font-size:12px;font-weight:700}
+.enrollment-form input,.enrollment-form select{width:100%;height:48px;border:1px solid #cbd5e1;border-radius:10px;background:#fff;padding:0 14px;color:#0f172a;font:400 14px 'Geist',sans-serif}
+.enrollment-form input:focus,.enrollment-form select:focus{outline:3px solid rgba(6,182,212,.16);border-color:#06b6d4}
+.enrollment-form button,.enrollment-success a{display:flex;min-height:50px;align-items:center;justify-content:center;margin-top:10px;border:0;border-radius:12px;background:linear-gradient(95deg,#06b6d4,#8b5cf6);color:#fff;text-decoration:none;font:700 14px 'Geist',sans-serif;cursor:pointer}
+.enrollment-form button:hover,.enrollment-success a:hover{filter:brightness(.96)}
+.enrollment-form small{color:#94a3b8;text-align:center;font-size:11px;line-height:1.5}
+.enrollment-success{align-items:flex-start}
+.enrollment-success[hidden]{display:none}
+.enrollment-success-icon{display:grid;width:48px;height:48px;place-items:center;border-radius:50%;background:#dcfce7;color:#15803d;font-size:24px;font-weight:700}
+.enrollment-success .enrollment-eyebrow{margin:8px 0 0}
+.enrollment-success-copy{margin:0;color:#64748b;line-height:1.6}
+.enrollment-success a{width:100%;padding:0 20px}
+.enrollment-footer{padding:20px 24px;border-top:1px solid #e2e8f0;color:#94a3b8;text-align:center;font-size:12px}
+@media(max-width:760px){.enrollment-content{grid-template-columns:1fr;gap:36px;padding:48px 0}.enrollment-copy{max-width:none}.enrollment-copy h1{max-width:600px}.enrollment-form,.enrollment-success{padding:28px}}
+@media(max-width:420px){.enrollment-nav{height:68px;padding:0 18px}.enrollment-brand{font-size:18px}.enrollment-brand span{width:34px;height:34px}.enrollment-back{font-size:12px}.enrollment-content{width:calc(100% - 36px);padding:36px 0}.enrollment-copy h1{font-size:38px}}

@@ -1,0 +1,298 @@
+*{margin:0;padding:0}
+body{width:100%;min-width:320px;background:#fff;-webkit-font-smoothing:antialiased}
+body>div{margin:0 auto}
+img,svg{display:block}
+.enair-loyalty-1{position:relative;width:100%;max-width:1440px;min-height:100vh;height:auto;margin:0 auto;background:#f8fafc;display:flex;flex-direction:column;align-items:flex-start;box-sizing:border-box;overflow-x:clip}
+.menu-mobile{display:none;border:1px solid #e2e8f0;border-radius:10px;background:#fff;padding:10px 14px;color:#0f172a;font:600 14px 'Geist',sans-serif;cursor:pointer}
+.sticky-navigation-2{position:relative;align-self:stretch;flex-shrink:0;background:rgba(255,255,255,0.7);border-bottom:1px solid #e2e8f0;box-sizing:border-box;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:flex;flex-direction:row;justify-content:space-between;align-items:center;padding:16px 80px 16px 80px;box-sizing:border-box}
+.logo-group-3{position:relative;width:110px;flex-shrink:0;display:flex;flex-direction:row;align-items:center;gap:12px;box-sizing:border-box}
+.logo-badge-4{position:relative;width:40px;height:40px;flex-shrink:0;border-radius:12px;background:linear-gradient(135deg, #06b6d4 0%, #8b5cf6 100%);box-shadow:0px 4px 16px 0px rgba(6,182,212,0.2);display:flex;flex-direction:column;justify-content:center;align-items:center;box-sizing:border-box}
+.en-5{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:20px;font-weight:800;line-height:25.2px;white-space:nowrap;color:#ffffff}
+.enair-6{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:22px;font-weight:700;line-height:28px;letter-spacing:-0.5px;white-space:nowrap;color:#0f172a}
+.nav-links-7{position:relative;width:543px;flex-shrink:0;display:flex;flex-direction:row;align-items:center;gap:40px;box-sizing:border-box}
+.frame-8{position:relative;height:20px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:4px;box-sizing:border-box}
+.destinations-9{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:15px;font-weight:500;line-height:20px;white-space:nowrap;color:#0f172a}
+.frame-10{position:relative;height:20px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:4px;box-sizing:border-box}
+.book-flights-11{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:15px;font-weight:500;line-height:20px;white-space:nowrap;color:#0f172a}
+.frame-12{position:relative;height:20px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:4px;box-sizing:border-box}
+.our-fleet-13{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:15px;font-weight:500;line-height:20px;white-space:nowrap;color:#0f172a}
+.frame-14{position:relative;height:27px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:4px;box-sizing:border-box}
+.loyalty-15{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:15px;font-weight:600;line-height:20px;white-space:nowrap;color:#8b5cf6}
+.indicator-16{position:relative;width:16px;height:3px;flex-shrink:0;border-radius:1.5px;background:#8b5cf6}
+.frame-17{position:relative;height:20px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:4px;box-sizing:border-box}
+.about-enair-18{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:15px;font-weight:500;line-height:20px;white-space:nowrap;color:#0f172a}
+.book-now-cta-19{position:relative;width:117px;flex-shrink:0;border-radius:100px;background:linear-gradient(109.75deg, #06b6d4 0%, #8b5cf6 100%);box-shadow:0px 4px 16px 0px rgba(139,92,246,0.15);display:flex;flex-direction:row;justify-content:center;align-items:center;padding:12px 24px 12px 24px;box-sizing:border-box}
+.book-now-20{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:600;line-height:18.2px;white-space:nowrap;color:#ffffff}
+.loyalty-hero-21{position:relative;height:520px;align-self:stretch;flex-shrink:0;background:rgba(15,23,42,0.3);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:40px;padding:80px 80px 80px 80px;box-sizing:border-box}
+.hero-copy-22{position:relative;height:187px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:16px;box-sizing:border-box}
+.tag-23{position:relative;width:193px;flex-shrink:0;border-radius:100px;background:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.56);box-sizing:border-box;display:flex;flex-direction:row;align-items:flex-start;padding:8px 16px 8px 16px;box-sizing:border-box}
+.enair-rewards-system-24{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:600;line-height:17px;letter-spacing:1.5px;text-transform:uppercase;white-space:nowrap;color:#06b6d4}
+.earn-miles-unlock-the-world-25{position:relative;align-self:stretch;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:56px;font-weight:800;line-height:70.56px;letter-spacing:-1.5px;text-align:center;white-space:pre-wrap;color:#ffffff}
+.join-our-premium-digital-rew-26{position:relative;width:700px;flex-shrink:0;opacity:0.95;font-family:'Geist',sans-serif;font-size:20px;font-weight:400;line-height:30px;text-align:center;white-space:pre-wrap;color:#ffffff}
+.membership-tiers-27{position:relative;height:749px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:56px;padding:100px 80px 100px 80px;box-sizing:border-box}
+.frame-28{position:relative;height:80px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:12px;box-sizing:border-box}
+.tier-benefits-29{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:700;line-height:18.2px;letter-spacing:1.5px;text-align:center;text-transform:uppercase;white-space:nowrap;color:#06b6d4}
+.sleek-cards-ascending-privil-30{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:40px;font-weight:800;line-height:50.4px;text-align:center;white-space:nowrap;color:#0f172a}
+.frame-31{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;align-items:flex-start;gap:24px;box-sizing:border-box}
+.frame-32{position:relative;height:379px;flex:1 1 0;min-width:0;border-radius:24px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;box-shadow:0px 8px 24px 0px rgba(139,92,246,0.03);overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;box-sizing:border-box}
+.frame-33{position:relative;height:172px;align-self:stretch;flex-shrink:0;background:#94a3b8;box-shadow:0px 4px 12px 0px rgba(148,163,184,0.2);display:flex;flex-direction:column;align-items:flex-start;gap:32px;padding:32px 32px 32px 32px;box-sizing:border-box}
+.frame-34{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;justify-content:space-between;align-items:center;box-sizing:border-box}
+.silver-35{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:22px;font-weight:800;line-height:28px;white-space:nowrap;color:#ffffff}
+.enair-36{position:relative;flex-shrink:0;opacity:0.8;font-family:'Geist',sans-serif;font-size:12px;font-weight:700;line-height:16px;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;color:#ffffff}
+.frame-37{position:relative;height:48px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:4px;box-sizing:border-box}
+.milestone-38{position:relative;flex-shrink:0;opacity:0.7;font-family:'Geist',sans-serif;font-size:11px;font-weight:600;line-height:14.3px;text-transform:uppercase;white-space:nowrap;color:#ffffff}
+[class~="15-000-miles-39"]{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:24px;font-weight:800;line-height:30.24px;white-space:nowrap;color:#ffffff}
+.frame-40{position:relative;height:207px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:20px;padding:32px 32px 32px 32px;box-sizing:border-box}
+.key-privileges-41{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;line-height:19px;white-space:nowrap;color:#0f172a}
+.frame-42{position:relative;height:104px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:12px;box-sizing:border-box}
+.frame-43{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;align-items:center;gap:8px;box-sizing:border-box}
+.vector-44{position:relative;width:14px;height:14px;flex-shrink:0;overflow:visible}
+.priority-boarding-group-b-45{position:relative;flex:1 1 0;min-width:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:17px;white-space:pre-wrap;color:#64748b}
+.frame-46{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;align-items:center;gap:8px;box-sizing:border-box}
+.vector-47{position:relative;width:14px;height:14px;flex-shrink:0;overflow:visible}
+.standard-lounge-access-pass--48{position:relative;flex:1 1 0;min-width:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:17px;white-space:pre-wrap;color:#64748b}
+.frame-49{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;align-items:center;gap:8px;box-sizing:border-box}
+.vector-50{position:relative;width:14px;height:14px;flex-shrink:0;overflow:visible}
+[class~="10-bonus-miles-earning-rate-51"]{position:relative;flex:1 1 0;min-width:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:17px;white-space:pre-wrap;color:#64748b}
+.frame-52{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;align-items:center;gap:8px;box-sizing:border-box}
+.vector-53{position:relative;width:14px;height:14px;flex-shrink:0;overflow:visible}
+.complimentary-seat-selection-54{position:relative;flex:1 1 0;min-width:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:17px;white-space:pre-wrap;color:#64748b}
+.frame-55{position:relative;height:379px;flex:1 1 0;min-width:0;border-radius:24px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;box-shadow:0px 8px 24px 0px rgba(139,92,246,0.03);overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;box-sizing:border-box}
+.frame-56{position:relative;height:172px;align-self:stretch;flex-shrink:0;background:#d97706;box-shadow:0px 4px 12px 0px rgba(217,119,6,0.2);display:flex;flex-direction:column;align-items:flex-start;gap:32px;padding:32px 32px 32px 32px;box-sizing:border-box}
+.frame-57{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;justify-content:space-between;align-items:center;box-sizing:border-box}
+.gold-58{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:22px;font-weight:800;line-height:28px;white-space:nowrap;color:#ffffff}
+.enair-59{position:relative;flex-shrink:0;opacity:0.8;font-family:'Geist',sans-serif;font-size:12px;font-weight:700;line-height:16px;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;color:#ffffff}
+.frame-60{position:relative;height:48px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:4px;box-sizing:border-box}
+.milestone-61{position:relative;flex-shrink:0;opacity:0.7;font-family:'Geist',sans-serif;font-size:11px;font-weight:600;line-height:14.3px;text-transform:uppercase;white-space:nowrap;color:#ffffff}
+[class~="40-000-miles-62"]{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:24px;font-weight:800;line-height:30.24px;white-space:nowrap;color:#ffffff}
+.frame-63{position:relative;height:207px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:20px;padding:32px 32px 32px 32px;box-sizing:border-box}
+.key-privileges-64{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;line-height:19px;white-space:nowrap;color:#0f172a}
+.frame-65{position:relative;height:104px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:12px;box-sizing:border-box}
+.frame-66{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;align-items:center;gap:8px;box-sizing:border-box}
+.vector-67{position:relative;width:14px;height:14px;flex-shrink:0;overflow:visible}
+.priority-boarding-group-a-68{position:relative;flex:1 1 0;min-width:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:17px;white-space:pre-wrap;color:#64748b}
+.frame-69{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;align-items:center;gap:8px;box-sizing:border-box}
+.vector-70{position:relative;width:14px;height:14px;flex-shrink:0;overflow:visible}
+.unlimited-global-lounge-entr-71{position:relative;flex:1 1 0;min-width:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:17px;white-space:pre-wrap;color:#64748b}
+.frame-72{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;align-items:center;gap:8px;box-sizing:border-box}
+.vector-73{position:relative;width:14px;height:14px;flex-shrink:0;overflow:visible}
+[class~="25-bonus-miles-earning-rate-74"]{position:relative;flex:1 1 0;min-width:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:17px;white-space:pre-wrap;color:#64748b}
+.frame-75{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;align-items:center;gap:8px;box-sizing:border-box}
+.vector-76{position:relative;width:14px;height:14px;flex-shrink:0;overflow:visible}
+.extra-baggage-allowance-12kg-77{position:relative;flex:1 1 0;min-width:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:17px;white-space:pre-wrap;color:#64748b}
+.frame-78{position:relative;height:413px;flex:1 1 0;min-width:0;border-radius:24px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;box-shadow:0px 8px 24px 0px rgba(139,92,246,0.03);overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;box-sizing:border-box}
+.frame-79{position:relative;height:172px;align-self:stretch;flex-shrink:0;background:#0284c7;box-shadow:0px 4px 12px 0px rgba(2,132,199,0.2);display:flex;flex-direction:column;align-items:flex-start;gap:32px;padding:32px 32px 32px 32px;box-sizing:border-box}
+.frame-80{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;justify-content:space-between;align-items:center;box-sizing:border-box}
+.platinum-81{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:22px;font-weight:800;line-height:28px;white-space:nowrap;color:#ffffff}
+.enair-82{position:relative;flex-shrink:0;opacity:0.8;font-family:'Geist',sans-serif;font-size:12px;font-weight:700;line-height:16px;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;color:#ffffff}
+.frame-83{position:relative;height:48px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:4px;box-sizing:border-box}
+.milestone-84{position:relative;flex-shrink:0;opacity:0.7;font-family:'Geist',sans-serif;font-size:11px;font-weight:600;line-height:14.3px;text-transform:uppercase;white-space:nowrap;color:#ffffff}
+[class~="85-000-miles-85"]{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:24px;font-weight:800;line-height:30.24px;white-space:nowrap;color:#ffffff}
+.frame-86{position:relative;height:241px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:20px;padding:32px 32px 32px 32px;box-sizing:border-box}
+.key-privileges-87{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;line-height:19px;white-space:nowrap;color:#0f172a}
+.frame-88{position:relative;height:138px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:12px;box-sizing:border-box}
+.frame-89{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;align-items:center;gap:8px;box-sizing:border-box}
+.vector-90{position:relative;width:14px;height:14px;flex-shrink:0;overflow:visible}
+.first-class-biometric-boardi-91{position:relative;flex:1 1 0;min-width:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:17px;white-space:pre-wrap;color:#64748b}
+.frame-92{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;align-items:center;gap:8px;box-sizing:border-box}
+.vector-93{position:relative;width:14px;height:14px;flex-shrink:0;overflow:visible}
+.sanctuary-lounge-access-comp-94{position:relative;flex:1 1 0;min-width:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:17px;white-space:pre-wrap;color:#64748b}
+.frame-95{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;align-items:center;gap:8px;box-sizing:border-box}
+.vector-96{position:relative;width:14px;height:14px;flex-shrink:0;overflow:visible}
+[class~="50-bonus-miles-earning-rate-97"]{position:relative;flex:1 1 0;min-width:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:17px;white-space:pre-wrap;color:#64748b}
+.frame-98{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;align-items:center;gap:8px;box-sizing:border-box}
+.vector-99{position:relative;width:14px;height:14px;flex-shrink:0;overflow:visible}
+.complimentary-cabin-upgrade--100{position:relative;flex:1 1 0;min-width:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:17px;white-space:pre-wrap;color:#64748b}
+.frame-101{position:relative;height:396px;flex:1 1 0;min-width:0;border-radius:24px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;box-shadow:0px 8px 24px 0px rgba(139,92,246,0.03);overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;box-sizing:border-box}
+.frame-102{position:relative;height:172px;align-self:stretch;flex-shrink:0;background:#7c3aed;box-shadow:0px 4px 12px 0px rgba(124,58,237,0.2);display:flex;flex-direction:column;align-items:flex-start;gap:32px;padding:32px 32px 32px 32px;box-sizing:border-box}
+.frame-103{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;justify-content:space-between;align-items:center;box-sizing:border-box}
+.diamond-104{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:22px;font-weight:800;line-height:28px;white-space:nowrap;color:#ffffff}
+.enair-105{position:relative;flex-shrink:0;opacity:0.8;font-family:'Geist',sans-serif;font-size:12px;font-weight:700;line-height:16px;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;color:#ffffff}
+.frame-106{position:relative;height:48px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:4px;box-sizing:border-box}
+.milestone-107{position:relative;flex-shrink:0;opacity:0.7;font-family:'Geist',sans-serif;font-size:11px;font-weight:600;line-height:14.3px;text-transform:uppercase;white-space:nowrap;color:#ffffff}
+[class~="150-000-miles-108"]{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:24px;font-weight:800;line-height:30.24px;white-space:nowrap;color:#ffffff}
+.frame-109{position:relative;height:224px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:20px;padding:32px 32px 32px 32px;box-sizing:border-box}
+.key-privileges-110{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;line-height:19px;white-space:nowrap;color:#0f172a}
+.frame-111{position:relative;height:121px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:12px;box-sizing:border-box}
+.frame-112{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;align-items:center;gap:8px;box-sizing:border-box}
+.vector-113{position:relative;width:14px;height:14px;flex-shrink:0;overflow:visible}
+.private-pod-escort-boarding-114{position:relative;flex:1 1 0;min-width:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:17px;white-space:pre-wrap;color:#64748b}
+.frame-115{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;align-items:center;gap:8px;box-sizing:border-box}
+.vector-116{position:relative;width:14px;height:14px;flex-shrink:0;overflow:visible}
+.vip-lounge-private-rest-suit-117{position:relative;flex:1 1 0;min-width:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:17px;white-space:pre-wrap;color:#64748b}
+.frame-118{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;align-items:center;gap:8px;box-sizing:border-box}
+.vector-119{position:relative;width:14px;height:14px;flex-shrink:0;overflow:visible}
+[class~="100-bonus-miles-earning-rate-120"]{position:relative;flex:1 1 0;min-width:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:17px;white-space:pre-wrap;color:#64748b}
+.frame-121{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;align-items:center;gap:8px;box-sizing:border-box}
+.vector-122{position:relative;width:14px;height:14px;flex-shrink:0;overflow:visible}
+.instant-concierge-unlimited--123{position:relative;flex:1 1 0;min-width:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:17px;white-space:pre-wrap;color:#64748b}
+.how-it-works-124{position:relative;height:503px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:56px;padding:0px 80px 100px 80px;box-sizing:border-box}
+.frame-125{position:relative;height:80px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:12px;box-sizing:border-box}
+.simple-accumulation-126{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:700;line-height:18.2px;letter-spacing:1.5px;text-align:center;text-transform:uppercase;white-space:nowrap;color:#06b6d4}
+.how-the-ecosystem-works-127{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:40px;font-weight:800;line-height:50.4px;text-align:center;white-space:nowrap;color:#0f172a}
+.frame-128{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;align-items:flex-start;gap:32px;box-sizing:border-box}
+.frame-129{position:relative;height:267px;flex:1 1 0;min-width:0;border-radius:24px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;box-shadow:0px 8px 24px 0px rgba(139,92,246,0.03);display:flex;flex-direction:column;align-items:flex-start;gap:24px;padding:40px 40px 40px 40px;box-sizing:border-box}
+[class~="01-130"]{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:48px;font-weight:800;line-height:60.48px;white-space:nowrap;color:rgba(139,92,246,0.1)}
+.frame-131{position:relative;height:103px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:12px;box-sizing:border-box}
+.fly-earn-132{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:20px;font-weight:700;line-height:25.2px;white-space:nowrap;color:#0f172a}
+.accrue-enmiles-on-every-sing-133{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:22px;white-space:pre-wrap;color:#64748b}
+.frame-134{position:relative;height:267px;flex:1 1 0;min-width:0;border-radius:24px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;box-shadow:0px 8px 24px 0px rgba(139,92,246,0.03);display:flex;flex-direction:column;align-items:flex-start;gap:24px;padding:40px 40px 40px 40px;box-sizing:border-box}
+[class~="02-135"]{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:48px;font-weight:800;line-height:60.48px;white-space:nowrap;color:rgba(139,92,246,0.1)}
+.frame-136{position:relative;height:103px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:12px;box-sizing:border-box}
+.reach-new-tiers-137{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:20px;font-weight:700;line-height:25.2px;white-space:nowrap;color:#0f172a}
+.scale-through-silver-gold-pl-138{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:22px;white-space:pre-wrap;color:#64748b}
+.frame-139{position:relative;height:267px;flex:1 1 0;min-width:0;border-radius:24px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;box-shadow:0px 8px 24px 0px rgba(139,92,246,0.03);display:flex;flex-direction:column;align-items:flex-start;gap:24px;padding:40px 40px 40px 40px;box-sizing:border-box}
+[class~="03-140"]{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:48px;font-weight:800;line-height:60.48px;white-space:nowrap;color:rgba(139,92,246,0.1)}
+.frame-141{position:relative;height:103px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:12px;box-sizing:border-box}
+.redeem-rewards-142{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:20px;font-weight:700;line-height:25.2px;white-space:nowrap;color:#0f172a}
+.convert-your-accrued-miles-t-143{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:22px;white-space:pre-wrap;color:#64748b}
+.miles-calculator-144{position:relative;height:666px;align-self:stretch;flex-shrink:0;background:#ffffff;border-top:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:column;align-items:flex-start;gap:48px;padding:100px 80px 100px 80px;box-sizing:border-box}
+.frame-145{position:relative;height:80px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:12px;box-sizing:border-box}
+.miles-estimator-146{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:700;line-height:18.2px;letter-spacing:1.5px;text-align:center;text-transform:uppercase;white-space:nowrap;color:#06b6d4}
+.calculate-your-earned-enmile-147{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:40px;font-weight:800;line-height:50.4px;text-align:center;white-space:nowrap;color:#0f172a}
+.frame-148{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;align-items:center;gap:48px;box-sizing:border-box}
+.frame-149{position:relative;height:338px;flex:1 1 0;min-width:0;border-radius:24px;background:#f8fafc;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:column;align-items:flex-start;gap:32px;padding:40px 40px 40px 40px;box-sizing:border-box}
+.frame-150{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;align-items:flex-start;gap:24px;box-sizing:border-box}
+.frame-151{position:relative;height:72px;flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:8px;box-sizing:border-box}
+.from-152{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:11px;font-weight:600;line-height:14.3px;text-transform:uppercase;white-space:nowrap;color:#64748b}
+.frame-153{position:relative;align-self:stretch;flex-shrink:0;border-radius:12px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;align-items:flex-start;padding:16px 16px 16px 16px;box-sizing:border-box}
+.new-york-jfk-154{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:500;line-height:18.2px;white-space:nowrap;color:#0f172a}
+.frame-155{position:relative;height:72px;flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:8px;box-sizing:border-box}
+.to-156{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:11px;font-weight:600;line-height:14.3px;text-transform:uppercase;white-space:nowrap;color:#64748b}
+.frame-157{position:relative;align-self:stretch;flex-shrink:0;border-radius:12px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;align-items:flex-start;padding:16px 16px 16px 16px;box-sizing:border-box}
+.london-lhr-158{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:500;line-height:18.2px;white-space:nowrap;color:#0f172a}
+.frame-159{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;align-items:flex-start;gap:24px;box-sizing:border-box}
+.frame-160{position:relative;height:72px;flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:8px;box-sizing:border-box}
+.fare-class-161{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:11px;font-weight:600;line-height:14.3px;text-transform:uppercase;white-space:nowrap;color:#64748b}
+.frame-162{position:relative;align-self:stretch;flex-shrink:0;border-radius:12px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;align-items:flex-start;padding:16px 16px 16px 16px;box-sizing:border-box}
+.business-sanctuary-163{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:500;line-height:18.2px;white-space:nowrap;color:#0f172a}
+.frame-164{position:relative;height:72px;flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:8px;box-sizing:border-box}
+.current-tier-165{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:11px;font-weight:600;line-height:14.3px;text-transform:uppercase;white-space:nowrap;color:#64748b}
+.frame-166{position:relative;align-self:stretch;flex-shrink:0;border-radius:12px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;align-items:flex-start;padding:16px 16px 16px 16px;box-sizing:border-box}
+.gold-member-167{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:500;line-height:18.2px;white-space:nowrap;color:#0f172a}
+.frame-168{position:relative;align-self:stretch;flex-shrink:0;border-radius:12px;background:#0f172a;display:flex;flex-direction:row;justify-content:center;align-items:center;padding:16px 0px 16px 0px;box-sizing:border-box}
+.estimate-accrual-169{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:700;line-height:18.2px;white-space:nowrap;color:#ffffff}
+.frame-170{position:relative;width:440px;height:331px;flex-shrink:0;border-radius:24px;background:linear-gradient(126.95deg, #06b6d4 0%, #8b5cf6 100%);box-shadow:0px 8px 24px 0px rgba(139,92,246,0.15);display:flex;flex-direction:column;align-items:flex-start;gap:32px;padding:40px 40px 40px 40px;box-sizing:border-box}
+.frame-171{position:relative;height:111px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:8px;box-sizing:border-box}
+.estimated-accrual-172{position:relative;flex-shrink:0;opacity:0.8;font-family:'Geist',sans-serif;font-size:13px;font-weight:700;line-height:17px;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;color:#ffffff}
+[class~="5-420-173"]{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:48px;font-weight:800;line-height:60.48px;white-space:nowrap;color:#ffffff}
+.enmiles-earned-this-flight-174{position:relative;flex-shrink:0;opacity:0.9;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:nowrap;color:#ffffff}
+.rectangle-175{position:relative;height:1px;align-self:stretch;flex-shrink:0;opacity:0.2;background:#ffffff}
+.frame-176{position:relative;height:75px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:12px;box-sizing:border-box}
+.base-flight-miles-3-440-177{position:relative;flex-shrink:0;opacity:0.95;font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:17px;white-space:nowrap;color:#ffffff}
+[class~="25-gold-multiplier-boost-860-178"]{position:relative;flex-shrink:0;opacity:0.95;font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:17px;white-space:nowrap;color:#ffffff}
+.business-class-bonus-1-120-179{position:relative;flex-shrink:0;opacity:0.95;font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:17px;white-space:nowrap;color:#ffffff}
+.loyalty-cta-180{position:relative;height:364px;align-self:stretch;flex-shrink:0;background:rgba(15,23,42,0.25);display:flex;flex-direction:column;align-items:center;gap:32px;padding:100px 100px 100px 100px;box-sizing:border-box}
+.frame-181{position:relative;height:80px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:12px;box-sizing:border-box}
+.membership-enrollment-182{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:700;line-height:18.2px;letter-spacing:1.5px;text-align:center;text-transform:uppercase;white-space:nowrap;color:#06b6d4}
+.begin-your-premium-digital-j-183{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:40px;font-weight:800;line-height:50.4px;text-align:center;white-space:nowrap;color:#0f172a}
+.frame-184{position:relative;width:208px;flex-shrink:0;border-radius:100px;background:#0f172a;display:flex;flex-direction:row;align-items:flex-start;padding:16px 32px 16px 32px;box-sizing:border-box}
+.join-enair-rewards-185{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:15px;font-weight:700;line-height:20px;white-space:nowrap;color:#ffffff}
+.footer-186{position:relative;height:408px;align-self:stretch;flex-shrink:0;background:#f8fafc;border-top:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:column;align-items:flex-start;gap:60px;padding:80px 80px 40px 80px;box-sizing:border-box}
+.footer-content-187{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;justify-content:space-between;align-items:flex-start;box-sizing:border-box}
+.footer-brand-col-188{position:relative;width:320px;height:186px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:24px;box-sizing:border-box}
+.logo-group-189{position:relative;width:101px;flex-shrink:0;display:flex;flex-direction:row;align-items:center;gap:12px;box-sizing:border-box}
+.logo-badge-190{position:relative;width:36px;height:36px;flex-shrink:0;border-radius:10px;background:linear-gradient(135deg, #06b6d4 0%, #8b5cf6 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;box-sizing:border-box}
+.en-191{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:18px;font-weight:800;line-height:23px;white-space:nowrap;color:#ffffff}
+.enair-192{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:20px;font-weight:700;line-height:25.2px;letter-spacing:-0.5px;white-space:nowrap;color:#0f172a}
+.redefining-next-generation-a-193{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:22px;white-space:pre-wrap;color:#64748b}
+.social-icons-194{position:relative;width:192px;flex-shrink:0;display:flex;flex-direction:row;align-items:flex-start;gap:16px;box-sizing:border-box}
+.frame-195{position:relative;width:36px;height:36px;flex-shrink:0;border-radius:18px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;justify-content:center;align-items:center;box-sizing:border-box}
+.vector-196{position:relative;width:16px;height:16px;flex-shrink:0;overflow:visible}
+.frame-197{position:relative;width:36px;height:36px;flex-shrink:0;border-radius:18px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;justify-content:center;align-items:center;box-sizing:border-box}
+.vector-198{position:relative;width:16px;height:16px;flex-shrink:0;overflow:visible}
+.frame-199{position:relative;width:36px;height:36px;flex-shrink:0;border-radius:18px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;justify-content:center;align-items:center;box-sizing:border-box}
+.vector-200{position:relative;width:16px;height:16px;flex-shrink:0;overflow:visible}
+.frame-201{position:relative;width:36px;height:36px;flex-shrink:0;border-radius:18px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;justify-content:center;align-items:center;box-sizing:border-box}
+.vector-202{position:relative;width:16px;height:16px;flex-shrink:0;overflow:visible}
+.frame-203{position:relative;width:180px;height:177px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:20px;box-sizing:border-box}
+.company-204{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;line-height:19px;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;color:#0f172a}
+.frame-205{position:relative;height:138px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:12px;box-sizing:border-box}
+.about-us-206{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.fleet-details-207{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.sustainability-208{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.careers-209{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.pressroom-210{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.frame-211{position:relative;width:180px;height:177px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:20px;box-sizing:border-box}
+.travel-options-212{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;line-height:19px;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;color:#0f172a}
+.frame-213{position:relative;height:138px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:12px;box-sizing:border-box}
+.destinations-214{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.corporate-travel-215{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.global-lounge-network-216{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.loyalty-programs-217{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.partner-flights-218{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.frame-219{position:relative;width:180px;height:177px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:20px;box-sizing:border-box}
+.support-220{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;line-height:19px;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;color:#0f172a}
+.frame-221{position:relative;height:138px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:12px;box-sizing:border-box}
+.help-center-222{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.baggage-claim-223{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.flight-status-224{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.refund-policies-225{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.accessible-travel-226{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.frame-227{position:relative;width:180px;height:177px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:20px;box-sizing:border-box}
+.connect-228{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;line-height:19px;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;color:#0f172a}
+.frame-229{position:relative;height:138px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:12px;box-sizing:border-box}
+.contact-support-230{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.corporate-offices-231{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.affiliate-inquiries-232{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.strategic-alliances-233{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.developer-api-234{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.footer-bottom-235{position:relative;height:42px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:24px;box-sizing:border-box}
+.divider-236{position:relative;height:1px;align-self:stretch;flex-shrink:0;background:#e2e8f0}
+.frame-237{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;justify-content:space-between;align-items:center;box-sizing:border-box}
+[class~="2026-enair-technologies-inc--238"]{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:17px;white-space:nowrap;color:#64748b}
+.frame-239{position:relative;width:317px;flex-shrink:0;display:flex;flex-direction:row;align-items:flex-start;gap:24px;box-sizing:border-box}
+.privacy-policy-240{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:17px;white-space:nowrap;color:#64748b}
+.terms-of-use-241{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:17px;white-space:nowrap;color:#64748b}
+.regulatory-filings-242{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:17px;white-space:nowrap;color:#64748b}
+@media(max-width:900px){
+  .sticky-navigation-2{padding:16px 24px}
+  .nav-links-7{display:none}
+  .menu-mobile{display:block}
+  .membership-tiers-27,.how-it-works-124{height:auto;padding:64px 24px;gap:40px}
+  .frame-31,.frame-128{width:100%;flex-direction:column;align-items:stretch}
+  .frame-32,.frame-55,.frame-78,.frame-101,.frame-129,.frame-134,.frame-139{width:100%;height:auto;min-height:0;flex:none}
+  .frame-34,.frame-57,.frame-80,.frame-103{flex-wrap:wrap;gap:8px}
+  .frame-40,.frame-63,.frame-86,.frame-109{height:auto}
+  .sleek-cards-ascending-privil-30,.how-the-ecosystem-works-127{max-width:100%;white-space:normal;text-wrap:balance}
+  .fly-earn-132,.reach-new-tiers-137,.redeem-rewards-142{white-space:normal}
+  .join-our-premium-digital-rew-26{width:100%;max-width:700px}
+  .loyalty-cta-180{height:auto;padding:64px 24px}
+  .begin-your-premium-digital-j-183{font-size:clamp(28px,5vw,40px);line-height:1.15;white-space:normal}
+  .miles-calculator-144{height:auto;padding:64px 24px}
+  .calculate-your-earned-enmile-147{font-size:clamp(28px,5vw,40px);line-height:1.15;white-space:normal;text-align:center}
+  .frame-148{width:100%;flex-direction:column;align-items:stretch;gap:32px}
+  .frame-149,.frame-170{width:100%;height:auto;flex:none}
+  .footer-186{height:auto;padding:56px 24px 32px;gap:40px}
+  .footer-content-187{width:100%;flex-wrap:wrap;gap:32px}
+  .footer-brand-col-188{width:min(100%,320px);height:auto;flex:1 1 240px}
+  .frame-203,.frame-211,.frame-219,.frame-227{width:auto;height:auto;flex:1 1 160px}
+  .footer-bottom-235{width:100%;height:auto}
+  .frame-237{width:100%;flex-wrap:wrap;gap:16px}
+  .frame-239{width:100%;max-width:100%;min-width:0;box-sizing:border-box;flex-wrap:wrap;gap:12px 20px}
+}
+@media(max-width:600px){
+  .sticky-navigation-2{padding:12px 20px}
+  .frame-33,.frame-56,.frame-79,.frame-102,.frame-40,.frame-63,.frame-86,.frame-109{padding:24px}
+  .loyalty-cta-180{padding:48px 20px}
+  .miles-calculator-144{padding:48px 20px}
+  .frame-149,.frame-170{padding:24px}
+  .frame-150,.frame-159{flex-direction:column;gap:16px}
+  .frame-151,.frame-155,.frame-160,.frame-164{width:100%;flex:none}
+  .footer-186{padding:48px 20px 28px}
+}
+.loyalty-hero-21{background:linear-gradient(rgba(15,23,42,.48),rgba(15,23,42,.48)),url("images/733a1975e2bf37c870b85036bf7305f8c7a70e3c.jpg") center 48%/cover no-repeat}
+.frame-153,.frame-157{position:relative;border:1px solid rgba(6,182,212,.22);background:linear-gradient(135deg,#fff 0%,#f0fdff 100%);box-shadow:0 8px 20px rgba(6,182,212,.07)}
+.frame-153:after,.frame-157:after{content:"";position:absolute;right:15px;top:50%;width:8px;height:8px;border-right:2px solid #06b6d4;border-bottom:2px solid #06b6d4;transform:translateY(-70%) rotate(45deg);pointer-events:none}
+.enair-miles-select{width:100%;height:36px;border:0;appearance:none;background:transparent;color:#0f172a;font:600 14px 'Geist',sans-serif;cursor:pointer}
+.enair-miles-airport-select{padding-right:24px}
+.enair-miles-select:focus-visible{outline:2px solid #06b6d4;outline-offset:3px;border-radius:6px}
+.enair-miles-select option{color:#0f172a}
+.tag-23{width:max-content;max-width:100%;align-items:center}
+.enair-rewards-system-24{white-space:normal;text-align:center}
+.earn-miles-unlock-the-world-25{white-space:normal;text-wrap:balance}
+.join-our-premium-digital-rew-26{max-width:100%;white-space:normal;text-wrap:balance}
+.loyalty-cta-180{background:linear-gradient(rgba(15,23,42,.55),rgba(15,23,42,.55)),url("images/8e5213b1360978f7e11e35e857922cdc1d5ee45c.jpg") center 54%/cover no-repeat}
+.begin-your-premium-digital-j-183{max-width:100%;color:#fff;white-space:normal;text-wrap:balance}
+.membership-enrollment-182{color:#67e8f9}
+.frame-184{cursor:pointer}

@@ -1,0 +1,247 @@
+*{margin:0;padding:0}
+body{width:100%;min-width:320px;background:#fff;-webkit-font-smoothing:antialiased}
+body>div{margin:0 auto}
+img,svg{display:block}
+.enair-about-contact-1{position:relative;width:100%;max-width:1440px;min-height:100vh;height:auto;margin:0 auto;background:#f8fafc;display:flex;flex-direction:column;align-items:flex-start;box-sizing:border-box;overflow-x:clip}
+.about-hero-2{position:relative;height:520px;align-self:stretch;flex-shrink:0;background:rgba(15,23,42,0.35);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:40px;padding:80px 80px 80px 80px;box-sizing:border-box}
+.hero-copy-3{position:relative;height:187px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:16px;box-sizing:border-box}
+.tag-4{position:relative;width:144px;flex-shrink:0;border-radius:100px;background:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.56);box-sizing:border-box;display:flex;flex-direction:row;align-items:flex-start;padding:8px 16px 8px 16px;box-sizing:border-box}
+.the-enair-story-5{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:600;line-height:17px;letter-spacing:1.5px;text-transform:uppercase;white-space:nowrap;color:#8b5cf6}
+.redefining-aviation-since-20-6{position:relative;align-self:stretch;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:56px;font-weight:800;line-height:70.56px;letter-spacing:-1.5px;text-align:center;white-space:pre-wrap;color:#ffffff}
+.we-believe-that-air-travel-c-7{position:relative;width:700px;flex-shrink:0;opacity:0.95;font-family:'Geist',sans-serif;font-size:20px;font-weight:400;line-height:30px;text-align:center;white-space:pre-wrap;color:#ffffff}
+.timeline-section-8{position:relative;height:583px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:56px;padding:100px 80px 100px 80px;box-sizing:border-box}
+.frame-9{position:relative;height:80px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:12px;box-sizing:border-box}
+.our-journey-10{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:700;line-height:18.2px;letter-spacing:1.5px;text-align:center;text-transform:uppercase;white-space:nowrap;color:#06b6d4}
+.the-flight-path-of-innovatio-11{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:40px;font-weight:800;line-height:50.4px;text-align:center;white-space:nowrap;color:#0f172a}
+.frame-12{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;align-items:flex-start;gap:32px;box-sizing:border-box}
+.frame-13{position:relative;height:247px;flex:1 1 0;min-width:0;border-radius:24px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:column;align-items:flex-start;gap:24px;padding:40px 40px 40px 40px;box-sizing:border-box}
+[class~="2024-14"]{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:32px;font-weight:800;line-height:40.32px;white-space:nowrap;color:#06b6d4}
+.frame-15{position:relative;height:103px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:12px;box-sizing:border-box}
+.founding-vision-16{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:20px;font-weight:700;line-height:25.2px;white-space:nowrap;color:#0f172a}
+.a-group-of-aerospace-veteran-17{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:22px;white-space:pre-wrap;color:#64748b}
+.frame-18{position:relative;height:247px;flex:1 1 0;min-width:0;border-radius:24px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:column;align-items:flex-start;gap:24px;padding:40px 40px 40px 40px;box-sizing:border-box}
+[class~="2025-19"]{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:32px;font-weight:800;line-height:40.32px;white-space:nowrap;color:#06b6d4}
+.frame-20{position:relative;height:103px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:12px;box-sizing:border-box}
+.hydrogen-fleet-launch-21{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:20px;font-weight:700;line-height:25.2px;white-space:nowrap;color:#0f172a}
+.our-first-pressurized-hydrog-22{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:22px;white-space:pre-wrap;color:#64748b}
+.frame-23{position:relative;height:247px;flex:1 1 0;min-width:0;border-radius:24px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:column;align-items:flex-start;gap:24px;padding:40px 40px 40px 40px;box-sizing:border-box}
+[class~="2026-24"]{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:32px;font-weight:800;line-height:40.32px;white-space:nowrap;color:#06b6d4}
+.frame-25{position:relative;height:103px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:12px;box-sizing:border-box}
+.global-hub-network-26{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:20px;font-weight:700;line-height:25.2px;white-space:nowrap;color:#0f172a}
+.we-expand-direct-routing-to--27{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:22px;white-space:pre-wrap;color:#64748b}
+.leadership-28{position:relative;height:624px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:56px;padding:0px 80px 100px 80px;box-sizing:border-box}
+.frame-29{position:relative;height:80px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:12px;box-sizing:border-box}
+.the-architects-30{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:700;line-height:18.2px;letter-spacing:1.5px;text-align:center;text-transform:uppercase;white-space:nowrap;color:#06b6d4}
+.our-leadership-team-31{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:40px;font-weight:800;line-height:50.4px;text-align:center;white-space:nowrap;color:#0f172a}
+.frame-32{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;align-items:flex-start;gap:24px;box-sizing:border-box}
+.frame-33{position:relative;height:388px;flex:1 1 0;min-width:0;border-radius:24px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;box-shadow:0px 8px 24px 0px rgba(139,92,246,0.03);overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;box-sizing:border-box}
+.rectangle-34{position:relative;height:240px;align-self:stretch;flex-shrink:0;background:url("images/0acf37893f0647fb8dd014e67f9a75370011ebee.jpg") center / cover no-repeat}
+.frame-35{position:relative;height:148px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:24px 24px 24px 24px;box-sizing:border-box}
+.dr-aris-vance-36{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:20px;font-weight:700;line-height:25.2px;white-space:nowrap;color:#0f172a}
+.chief-executive-officer-37{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:600;line-height:17px;text-transform:uppercase;white-space:nowrap;color:#8b5cf6}
+.former-aerospace-engineering-38{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:21px;white-space:pre-wrap;color:#64748b}
+.frame-39{position:relative;height:388px;flex:1 1 0;min-width:0;border-radius:24px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;box-shadow:0px 8px 24px 0px rgba(139,92,246,0.03);overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;box-sizing:border-box}
+.rectangle-40{position:relative;height:240px;align-self:stretch;flex-shrink:0;background:url("images/c7e67ee30298ebaf815c129b57c4798800dcea59.jpg") center / cover no-repeat}
+.frame-41{position:relative;height:148px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:24px 24px 24px 24px;box-sizing:border-box}
+.siddharth-mehta-42{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:20px;font-weight:700;line-height:25.2px;white-space:nowrap;color:#0f172a}
+.chief-operating-officer-43{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:600;line-height:17px;text-transform:uppercase;white-space:nowrap;color:#8b5cf6}
+.logistics-specialist-managin-44{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:21px;white-space:pre-wrap;color:#64748b}
+.frame-45{position:relative;height:388px;flex:1 1 0;min-width:0;border-radius:24px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;box-shadow:0px 8px 24px 0px rgba(139,92,246,0.03);overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;box-sizing:border-box}
+.rectangle-46{position:relative;height:240px;align-self:stretch;flex-shrink:0;background:url("images/10de4f7ef4e5fce0764f50197998510799791bf3.jpg") center / cover no-repeat}
+.frame-47{position:relative;height:148px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:24px 24px 24px 24px;box-sizing:border-box}
+.elena-rostova-48{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:20px;font-weight:700;line-height:25.2px;white-space:nowrap;color:#0f172a}
+.chief-technology-officer-49{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:600;line-height:17px;text-transform:uppercase;white-space:nowrap;color:#8b5cf6}
+.neural-systems-engineer-desi-50{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:21px;white-space:pre-wrap;color:#64748b}
+.frame-51{position:relative;height:388px;flex:1 1 0;min-width:0;border-radius:24px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;box-shadow:0px 8px 24px 0px rgba(139,92,246,0.03);overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;box-sizing:border-box}
+.rectangle-52{position:relative;height:240px;align-self:stretch;flex-shrink:0;background:url("images/d8ab9f3432559594febb1503c52152b88dce41f5.jpg") center / cover no-repeat}
+.frame-53{position:relative;height:148px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:24px 24px 24px 24px;box-sizing:border-box}
+.marcus-dupont-54{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:20px;font-weight:700;line-height:25.2px;white-space:nowrap;color:#0f172a}
+.chief-experience-officer-55{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:600;line-height:17px;text-transform:uppercase;white-space:nowrap;color:#8b5cf6}
+.luxury-resort-architect-desi-56{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:21px;white-space:pre-wrap;color:#64748b}
+.our-values-57{position:relative;height:574px;align-self:stretch;flex-shrink:0;background:#ffffff;border-top:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:column;align-items:flex-start;gap:56px;padding:100px 100px 100px 100px;box-sizing:border-box}
+.frame-58{position:relative;height:80px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:12px;box-sizing:border-box}
+.our-anchors-59{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:700;line-height:18.2px;letter-spacing:1.5px;text-align:center;text-transform:uppercase;white-space:nowrap;color:#06b6d4}
+.the-pillars-of-enair-60{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:40px;font-weight:800;line-height:50.4px;text-align:center;white-space:nowrap;color:#0f172a}
+.frame-61{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;align-items:flex-start;gap:24px;box-sizing:border-box}
+.frame-62{position:relative;height:238px;flex:1 1 0;min-width:0;border-radius:20px;background:#f8fafc;display:flex;flex-direction:column;align-items:flex-start;gap:24px;padding:32px 32px 32px 32px;box-sizing:border-box}
+.frame-63{position:relative;width:56px;height:56px;flex-shrink:0;border-radius:16px;background:rgba(6,182,212,0.1);display:flex;flex-direction:row;justify-content:center;align-items:center;box-sizing:border-box}
+.vector-64{position:relative;width:24px;height:24px;flex-shrink:0;overflow:visible}
+.frame-65{position:relative;height:94px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:8px;box-sizing:border-box}
+.continuous-innovation-66{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:18px;font-weight:700;line-height:23px;white-space:nowrap;color:#0f172a}
+.aerodynamics-engine-technolo-67{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:21px;white-space:pre-wrap;color:#64748b}
+.frame-68{position:relative;height:238px;flex:1 1 0;min-width:0;border-radius:20px;background:#f8fafc;display:flex;flex-direction:column;align-items:flex-start;gap:24px;padding:32px 32px 32px 32px;box-sizing:border-box}
+.frame-69{position:relative;width:56px;height:56px;flex-shrink:0;border-radius:16px;background:rgba(139,92,246,0.1);display:flex;flex-direction:row;justify-content:center;align-items:center;box-sizing:border-box}
+.vector-70{position:relative;width:24px;height:24px;flex-shrink:0;overflow:visible}
+.frame-71{position:relative;height:94px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:8px;box-sizing:border-box}
+.zero-carbon-mandate-72{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:18px;font-weight:700;line-height:23px;white-space:nowrap;color:#0f172a}
+.every-flight-resource-and-gr-73{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:21px;white-space:pre-wrap;color:#64748b}
+.frame-74{position:relative;height:238px;flex:1 1 0;min-width:0;border-radius:20px;background:#f8fafc;display:flex;flex-direction:column;align-items:flex-start;gap:24px;padding:32px 32px 32px 32px;box-sizing:border-box}
+.frame-75{position:relative;width:56px;height:56px;flex-shrink:0;border-radius:16px;background:rgba(6,182,212,0.1);display:flex;flex-direction:row;justify-content:center;align-items:center;box-sizing:border-box}
+.vector-76{position:relative;width:24px;height:24px;flex-shrink:0;overflow:visible}
+.frame-77{position:relative;height:94px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:8px;box-sizing:border-box}
+.physical-restoration-78{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:18px;font-weight:700;line-height:23px;white-space:nowrap;color:#0f172a}
+.long-journeys-should-leave-p-79{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:21px;white-space:pre-wrap;color:#64748b}
+.frame-80{position:relative;height:238px;flex:1 1 0;min-width:0;border-radius:20px;background:#f8fafc;display:flex;flex-direction:column;align-items:flex-start;gap:24px;padding:32px 32px 32px 32px;box-sizing:border-box}
+.frame-81{position:relative;width:56px;height:56px;flex-shrink:0;border-radius:16px;background:rgba(139,92,246,0.1);display:flex;flex-direction:row;justify-content:center;align-items:center;box-sizing:border-box}
+.vector-82{position:relative;width:24px;height:24px;flex-shrink:0;overflow:visible}
+.frame-83{position:relative;height:94px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:8px;box-sizing:border-box}
+.universal-connection-84{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:18px;font-weight:700;line-height:23px;white-space:nowrap;color:#0f172a}
+.bridging-continents-graceful-85{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:21px;white-space:pre-wrap;color:#64748b}
+.contact-section-86{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;align-items:flex-start;gap:48px;padding:100px 100px 100px 100px;box-sizing:border-box}
+.frame-87{position:relative;width:500px;height:560px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:32px;box-sizing:border-box}
+.frame-88{position:relative;height:80px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:12px;box-sizing:border-box}
+.get-in-touch-89{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:700;line-height:18.2px;letter-spacing:1.5px;text-transform:uppercase;white-space:nowrap;color:#06b6d4}
+.we-are-here-to-assist-90{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:40px;font-weight:800;line-height:50.4px;white-space:nowrap;color:#0f172a}
+.have-questions-about-our-hyd-91{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:16px;font-weight:400;line-height:26px;white-space:pre-wrap;color:#64748b}
+.frame-92{position:relative;height:338px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:16px;box-sizing:border-box}
+.frame-93{position:relative;height:102px;align-self:stretch;flex-shrink:0;border-radius:16px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:20px 20px 20px 20px;box-sizing:border-box}
+.call-us-globally-94{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:11px;font-weight:600;line-height:14.3px;text-transform:uppercase;white-space:nowrap;color:#64748b}
+[class~="1-800-555-0199-95"]{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:16px;font-weight:700;line-height:20.16px;white-space:nowrap;color:#0f172a}
+.available-24-7-for-diamond-p-96{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:12px;font-weight:400;line-height:16px;white-space:nowrap;color:#64748b}
+.frame-97{position:relative;height:102px;align-self:stretch;flex-shrink:0;border-radius:16px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:20px 20px 20px 20px;box-sizing:border-box}
+.email-concierge-98{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:11px;font-weight:600;line-height:14.3px;text-transform:uppercase;white-space:nowrap;color:#64748b}
+.concierge-enair-aero-99{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:16px;font-weight:700;line-height:20.16px;white-space:nowrap;color:#0f172a}
+.average-reply-under-12-minut-100{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:12px;font-weight:400;line-height:16px;white-space:nowrap;color:#64748b}
+.frame-101{position:relative;height:102px;align-self:stretch;flex-shrink:0;border-radius:16px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:20px 20px 20px 20px;box-sizing:border-box}
+.our-aerospace-hq-102{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:11px;font-weight:600;line-height:14.3px;text-transform:uppercase;white-space:nowrap;color:#64748b}
+[class~="100-innovation-way-london-uk-103"]{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:16px;font-weight:700;line-height:20.16px;white-space:nowrap;color:#0f172a}
+.glass-center-office-room-12-104{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:12px;font-weight:400;line-height:16px;white-space:nowrap;color:#64748b}
+.frame-105{position:relative;height:532px;flex:1 1 0;min-width:0;border-radius:24px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;box-shadow:0px 8px 24px 0px rgba(139,92,246,0.03);display:flex;flex-direction:column;align-items:flex-start;gap:24px;padding:40px 40px 40px 40px;box-sizing:border-box}
+.send-message-106{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:22px;font-weight:800;line-height:28px;white-space:nowrap;color:#0f172a}
+.frame-107{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;align-items:flex-start;gap:24px;box-sizing:border-box}
+.frame-108{position:relative;height:68px;flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:8px;box-sizing:border-box}
+.full-name-109{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:11px;font-weight:600;line-height:14.3px;text-transform:uppercase;white-space:nowrap;color:#64748b}
+.frame-110{position:relative;align-self:stretch;flex-shrink:0;border-radius:8px;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;align-items:flex-start;padding:14px 14px 14px 14px;box-sizing:border-box}
+.enter-name-111{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:nowrap;color:#64748b}
+.frame-112{position:relative;height:68px;flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:8px;box-sizing:border-box}
+.email-address-113{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:11px;font-weight:600;line-height:14.3px;text-transform:uppercase;white-space:nowrap;color:#64748b}
+.frame-114{position:relative;align-self:stretch;flex-shrink:0;border-radius:8px;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;align-items:flex-start;padding:14px 14px 14px 14px;box-sizing:border-box}
+.enter-email-115{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:nowrap;color:#64748b}
+.frame-116{position:relative;height:68px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:8px;box-sizing:border-box}
+.subject-117{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:11px;font-weight:600;line-height:14.3px;text-transform:uppercase;white-space:nowrap;color:#64748b}
+.frame-118{position:relative;align-self:stretch;flex-shrink:0;border-radius:8px;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;justify-content:space-between;align-items:center;padding:14px 14px 14px 14px;box-sizing:border-box}
+.corporate-alliances-119{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:nowrap;color:#0f172a}
+.vector-120{position:relative;width:14px;height:14px;flex-shrink:0;overflow:visible}
+.frame-121{position:relative;height:142px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:8px;box-sizing:border-box}
+.message-122{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:11px;font-weight:600;line-height:14.3px;text-transform:uppercase;white-space:nowrap;color:#64748b}
+.frame-123{position:relative;height:120px;align-self:stretch;flex-shrink:0;border-radius:8px;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;align-items:flex-start;padding:14px 14px 14px 14px;box-sizing:border-box}
+.briefly-detail-your-inquiry-124{position:relative;flex:1 1 0;min-width:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.frame-125{position:relative;align-self:stretch;flex-shrink:0;border-radius:12px;background:linear-gradient(94.67deg, #06b6d4 0%, #8b5cf6 100%);box-shadow:0px 4px 16px 0px rgba(139,92,246,0.15);display:flex;flex-direction:row;justify-content:center;align-items:center;padding:16px 0px 16px 0px;box-sizing:border-box}
+.send-message-126{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:700;line-height:18.2px;white-space:nowrap;color:#ffffff}
+.footer-127{position:relative;height:408px;align-self:stretch;flex-shrink:0;background:#f8fafc;border-top:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:column;align-items:flex-start;gap:60px;padding:80px 80px 40px 80px;box-sizing:border-box}
+.footer-content-128{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;justify-content:space-between;align-items:flex-start;box-sizing:border-box}
+.footer-brand-col-129{position:relative;width:320px;height:186px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:24px;box-sizing:border-box}
+.logo-group-130{position:relative;width:101px;flex-shrink:0;display:flex;flex-direction:row;align-items:center;gap:12px;box-sizing:border-box}
+.logo-badge-131{position:relative;width:36px;height:36px;flex-shrink:0;border-radius:10px;background:linear-gradient(135deg, #06b6d4 0%, #8b5cf6 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;box-sizing:border-box}
+.en-132{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:18px;font-weight:800;line-height:23px;white-space:nowrap;color:#ffffff}
+.enair-133{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:20px;font-weight:700;line-height:25.2px;letter-spacing:-0.5px;white-space:nowrap;color:#0f172a}
+.redefining-next-generation-a-134{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:22px;white-space:pre-wrap;color:#64748b}
+.social-icons-135{position:relative;width:192px;flex-shrink:0;display:flex;flex-direction:row;align-items:flex-start;gap:16px;box-sizing:border-box}
+.frame-136{position:relative;width:36px;height:36px;flex-shrink:0;border-radius:18px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;justify-content:center;align-items:center;box-sizing:border-box}
+.vector-137{position:relative;width:16px;height:16px;flex-shrink:0;overflow:visible}
+.frame-138{position:relative;width:36px;height:36px;flex-shrink:0;border-radius:18px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;justify-content:center;align-items:center;box-sizing:border-box}
+.vector-139{position:relative;width:16px;height:16px;flex-shrink:0;overflow:visible}
+.frame-140{position:relative;width:36px;height:36px;flex-shrink:0;border-radius:18px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;justify-content:center;align-items:center;box-sizing:border-box}
+.vector-141{position:relative;width:16px;height:16px;flex-shrink:0;overflow:visible}
+.frame-142{position:relative;width:36px;height:36px;flex-shrink:0;border-radius:18px;background:#ffffff;border:1px solid #e2e8f0;box-sizing:border-box;display:flex;flex-direction:row;justify-content:center;align-items:center;box-sizing:border-box}
+.vector-143{position:relative;width:16px;height:16px;flex-shrink:0;overflow:visible}
+.frame-144{position:relative;width:180px;height:177px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:20px;box-sizing:border-box}
+.company-145{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;line-height:19px;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;color:#0f172a}
+.frame-146{position:relative;height:138px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:12px;box-sizing:border-box}
+.about-us-147{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.fleet-details-148{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.sustainability-149{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.careers-150{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.pressroom-151{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.frame-152{position:relative;width:180px;height:177px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:20px;box-sizing:border-box}
+.travel-options-153{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;line-height:19px;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;color:#0f172a}
+.frame-154{position:relative;height:138px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:12px;box-sizing:border-box}
+.destinations-155{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.corporate-travel-156{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.global-lounge-network-157{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.loyalty-programs-158{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.partner-flights-159{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.frame-160{position:relative;width:180px;height:177px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:20px;box-sizing:border-box}
+.support-161{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;line-height:19px;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;color:#0f172a}
+.frame-162{position:relative;height:138px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:12px;box-sizing:border-box}
+.help-center-163{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.baggage-claim-164{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.flight-status-165{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.refund-policies-166{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.accessible-travel-167{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.frame-168{position:relative;width:180px;height:177px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:20px;box-sizing:border-box}
+.connect-169{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;line-height:19px;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;color:#0f172a}
+.frame-170{position:relative;height:138px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:12px;box-sizing:border-box}
+.contact-support-171{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.corporate-offices-172{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.affiliate-inquiries-173{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.strategic-alliances-174{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.developer-api-175{position:relative;align-self:stretch;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:400;line-height:18.2px;white-space:pre-wrap;color:#64748b}
+.footer-bottom-176{position:relative;height:42px;align-self:stretch;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:24px;box-sizing:border-box}
+.divider-177{position:relative;height:1px;align-self:stretch;flex-shrink:0;background:#e2e8f0}
+.frame-178{position:relative;align-self:stretch;flex-shrink:0;display:flex;flex-direction:row;justify-content:space-between;align-items:center;box-sizing:border-box}
+[class~="2026-enair-technologies-inc--179"]{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:17px;white-space:nowrap;color:#64748b}
+.frame-180{position:relative;width:317px;flex-shrink:0;display:flex;flex-direction:row;align-items:flex-start;gap:24px;box-sizing:border-box}
+.privacy-policy-181{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:17px;white-space:nowrap;color:#64748b}
+.terms-of-use-182{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:17px;white-space:nowrap;color:#64748b}
+.regulatory-filings-183{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:17px;white-space:nowrap;color:#64748b}
+.sticky-navigation-184{position:relative;align-self:stretch;flex-shrink:0;background:rgba(255,255,255,0.7);border-bottom:1px solid #e2e8f0;box-sizing:border-box;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:flex;flex-direction:row;justify-content:space-between;align-items:center;padding:16px 80px 16px 80px;box-sizing:border-box}
+.logo-group-185{position:relative;width:110px;flex-shrink:0;display:flex;flex-direction:row;align-items:center;gap:12px;box-sizing:border-box}
+.logo-badge-186{position:relative;width:40px;height:40px;flex-shrink:0;border-radius:12px;background:linear-gradient(135deg, #06b6d4 0%, #8b5cf6 100%);box-shadow:0px 4px 16px 0px rgba(6,182,212,0.2);display:flex;flex-direction:column;justify-content:center;align-items:center;box-sizing:border-box}
+.en-187{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:20px;font-weight:800;line-height:25.2px;white-space:nowrap;color:#ffffff}
+.enair-188{position:relative;flex-shrink:0;font-family:'Outfit',sans-serif;font-size:22px;font-weight:700;line-height:28px;letter-spacing:-0.5px;white-space:nowrap;color:#0f172a}
+.nav-links-189{position:relative;width:543px;flex-shrink:0;display:flex;flex-direction:row;align-items:center;gap:40px;box-sizing:border-box}
+.frame-190{position:relative;height:20px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:4px;box-sizing:border-box}
+.destinations-191{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:15px;font-weight:500;line-height:20px;white-space:nowrap;color:#0f172a}
+.frame-192{position:relative;height:20px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:4px;box-sizing:border-box}
+.book-flights-193{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:15px;font-weight:500;line-height:20px;white-space:nowrap;color:#0f172a}
+.frame-194{position:relative;height:20px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:4px;box-sizing:border-box}
+.our-fleet-195{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:15px;font-weight:500;line-height:20px;white-space:nowrap;color:#0f172a}
+.frame-196{position:relative;height:20px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:4px;box-sizing:border-box}
+.loyalty-197{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:15px;font-weight:500;line-height:20px;white-space:nowrap;color:#0f172a}
+.frame-198{position:relative;height:27px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:4px;box-sizing:border-box}
+.about-enair-199{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:15px;font-weight:600;line-height:20px;white-space:nowrap;color:#8b5cf6}
+.indicator-200{position:relative;width:16px;height:3px;flex-shrink:0;border-radius:1.5px;background:#8b5cf6}
+.book-now-cta-201{position:relative;width:117px;flex-shrink:0;border-radius:100px;background:linear-gradient(109.75deg, #06b6d4 0%, #8b5cf6 100%);box-shadow:0px 4px 16px 0px rgba(139,92,246,0.15);display:flex;flex-direction:row;justify-content:center;align-items:center;padding:12px 24px 12px 24px;box-sizing:border-box}
+.book-now-202{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:14px;font-weight:600;line-height:18.2px;white-space:nowrap;color:#ffffff}
+@media(max-width:900px){
+  .contact-section-86{flex-direction:column;gap:32px;padding:64px 24px}
+  .frame-87,.frame-105{width:100%;height:auto;flex:none}
+  .frame-105{padding:32px}
+}
+@media(max-width:600px){
+  .contact-section-86{padding:48px 20px}
+  .frame-105{padding:24px}
+  .frame-107{flex-direction:column;gap:16px}
+  .frame-108,.frame-112{width:100%;flex:none}
+}
+@media(max-width:900px){
+  .we-believe-that-air-travel-c-7{width:100%;max-width:700px}
+  .footer-127{height:auto;padding:56px 24px 32px;gap:40px}
+  .footer-content-128{width:100%;flex-wrap:wrap;gap:32px}
+  .footer-brand-col-129{width:min(100%,320px);height:auto;flex:1 1 240px}
+  .footer-content-128>*:not(.footer-brand-col-129){width:auto;height:auto;flex:1 1 150px;min-width:0}
+  .footer-bottom-176{width:100%;height:auto}
+  .divider-177{width:100%}
+  .frame-178{width:100%;flex-wrap:wrap;gap:16px}
+  .frame-180{width:auto;flex-wrap:wrap;gap:12px 20px}
+  .chief-experience-officer-55,.universal-connection-84{white-space:normal}
+}
+@media(max-width:600px){
+  .footer-127{padding:48px 20px 28px}
+}
+.about-hero-2{background:linear-gradient(rgba(15,23,42,.5),rgba(15,23,42,.5)),url("images/d608dc38269e72681e40e4c655c0537a01239e3e.jpg") center 48%/cover no-repeat}
+.the-enair-story-5{white-space:normal;text-align:center}
+.redefining-aviation-since-20-6{white-space:normal;text-wrap:balance}
+.we-believe-that-air-travel-c-7{max-width:100%;white-space:normal;text-wrap:balance}
+.the-flight-path-of-innovatio-11,.the-pillars-of-enair-60{max-width:100%;white-space:normal;text-wrap:balance}
+.vector-64,.vector-70,.vector-76,.vector-82{color:#06b6d4}
+.vector-70,.vector-82{color:#8b5cf6}
+.contact-message-form{height:auto;min-height:532px}
+.contact-input,.contact-select,.contact-textarea{width:100%;min-width:0;border:0;background:transparent;color:#0f172a;font:400 14px 'Geist',sans-serif;outline:none}
+.contact-input,.contact-select{height:18px}
+.contact-select{appearance:none;cursor:pointer}
+.contact-textarea{height:100%;min-height:88px;resize:vertical}
+.frame-110:focus-within,.frame-114:focus-within,.frame-118:focus-within,.frame-123:focus-within{border-color:#06b6d4;box-shadow:0 0 0 3px rgba(6,182,212,.12)}
+.frame-125{width:100%;border:0;cursor:pointer}
+.contact-form-status{min-height:20px;color:#0f766e;font:500 13px 'Geist',sans-serif}
