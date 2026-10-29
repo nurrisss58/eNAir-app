@@ -19,26 +19,47 @@
     if (url) window.location.href = url;
   }
 
-  function bindText(text, handler, occurrence = 0) {
+  function attachInteractive(node, handler) {
+    if (!node || node.dataset.enairBound === "true") return;
+
+    node.dataset.enairBound = "true";
+    node.style.cursor = "pointer";
+    node.tabIndex = 0;
+    node.setAttribute("role", "button");
+    node.setAttribute("aria-label", node.textContent ? node.textContent.trim() : "Action");
+
+    const run = function (event) {
+      if (event && event.type === "keydown") {
+        const key = event.key || "";
+        if (key !== "Enter" && key !== " " && key !== "Spacebar") return;
+      }
+
+      if (event) {
+        event.preventDefault && event.preventDefault();
+        event.stopPropagation && event.stopPropagation();
+      }
+
+      handler(event, node);
+    };
+
+    node.addEventListener("click", run);
+    node.addEventListener("keydown", run);
+  }
+
+  function bindText(text, handler) {
     const nodes = [...document.querySelectorAll("button, a, div, span")];
-    let found = 0;
+    let matched = 0;
 
     for (const node of nodes) {
       if (!node || !node.textContent) continue;
       const value = (node.textContent || "").replace(/\s+/g, " ").trim();
       if (value.toLowerCase() === text.toLowerCase()) {
-        if (found === occurrence) {
-          node.style.cursor = "pointer";
-          node.addEventListener("click", function (event) {
-            event.preventDefault();
-            handler(event, node);
-          });
-          return true;
-        }
-        found += 1;
+        attachInteractive(node, handler);
+        matched += 1;
       }
     }
-    return false;
+
+    return matched > 0;
   }
 
   function bindNavigation() {
