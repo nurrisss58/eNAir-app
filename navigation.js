@@ -1203,4 +1203,16 @@
   if(is('mobile-homepage.html')||is('mobile-booking.html')||is('enair-booking.html')||is('booking-search.html')||is('enair-fleet-experience.html')||is('enair-loyalty.html')) mobileMenu();
   globalFallbacks(); informationalFallbacks();
   updateDisplayedRoute();
+
+  // Виджет ассистента подключается отдельным файлом, чтобы не раздувать navigation.js.
+  function loadAssistant() {
+    if (document.getElementById('enair-assistant-script')) return;
+    const script = document.createElement('script');
+    script.id = 'enair-assistant-script';
+    script.src = 'assistant.js';
+    script.defer = true;
+    document.body.appendChild(script);
+  }
+  if (document.body) loadAssistant();
+  else document.addEventListener('DOMContentLoaded', loadAssistant);
 })();
