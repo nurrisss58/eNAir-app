@@ -6,26 +6,60 @@ from flask_cors import CORS
 import psycopg2
 from werkzeug.security import generate_password_hash, check_password_hash
 
-app = Flask(__name__, static_folder='.', static_url_path='')
+# static_folder=None: встроенная раздача файлов из корня отключена,
+# иначе Flask отдаёт по прямой ссылке app.py и Procfile в обход проверок ниже.
+app = Flask(__name__, static_folder=None)
 CORS(app)
+
+# Разрешаем раздавать только файлы сайта. Иначе Flask отдаёт по прямой ссылке
+# app.py, requirements.txt и Procfile — вместе с кодом и паролями.
+PUBLIC_EXTENSIONS = {
+    ".html", ".css", ".js", ".mjs",
+    ".jpg", ".jpeg", ".png", ".svg", ".webp", ".gif", ".ico",
+    ".json", ".woff", ".woff2", ".ttf",
+}
+
+
+def is_public_path(path):
+    """True, если путь можно отдавать посетителю сайта."""
+    if not path or path.startswith("/") or ".." in path:
+        return False
+    parts = path.replace("\\", "/").split("/")
+    if any(part.startswith(".") for part in parts):
+        return False
+    return os.path.splitext(path)[1].lower() in PUBLIC_EXTENSIONS
+
 
 def get_db():
     database_url = os.environ.get("DATABASE_URL")
     if database_url:
-        return psycopg2.connect(database_url, sslmode="require")
+        return psycopg2.connect(database_url, sslmode="require", connect_timeout=10)
 
+    # Локальная разработка. На хостинге всегда используется DATABASE_URL (Neon).
     return psycopg2.connect(
         dbname="airline",
         user="postgres",
         password="2726259012",
         host="localhost",
-        port="5432"
+        port="5432",
+        connect_timeout=10
     )
 
+
 def init_db():
+    """Создаёт таблицы, если их нет, и убирает случайные дубли рейсов.
+
+    Вызывается при импорте модуля, поэтому работает и под gunicorn на Render,
+    а не только при `python app.py`.
+    """
+    conn = None
+    cur = None
     try:
         conn = get_db()
         cur = conn.cursor()
+
+        # Блокировка, чтобы несколько воркеров gunicorn не создавали данные одновременно
+        cur.execute("SELECT pg_advisory_lock(918273645);")
 
         cur.execute("""
             CREATE TABLE IF NOT EXISTS users (
@@ -57,20 +91,18 @@ def init_db():
         cur.execute("ALTER TABLE users ALTER COLUMN name DROP NOT NULL;")
         cur.execute("ALTER TABLE users ALTER COLUMN password DROP NOT NULL;")
 
-        now = datetime.utcnow()
-        demo_flights = [
-            ("EN-101", "New York", "London", now + timedelta(days=14), now + timedelta(days=14, hours=8), 2450.00, 120),
-            ("EN-108", "New York", "London", now + timedelta(days=15), now + timedelta(days=15, hours=8, minutes=30), 2548.00, 98),
-            ("EN-214", "New York", "Paris", now + timedelta(days=18), now + timedelta(days=18, hours=7), 2352.00, 85),
-            ("EN-305", "London", "Athens", now + timedelta(days=12), now + timedelta(days=12, hours=5, minutes=20), 420.00, 64),
-        ]
-
-        for flight_number, dep_city, arr_city, dep_time, arr_time, price, seats in demo_flights:
-            cur.execute(
-                "SELECT 1 FROM flights WHERE flight_number = %s LIMIT 1;",
-                (flight_number,)
-            )
-            if cur.fetchone() is None:
+        # Демо-рейсы добавляем только в пустую таблицу, иначе при каждом деплое
+        # появлялись новые копии одних и тех же рейсов.
+        cur.execute("SELECT COUNT(*) FROM flights;")
+        if cur.fetchone()[0] == 0:
+            now = datetime.utcnow()
+            demo_flights = [
+                ("EN-101", "New York", "London", now + timedelta(days=14), now + timedelta(days=14, hours=8), 2450.00, 120),
+                ("EN-108", "New York", "London", now + timedelta(days=15), now + timedelta(days=15, hours=8, minutes=30), 2548.00, 98),
+                ("EN-214", "New York", "Paris", now + timedelta(days=18), now + timedelta(days=18, hours=7), 2352.00, 85),
+                ("EN-305", "London", "Athens", now + timedelta(days=12), now + timedelta(days=12, hours=5, minutes=20), 420.00, 64),
+            ]
+            for flight_number, dep_city, arr_city, dep_time, arr_time, price, seats in demo_flights:
                 cur.execute("""
                     INSERT INTO flights (
                         flight_number, departure_city, arrival_city,
@@ -78,24 +110,57 @@ def init_db():
                     ) VALUES (%s, %s, %s, %s, %s, %s, %s);
                 """, (flight_number, dep_city, arr_city, dep_time, arr_time, price, seats))
 
+        # Чистим полные дубли, оставляя запись с наименьшим id.
+        # Удаляет только строки, у которых совпадают номер, маршрут и оба времени.
+        cur.execute("""
+            DELETE FROM flights
+            WHERE id NOT IN (
+                SELECT MIN(id) FROM flights
+                GROUP BY flight_number, departure_city, arrival_city,
+                         departure_time, arrival_time, price, seats_available
+            );
+        """)
+
         conn.commit()
-        cur.close()
-        conn.close()
+        cur.execute("SELECT pg_advisory_unlock(918273645);")
+        conn.commit()
         print("Database initialized successfully.")
     except Exception:
+        if conn:
+            conn.rollback()
         app.logger.exception("Unable to initialize the database tables")
+    finally:
+        if cur:
+            cur.close()
+        if conn:
+            conn.close()
+
 
 @app.route("/")
 def home():
-    return send_from_directory(".", "index.html")
+    return send_from_directory(".", "enair-homepage.html")
+
 
 @app.route("/images/<path:filename>")
 def serve_images(filename):
-    return send_from_directory(".", filename)
+    # В репозитории картинки лежат в корне (CSS ссылается на images/<файл>),
+    # а в локальной папке — в подкаталоге images/. Поддерживаем оба варианта.
+    if not is_public_path(filename):
+        abort(404)
+    nested = os.path.join(".", "images", filename)
+    if os.path.isfile(nested):
+        return send_from_directory(os.path.join(".", "images"), filename)
+    if os.path.isfile(os.path.join(".", filename)):
+        return send_from_directory(".", filename)
+    abort(404)
+
 
 @app.route("/<path:path>")
 def send_static(path):
     if path.startswith("api/"):
+        abort(404)
+
+    if not is_public_path(path):
         abort(404)
 
     full_path = os.path.join(".", path)
@@ -103,6 +168,7 @@ def send_static(path):
         return send_from_directory(".", path)
 
     abort(404)
+
 
 @app.route("/api/flights")
 def flights():
@@ -132,6 +198,7 @@ def flights():
         })
 
     return jsonify(result)
+
 
 @app.route("/api/register", methods=["POST"])
 def register():
@@ -174,6 +241,7 @@ def register():
         if conn:
             conn.close()
 
+
 @app.route("/api/login", methods=["POST"])
 def login():
     data = request.get_json(silent=True) or {}
@@ -212,6 +280,7 @@ def login():
         if conn:
             conn.close()
 
+
 @app.route("/api/book", methods=["POST"])
 def book_flight():
     data = request.get_json(silent=True) or {}
@@ -236,10 +305,14 @@ def book_flight():
     except Exception as exc:
         return jsonify({"error": str(exc)}), 500
 
+
 @app.route("/healthz")
 def healthz():
     return jsonify({"status": "ok"})
 
+
+# Важно: инициализация на уровне модуля, чтобы срабатывала и под gunicorn на Render.
+init_db()
+
 if __name__ == "__main__":
-    init_db()
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", "5000")), debug=False)
