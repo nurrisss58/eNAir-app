@@ -1,6 +1,7 @@
 import json
 import os
 import re
+import urllib.error
 import urllib.request
 from datetime import datetime, timedelta
 
@@ -36,12 +37,65 @@ def is_public_path(path):
 # ---------------------------------------------------------------------------
 # ИИ-ассистент
 # ---------------------------------------------------------------------------
-# Режим ИИ включается переменной окружения AI_API_KEY на Render.
+# Режим ИИ включается переменной окружения с ключом.
 # Без ключа (или если модель недоступна) отвечает движок правил ниже —
 # сайт никогда не остаётся без ответа.
-AI_API_KEY = os.environ.get("AI_API_KEY", "").strip()
-AI_BASE_URL = os.environ.get("AI_BASE_URL", "https://api.openai.com/v1").rstrip("/")
-AI_MODEL = os.environ.get("AI_MODEL", "gpt-4o-mini")
+KEY_ENV_NAMES = (
+    "AI_API_KEY", "GROQ_API_KEY", "OPENAI_API_KEY",
+    "DEEPSEEK_API_KEY", "OPENROUTER_API_KEY", "API_KEY",
+)
+
+
+def _find_ai_key():
+    """Ищет ключ под любым из привычных имён, чтобы не зависеть от названия переменной."""
+    for name in KEY_ENV_NAMES:
+        value = (os.environ.get(name) or "").strip()
+        if value:
+            return value
+    # Последний шанс: любая переменная, значение которой похоже на ключ.
+    for name, value in os.environ.items():
+        text = (value or "").strip()
+        if text.startswith("gsk_") or text.startswith("sk-"):
+            return text
+    return ""
+
+
+def _resolve_ai():
+    """Определяет провайдера по префиксу ключа, если адрес и модель не заданы вручную."""
+    key = _find_ai_key()
+    base = (os.environ.get("AI_BASE_URL") or "").strip().rstrip("/")
+    model = (os.environ.get("AI_MODEL") or "").strip()
+
+    if key.startswith("gsk_"):            # Groq
+        base = base or "https://api.groq.com/openai/v1"
+        model = model or "llama-3.3-70b-versatile"
+    elif key.startswith("sk-or-"):        # OpenRouter
+        base = base or "https://openrouter.ai/api/v1"
+        model = model or "meta-llama/llama-3.3-70b-instruct:free"
+    else:                                 # любой OpenAI-совместимый сервис
+        base = base or "https://api.openai.com/v1"
+        model = model or "gpt-4o-mini"
+
+    return key, base, model
+
+
+AI_API_KEY, AI_BASE_URL, AI_MODEL = _resolve_ai()
+
+# Запасная модель: если основную переименовали или сняли с поддержки,
+# ассистент пробует её, а не падает в шаблонные ответы.
+if AI_API_KEY.startswith("gsk_"):
+    AI_MODEL_FALLBACK = "llama-3.1-8b-instant"
+elif AI_API_KEY.startswith("sk-or-"):
+    AI_MODEL_FALLBACK = "meta-llama/llama-3.1-8b-instruct:free"
+else:
+    AI_MODEL_FALLBACK = "gpt-4o-mini"
+
+app.logger.info(
+    "AI assistant: %s (model=%s, base=%s)",
+    "включён" if AI_API_KEY else "выключен, работают правила",
+    AI_MODEL,
+    AI_BASE_URL,
+)
 
 # Цены в базе хранятся в долларах: на сайте все суммы в тенге по тому же курсу,
 # что и переключатель валют в шапке. PRICE_CURRENCY=KZT отключает пересчёт.
@@ -546,8 +600,8 @@ def _rule_reply(message, flights):
             "Try: \"how much is a flight to London?\""), _suggestions(message)
 
 
-def _ask_ai(message, flights):
-    """Запрос к языковой модели. Любая ошибка — повод вернуться к правилам."""
+def _ask_ai_model(message, flights, model):
+    """Один запрос к модели с явно указанным именем."""
     schedule = "\n".join(
         "{no}: {a} -> {b}, {d}, {p} KZT, seats {s}".format(
             no=f["number"], a=f["from"], b=f["to"], d=f["departure"], p=f["price"], s=f["seats"])
@@ -563,7 +617,7 @@ def _ask_ai(message, flights):
     )
 
     payload = {
-        "model": AI_MODEL,
+        "model": model,
         "messages": [
             {"role": "system", "content": system},
             {"role": "user", "content": message},
@@ -588,6 +642,19 @@ def _ask_ai(message, flights):
     return (data["choices"][0]["message"]["content"] or "").strip()
 
 
+def _ask_ai(message, flights):
+    """Запрос к модели. При 400/404 пробует запасную, при прочих ошибках — откат на правила."""
+    try:
+        return _ask_ai_model(message, flights, AI_MODEL)
+    except urllib.error.HTTPError as exc:
+        if exc.code in (400, 404) and AI_MODEL_FALLBACK and AI_MODEL_FALLBACK != AI_MODEL:
+            app.logger.warning(
+                "Model %s is unavailable (%s), retrying with %s", AI_MODEL, exc.code, AI_MODEL_FALLBACK
+            )
+            return _ask_ai_model(message, flights, AI_MODEL_FALLBACK)
+        raise
+
+
 @app.route("/api/assistant", methods=["POST"])
 def assistant():
     data = request.get_json(silent=True) or {}
@@ -597,17 +664,38 @@ def assistant():
         return jsonify({"error": "Пустой запрос"}), 400
 
     flights = _flights_snapshot()
+    ai_error = None
 
     if AI_API_KEY:
         try:
             reply = _ask_ai(message, flights)
             if reply:
                 return jsonify({"reply": reply, "source": "ai", "suggestions": _suggestions(message)})
+        except urllib.error.HTTPError as exc:
+            ai_error = "HTTP {}".format(exc.code)
+            app.logger.exception("AI assistant request failed")
         except Exception:
-            app.logger.exception("AI assistant failed, falling back to rules")
+            ai_error = "connection"
+            app.logger.exception("AI assistant request failed")
 
     reply, suggestions = _rule_reply(message, flights)
-    return jsonify({"reply": reply, "source": "rules", "suggestions": suggestions})
+    payload = {"reply": reply, "source": "rules", "suggestions": suggestions}
+    if ai_error:
+        payload["ai_error"] = ai_error
+    return jsonify(payload)
+
+
+@app.route("/api/assistant/status")
+def assistant_status():
+    """Диагностика: включён ли режим ИИ. Ключ наружу не отдаётся."""
+    return jsonify({
+        "mode": "ai" if AI_API_KEY else "rules",
+        "ai_enabled": bool(AI_API_KEY),
+        "model": AI_MODEL if AI_API_KEY else None,
+        "fallback_model": AI_MODEL_FALLBACK if AI_API_KEY else None,
+        "base_url": AI_BASE_URL if AI_API_KEY else None,
+        "key_variable_hint": "ключ найден" if AI_API_KEY else "ключ не найден ни в одной переменной",
+    })
 
 
 # Важно: инициализация на уровне модуля, чтобы срабатывала и под gunicorn на Render.
