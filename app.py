@@ -68,7 +68,8 @@ def _resolve_ai():
 
     if key.startswith("gsk_"):            # Groq
         base = base or "https://api.groq.com/openai/v1"
-        model = model or "llama-3.3-70b-versatile"
+        # llama-3.3-70b-versatile у Groq сняли с поддержки — актуальная замена ниже.
+        model = model or "openai/gpt-oss-120b"
     elif key.startswith("sk-or-"):        # OpenRouter
         base = base or "https://openrouter.ai/api/v1"
         model = model or "meta-llama/llama-3.3-70b-instruct:free"
@@ -631,7 +632,11 @@ def _ask_ai_model(message, flights, model):
         data=json.dumps(payload).encode("utf-8"),
         headers={
             "Content-Type": "application/json",
+            "Accept": "application/json",
             "Authorization": "Bearer " + AI_API_KEY,
+            # Groq стоит за Cloudflare и блокирует дефолтный Python-urllib
+            # ошибкой 1010, поэтому представляемся нормально.
+            "User-Agent": "eNAir-Assistant/1.0 (+https://enair-app-1.onrender.com)",
         },
         method="POST",
     )
@@ -685,6 +690,38 @@ def assistant():
     return jsonify(payload)
 
 
+@app.route("/api/assistant/selftest")
+def assistant_selftest():
+    """Проверка связи с моделью: показывает точную ошибку провайдера."""
+    if not AI_API_KEY:
+        return jsonify({"ok": False, "stage": "config", "error": "Ключ ИИ не найден в переменных окружения"})
+
+    result = {"ok": False, "base_url": AI_BASE_URL, "models_tried": []}
+
+    for model in (AI_MODEL, AI_MODEL_FALLBACK):
+        if not model:
+            continue
+        try:
+            reply = _ask_ai_model("Ответь одним словом: привет", [], model)
+            result.update({"ok": True, "stage": "ok", "model": model, "reply": (reply or "")[:200]})
+            return jsonify(result)
+        except urllib.error.HTTPError as exc:
+            body = ""
+            try:
+                body = exc.read().decode("utf-8", "replace")[:400]
+            except Exception:
+                pass
+            result["models_tried"].append({"model": model, "http": exc.code, "body": body})
+        except Exception as exc:
+            result["models_tried"].append({
+                "model": model,
+                "error": type(exc).__name__ + ": " + str(exc)[:200],
+            })
+
+    result["error"] = "Ни одна модель не ответила, смотри models_tried"
+    return jsonify(result)
+
+
 @app.route("/api/assistant/status")
 def assistant_status():
     """Диагностика: включён ли режим ИИ. Ключ наружу не отдаётся."""
@@ -695,6 +732,7 @@ def assistant_status():
         "fallback_model": AI_MODEL_FALLBACK if AI_API_KEY else None,
         "base_url": AI_BASE_URL if AI_API_KEY else None,
         "key_variable_hint": "ключ найден" if AI_API_KEY else "ключ не найден ни в одной переменной",
+        "selftest": "/api/assistant/selftest",
     })
 
 

@@ -45,6 +45,7 @@
     '.enair-ai-msg.bot{align-self:flex-start;background:#fff;border:1px solid #e2e8f0;color:#0f172a;border-bottom-left-radius:6px}',
     '.enair-ai-msg.user{align-self:flex-end;background:#0f172a;color:#fff;border-bottom-right-radius:6px}',
     '.enair-ai-msg.pending{color:#64748b;font-style:italic}',
+    '.enair-ai-note{align-self:flex-start;max-width:92%;padding:0 4px;font:400 11px "Geist",sans-serif;color:#94a3b8;line-height:1.4}',
     '.enair-ai-chips{display:flex;flex-wrap:wrap;gap:6px;padding:0 16px 10px;background:#f8fafc}',
     '.enair-ai-chip{border:1px solid #e2e8f0;background:#fff;border-radius:999px;padding:7px 11px;font:500 11px "Geist",sans-serif;color:#334155;cursor:pointer}',
     '.enair-ai-chip:hover{border-color:#06b6d4;color:#0e7490}',
@@ -203,6 +204,16 @@
       }
 
       bubble(data.reply, 'bot');
+
+      // Если модель недоступна — честно показываем, что ответил движок правил.
+      if (data.ai_error) {
+        const note = document.createElement('div');
+        note.className = 'enair-ai-note';
+        note.textContent = 'Режим ИИ недоступен (' + data.ai_error + '), отвечает встроенный движок правил.';
+        log.appendChild(note);
+        log.scrollTop = log.scrollHeight;
+      }
+
       if (Array.isArray(data.suggestions)) renderChips(data.suggestions);
     } catch (error) {
       pending.remove();
