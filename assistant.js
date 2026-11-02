@@ -32,6 +32,8 @@
     '.enair-ai-panel{position:absolute;right:0;bottom:64px;width:360px;max-width:calc(100vw - 32px);height:min(520px,70vh);',
     'display:flex;flex-direction:column;background:#fff;border:1px solid #e2e8f0;border-radius:20px;overflow:hidden;',
     'box-shadow:0 28px 80px rgba(15,23,42,.3)}',
+    // display:flex выше перебивает атрибут hidden, поэтому закрываем явно
+    '.enair-ai-panel[hidden]{display:none}',
     '.enair-ai-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;',
     'background:linear-gradient(110deg,rgba(6,182,212,.12),rgba(139,92,246,.12));border-bottom:1px solid #e2e8f0}',
     '.enair-ai-title{font:700 15px "Outfit",sans-serif;color:#0f172a}',

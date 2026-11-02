@@ -60,6 +60,123 @@
     return frame;
   }
 
+  // --- Интерактивная карта на Leaflet -------------------------------------
+  // Ключ не нужен: библиотека с CDN, тайлы CARTO на основе OpenStreetMap.
+  // Если Leaflet не загрузился (нет сети, CDN недоступен) — откат на iframe.
+  const LEAFLET_VERSION = '1.9.4';
+  let leafletPromise = null;
+
+  function loadLeaflet() {
+    if (window.L) return Promise.resolve(window.L);
+    if (leafletPromise) return leafletPromise;
+    leafletPromise = new Promise((resolve, reject) => {
+      if (!document.getElementById('enair-leaflet-css')) {
+        const link = document.createElement('link');
+        link.id = 'enair-leaflet-css';
+        link.rel = 'stylesheet';
+        link.href = `https://unpkg.com/leaflet@${LEAFLET_VERSION}/dist/leaflet.css`;
+        document.head.appendChild(link);
+      }
+      const script = document.createElement('script');
+      script.src = `https://unpkg.com/leaflet@${LEAFLET_VERSION}/dist/leaflet.js`;
+      script.async = true;
+      script.onload = () => (window.L ? resolve(window.L) : reject(new Error('Leaflet is unavailable')));
+      script.onerror = () => reject(new Error('Leaflet failed to load'));
+      document.head.appendChild(script);
+    });
+    return leafletPromise;
+  }
+
+  // Дуга между двумя точками — чтобы маршруты не резали карту по прямой.
+  function routeCurve(from, to) {
+    const midLat = (from.lat + to.lat) / 2 + (to.lon - from.lon) * 0.06;
+    const midLon = (from.lon + to.lon) / 2 - (to.lat - from.lat) * 0.06;
+    const points = [];
+    for (let step = 0; step <= 20; step += 1) {
+      const t = step / 20;
+      const lat = (1 - t) * (1 - t) * from.lat + 2 * (1 - t) * t * midLat + t * t * to.lat;
+      const lon = (1 - t) * (1 - t) * from.lon + 2 * (1 - t) * t * midLon + t * t * to.lon;
+      points.push([lat, lon]);
+    }
+    return points;
+  }
+
+  function networkMap(host, wrapper, title, initial, zoomPosition = 'topright') {
+    const controller = {
+      map: null,
+      pending: initial,
+      flyTo(location) {
+        if (!location) return;
+        controller.pending = location;
+        if (!controller.map) return;
+        const target = [location.lat, location.lon];
+        controller.map.flyTo(target, 4, {duration: 1.1});
+        drawNetwork(location);
+        // Страховка: если анимация не доехала (фоновая вкладка, слабое устройство),
+        // ставим вид принудительно, чтобы карта не осталась на прошлом городе.
+        window.setTimeout(() => {
+          const center = controller.map.getCenter();
+          if (Math.abs(center.lat - target[0]) > 0.8 || Math.abs(center.lng - target[1]) > 0.8) {
+            controller.map.setView(target, 4);
+          }
+        }, 1400);
+      }
+    };
+
+    function drawNetwork(origin) {
+      if (controller.links) controller.links.remove();
+      const layer = window.L.layerGroup();
+      Object.values(mapLocations).forEach(target => {
+        if (target.code === origin.code) return;
+        window.L.polyline(routeCurve(origin, target), {
+          color: '#06b6d4', weight: 1.3, opacity: 0.5, dashArray: '5 7', interactive: false
+        }).addTo(layer);
+      });
+      layer.addTo(controller.map);
+      controller.links = layer;
+    }
+
+    loadLeaflet().then(L => {
+      host.classList.add('enair-leaflet-map');
+      const start = controller.pending || initial;
+      const map = L.map(host, {
+        scrollWheelZoom: false,
+        worldCopyJump: true,
+        minZoom: 2,
+        zoomControl: false
+      }).setView([start.lat, start.lon], 4);
+
+      L.control.zoom({position: zoomPosition}).addTo(map);
+
+      // Тайлы OpenStreetMap: без ключа и без регистрации (CARTO теперь требует ключ).
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors',
+        maxZoom: 19
+      }).addTo(map);
+
+      Object.entries(mapLocations).forEach(([name, city]) => {
+        L.circleMarker([city.lat, city.lon], {
+          radius: 6, color: '#06b6d4', weight: 2, fillColor: '#ffffff', fillOpacity: 1
+        }).addTo(map).bindTooltip(name, {direction: 'top', offset: [0, -6]});
+      });
+
+      controller.map = map;
+      drawNetwork(controller.pending || initial);
+      window.setTimeout(() => map.invalidateSize(), 80);
+      window.addEventListener('resize', () => map.invalidateSize());
+    }).catch(error => {
+      console.warn('Leaflet недоступен, показываем встроенную карту:', error);
+      host.remove();
+      const frame = mapFrame(title, controller.pending || initial);
+      wrapper.replaceChildren(frame);
+      controller.flyTo = location => {
+        if (location) frame.src = mapEmbedUrl(location);
+      };
+    });
+
+    return controller;
+  }
+
   const flights = [
     {no:'eN-102', aircraft:'A350-H2 (Hydrogen)', from:'JFK', to:'LHR', dep:'08:15 AM', arr:'20:30 PM', duration:'7h 15m', price:244510},
     {no:'eN-108', aircraft:'A350-H2 (Hydrogen)', from:'JFK', to:'LHR', dep:'11:30 AM', arr:'23:45 PM', duration:'7h 15m', price:254800},
@@ -186,6 +303,14 @@
         [class*="footer-bottom-"]{flex-wrap:wrap!important;gap:16px!important}
         .map-section-home-89{overflow:hidden}
       }
+      .enair-leaflet-map{position:relative;width:100%;height:100%;background:#eaf3f4;overflow:hidden}
+      /* Карта создаёт свой контекст наложения, иначе панели Leaflet перекрывают чипы городов */
+      .enair-map-frame{z-index:0}
+      .detailed-high-tech-map-46{position:relative;z-index:0}
+      .enair-leaflet-map.leaflet-container{font:inherit;background:#eaf3f4}
+      .enair-leaflet-map .leaflet-control-attribution{font:10px 'Geist',sans-serif;background:rgba(255,255,255,.82)}
+      .enair-leaflet-map .leaflet-tooltip{font:600 12px 'Geist',sans-serif;border:0;border-radius:8px;padding:4px 9px;color:#0f172a;box-shadow:0 6px 18px rgba(15,23,42,.18)}
+      .enair-leaflet-map .leaflet-tooltip-top:before{display:none}
       @media(max-width:700px){.enair-grid{grid-template-columns:1fr}}
     `; document.head.appendChild(s);
   }
@@ -508,12 +633,29 @@
   };
   function textButton(text, handler, occurrence=0){bindText(text,handler,occurrence)}
 
+  // Страница персонажей — исследовательский артефакт, на неё не было ссылок.
+  // Добавляем пункт в подвал, в колонку Company, клонируя стиль соседних ссылок.
+  function addPersonasLink(){
+    if(document.querySelector('[data-enair-personas]'))return;
+    const heading=findAll('Company')[0];
+    if(!heading||!heading.parentElement)return;
+    const list=[...heading.parentElement.children].find(child=>child!==heading&&child.children.length>0);
+    if(!list||!list.lastElementChild)return;
+    const item=list.lastElementChild.cloneNode(true);
+    item.textContent='User Personas';
+    delete item.dataset.enairBound;
+    item.dataset.enairPersonas='1';
+    clickable(item,()=>go(routes.personas));
+    list.appendChild(item);
+  }
+
   function globalNav(){
     const map={Destinations:routes.destinations,'Book Flights':routes.booking,'Our Fleet':routes.fleet,Loyalty:routes.loyalty,'About eNAir':routes.about,'Book Now':routes.booking};
     Object.entries(map).forEach(([t,u])=>findAll(t).slice(0,3).forEach(el=>clickable(clickableTarget(el),()=>go(u))));
     document.querySelectorAll('.brand-3,.logo-group-3,.logo-group-4,.logo-group,.brand').forEach(el=>clickable(el,()=>go(routes.home)));
     const footer={ 'About Us':routes.about,'Fleet Details':routes.fleet,Destinations:routes.destinations,'Loyalty Programs':routes.loyalty,'Contact Support':routes.about };
     Object.entries(footer).forEach(([t,u])=>findAll(t).forEach(el=>clickable(clickableTarget(el),()=>go(u))));
+    addPersonasLink();
     renderAuthControl();
     renderCurrencyControl();
     updateCurrencyPrices();
@@ -581,17 +723,19 @@
     const map=document.querySelector('.map-illustration-95');
     if(!map)return;
     const instruction=find('Click any destination on the map to explore custom routes');
-    if(instruction)instruction.textContent='Choose a hub to view its real location. Pan and zoom the map to explore.';
+    if(instruction)instruction.textContent='Choose a hub to see its routes. Drag and zoom the map to explore.';
     const picker=document.createElement('div');picker.className='enair-map-picker';picker.setAttribute('aria-label','Choose an eNAir network hub');
-    const frame=mapFrame('Interactive OpenStreetMap showing the eNAir global network');
-    map.replaceChildren(frame,picker);
+    const wrapper=document.createElement('div');wrapper.className='enair-map-frame';
+    const host=document.createElement('div');
+    wrapper.append(host);
+    map.replaceChildren(wrapper,picker);
+    const controller=networkMap(host,wrapper,'Interactive map of the eNAir network',mapLocations['New York'],'topright');
     Object.keys(mapLocations).slice(0,6).forEach((name,index)=>{
       const button=document.createElement('button');button.type='button';button.className='enair-map-city';button.textContent=name;
       button.setAttribute('aria-pressed',String(index===0));
       button.addEventListener('click',()=>{
-        frame.src=mapEmbedUrl(mapLocations[name]);
+        controller.flyTo(mapLocations[name]);
         picker.querySelectorAll('button').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));
-        frame.title=`Interactive OpenStreetMap centered on ${name}`;
       });
       picker.append(button);
     });
@@ -870,16 +1014,16 @@
     const mapHeading=document.querySelector('.tokyo-japan-51');
     const mapCaption=document.querySelector('.direct-route-via-hydrogen-fl-52');
     const mapImage=document.querySelector('.rectangle-48');
-    const mapFrameElement=mapFrame('Interactive OpenStreetMap centered on Tokyo, Japan',mapLocations.Tokyo);
-    mapFrameElement.classList.add('detailed-high-tech-map-46');
-    if(mapLayer)mapLayer.replaceChildren(mapFrameElement);
+    const mapWrapper=document.createElement('div');mapWrapper.className='detailed-high-tech-map-46';
+    const mapHost=document.createElement('div');mapWrapper.append(mapHost);
+    if(mapLayer)mapLayer.replaceChildren(mapWrapper);
+    const mapController=networkMap(mapHost,mapWrapper,'Interactive map centered on Tokyo, Japan',mapLocations.Tokyo,'bottomleft');
     const mapPicker=document.createElement('div');mapPicker.className='enair-destination-map-picker';mapPicker.setAttribute('aria-label','Choose a destination to locate on the map');
     if(mapContainer)mapContainer.append(mapPicker);
     const selectMapCity=city=>{
       const card=cards.find(item=>item.city===city);
       if(!card?.location)return;
-      mapFrameElement.src=mapEmbedUrl(card.location);
-      mapFrameElement.title=`Interactive OpenStreetMap centered on ${card.location.name}`;
+      mapController.flyTo(card.location);
       if(mapHeading)mapHeading.textContent=card.location.name;
       if(mapCaption)mapCaption.textContent=`${card.location.code} airport · Pan and zoom to explore`;
       if(mapImage)mapImage.style.backgroundImage=`url("${card.image}")`;
