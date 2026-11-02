@@ -249,6 +249,16 @@
   let activeUser = readAuthUser();
   let pendingAuthAction = null;
 
+  // Адаптив лежит отдельным файлом responsive.css, чтобы не править 21 страницу.
+  function injectResponsive() {
+    if (document.getElementById('enair-responsive')) return;
+    const link = document.createElement('link');
+    link.id = 'enair-responsive';
+    link.rel = 'stylesheet';
+    link.href = 'responsive.css';
+    document.head.appendChild(link);
+  }
+
   function injectCSS() {
     if (document.getElementById('enair-enhancements')) return;
     const s = document.createElement('style'); s.id = 'enair-enhancements';
@@ -1312,7 +1322,8 @@
 
   function mobileMenu(){
     const navigation=document.querySelector('.sticky-navigation-2,.navigation-2');
-    if(navigation&&!navigation.querySelector('.menu-mobile')){
+    // На мобильных страницах уже есть своя иконка меню — вторую кнопку не добавляем.
+    if(navigation&&!navigation.querySelector('.menu-mobile')&&!navigation.querySelector('[class^="menu-"]')){
       const button=document.createElement('button');
       button.type='button';
       button.className='menu-mobile';
@@ -1330,7 +1341,7 @@
     });
   }
 
-  injectCSS(); globalNav();
+  injectResponsive(); injectCSS(); globalNav();
   if(is('enair-homepage.html')||is('mobile-homepage.html')) homePage();
   if(is('enair-booking.html')||is('mobile-booking.html')) bookingPage();
   if(is('enair-destinations.html')) destinationsPage();
@@ -1344,7 +1355,8 @@
   if(is('fleet-a350.html')||is('fleet-787.html')||is('fleet-a380.html')) aircraftPage();
   if(is('enair-about-contact.html')) aboutPage();
   if(is('curated-iceland.html')||is('curated-vietnam-bali.html')||is('curated-greece.html')) curatedTripPage();
-  if(is('mobile-homepage.html')||is('mobile-booking.html')||is('enair-booking.html')||is('booking-search.html')||is('enair-fleet-experience.html')||is('enair-loyalty.html')) mobileMenu();
+  // Меню нужно на всех страницах: на узких экранах обычные ссылки скрыты.
+  mobileMenu();
   globalFallbacks(); informationalFallbacks();
   updateDisplayedRoute();
 

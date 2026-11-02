@@ -1,0 +1,411 @@
+/* ============================================================
+   eNAir — адаптив для страниц, свёрстанных из Figma.
+   Подключается из navigation.js, чтобы не править 21 HTML-файл.
+   Здесь только правки для узких экранов: на десктопе ничего не меняется.
+   ============================================================ */
+
+@media (max-width: 900px) {
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  /* ---------- шапка ---------- */
+
+  /* «Book Now» в шапке уступает место валюте и входу */
+  [class*="navigation-"] [class*="book-now"],
+  [class*="sticky-navigation-"] [class*="book-now"] {
+    display: none !important;
+  }
+
+  [class*="navigation-"],
+  [class*="sticky-navigation-"] {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    gap: 8px !important;
+  }
+
+  .enair-header-controls {
+    margin-left: 0 !important;
+    gap: 6px !important;
+  }
+
+  .enair-currency-select {
+    padding: 7px 8px !important;
+    font-size: 11px !important;
+  }
+
+  .enair-auth-trigger,
+  .enair-auth-logout {
+    padding: 7px 10px !important;
+    font-size: 11px !important;
+  }
+
+  .menu-mobile {
+    padding: 7px 10px !important;
+    font-size: 11px !important;
+  }
+
+  /* ---------- booking-search ---------- */
+
+  .booking-search-1 .header-15 {
+    height: auto;
+    padding: 28px 16px 22px;
+    gap: 18px;
+  }
+
+  .booking-search-1 .title-17 {
+    font-size: clamp(24px, 7.5vw, 34px);
+    line-height: 1.15;
+    white-space: normal;
+  }
+
+  .booking-search-1 .booking-progress-18 {
+    gap: 6px;
+  }
+
+  /* в степпере оставляем номера, подписи скрываем */
+  .booking-search-1 .booking-progress-18 [class^="label-"] {
+    display: none;
+  }
+
+  .booking-search-1 .content-38 {
+    height: auto;
+    padding: 20px 16px 48px;
+  }
+
+  .booking-search-1 .search-form-39 {
+    height: auto;
+    padding: 18px;
+    gap: 16px;
+  }
+
+  .booking-search-1 .trip-options-40 {
+    height: auto;
+    gap: 12px;
+  }
+
+  /* Round-trip / One-way встают в строку и больше не наезжают */
+  .booking-search-1 .trip-type-41 {
+    height: auto;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+    padding: 4px;
+  }
+
+  .booking-search-1 .cabin-46 {
+    white-space: normal;
+  }
+
+  .booking-search-1 .route-fields-47 {
+    height: auto;
+  }
+
+  .booking-search-1 .results-60 {
+    height: auto;
+  }
+
+  .booking-search-1 .heading-61 {
+    white-space: normal;
+    font-size: 20px;
+  }
+
+  .booking-search-1 .flight-option-62 {
+    height: auto;
+    padding: 18px;
+    gap: 18px;
+  }
+
+  .booking-search-1 .aircraft-63 {
+    width: 100%;
+    height: auto;
+  }
+
+  /* ---------- booking-payment ---------- */
+
+  .booking-payment-1 .header-15 {
+    height: auto;
+    padding: 28px 16px 22px;
+    gap: 18px;
+  }
+
+  .booking-payment-1 .title-17 {
+    font-size: clamp(24px, 7.5vw, 34px);
+    line-height: 1.15;
+    white-space: normal;
+  }
+
+  .booking-payment-1 .booking-progress-18 {
+    gap: 6px;
+  }
+
+  .booking-payment-1 .booking-progress-18 [class^="label-"] {
+    display: none;
+  }
+
+  .booking-payment-1 .content-38 {
+    height: auto;
+    padding: 20px 16px 48px;
+  }
+
+  .booking-payment-1 .trip-summary-39 {
+    height: auto;
+    padding: 18px;
+    gap: 12px;
+  }
+
+  /* строка маршрута «JFK 08:15 → LHR 20:30» больше не обрезается */
+  .booking-payment-1 .trip-summary-39,
+  .booking-payment-1 .trip-summary-39 * {
+    white-space: normal !important;
+    overflow: visible;
+  }
+
+  .booking-payment-1 .payment-layout-46,
+  .booking-payment-1 .payment-form-47,
+  .booking-payment-1 .card-48 {
+    height: auto;
+  }
+
+  .booking-payment-1 .order-summary-68 {
+    width: 100%;
+    height: auto;
+  }
+
+  .booking-payment-1 .card-69 {
+    height: auto;
+  }
+
+  /* ---------- loyalty ---------- */
+
+  .enair-loyalty-1 .loyalty-hero-21 {
+    height: auto;
+    min-height: 340px;
+    padding: 48px 16px;
+    gap: 24px;
+  }
+
+  .enair-loyalty-1 .earn-miles-unlock-the-world-25 {
+    font-size: clamp(26px, 8vw, 38px);
+    line-height: 1.12;
+    white-space: normal;
+    text-align: center;
+  }
+
+  /* ---------- mobile-homepage ---------- */
+
+  .mobile-homepage-1 .hero-9 {
+    height: auto;
+    min-height: 520px;
+    padding-bottom: 28px;
+    gap: 20px;
+  }
+
+  .mobile-homepage-1 .quick-search-15,
+  .mobile-homepage-1 .route-16,
+  .mobile-homepage-1 .trip-23 {
+    height: auto;
+  }
+
+  /* ---------- enair-booking ---------- */
+
+  /* ряд выбора класса перестаёт быть фиксированным и переносится */
+  .enair-booking-1 .frame-56 {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .enair-booking-1 .frame-52,
+  .enair-booking-1 .frame-54 {
+    width: auto;
+  }
+
+  /* ---------- секции с фиксированной высотой и отступами 80px ---------- */
+
+  .enair-about-contact-1 .timeline-section-8,
+  .enair-about-contact-1 .leadership-28,
+  .enair-fleet-experience-1 .fleet-lineup-27,
+  .enair-fleet-experience-1 .cabin-classes-83,
+  .enair-destinations-1 .destinations-hero-21,
+  .enair-destinations-1 .map-showcase-section-43,
+  .enair-destinations-1 .destination-grid-section-57,
+  .enair-destinations-1 .travel-inspiration-164 {
+    height: auto !important;
+    padding: 40px 20px !important;
+  }
+
+  /* блок развлечений на «Fleet» — из строки в колонку */
+  .enair-fleet-experience-1 .entertainment-section-160 {
+    height: auto !important;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 40px 20px !important;
+  }
+
+  .enair-about-contact-1 .about-hero-2,
+  .enair-fleet-experience-1 .fleet-hero-21 {
+    height: auto !important;
+    min-height: 380px;
+    padding: 48px 20px !important;
+    gap: 24px;
+  }
+
+  /* «About»: карточки истории и команды из строки в колонку */
+  .enair-about-contact-1 .the-flight-path-of-innovatio-11,
+  .enair-about-contact-1 .our-leadership-team-31 {
+    font-size: clamp(22px, 7vw, 30px);
+    line-height: 1.2;
+    white-space: normal;
+  }
+
+  .enair-about-contact-1 .frame-12,
+  .enair-about-contact-1 .frame-32 {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .enair-about-contact-1 .frame-13,
+  .enair-about-contact-1 .frame-18,
+  .enair-about-contact-1 .frame-23,
+  .enair-about-contact-1 .frame-33,
+  .enair-about-contact-1 .frame-39,
+  .enair-about-contact-1 .frame-45,
+  .enair-about-contact-1 .frame-51 {
+    width: 100%;
+    height: auto;
+    flex: none;
+    padding: 24px;
+  }
+
+  /* «Destinations»: карта ниже, всплывающая карточка не закрывает её */
+  .enair-destinations-1 .interactive-visual-map-44 {
+    height: 360px;
+  }
+
+  .enair-destinations-1 .hover-tooltip-card-47 {
+    display: none;
+  }
+
+  /* «Payment»: блок маршрута растёт под перенос строк */
+  .booking-payment-1 .trip-summary-39 * {
+    height: auto;
+    min-height: 0;
+  }
+  /* мелкая строка «eN-102 · A350-H2 · …» ужимается, чтобы не рвалась на «Non-stop» */
+  .booking-payment-1 .details-42 {
+    font-size: 12px;
+    line-height: 1.35;
+  }
+
+  /* ---------- персонажи ---------- */
+
+  .nair-high-user-personas-1 .content-9 {
+    height: auto;
+    padding: 32px 16px 48px;
+    gap: 24px;
+  }
+
+  .nair-high-user-personas-1 .introduction-10 {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .nair-high-user-personas-1 .heading-11,
+  .nair-high-user-personas-1 .description-14 {
+    width: 100%;
+    height: auto;
+  }
+
+  .nair-high-user-personas-1 .title-13 {
+    font-size: clamp(26px, 8vw, 36px);
+    line-height: 1.15;
+    letter-spacing: -0.5px;
+  }
+
+  /* счётчик «02 Core personas» уезжал за правый край */
+  .nair-high-user-personas-1 .persona-count-15 {
+    display: none;
+  }
+
+  .nair-high-user-personas-1 .persona-cards-18 {
+    flex-direction: column;
+    height: auto;
+    gap: 16px;
+  }
+
+  .nair-high-user-personas-1 [class^="persona-card-"] {
+    width: 100%;
+    flex: none;
+  }
+
+  /* внутри карточки: портрет сверху, цели и боли — друг под другом */
+  .nair-high-user-personas-1 [class^="persona-card-"] [class^="profile-"] {
+    height: auto;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px;
+  }
+
+  .nair-high-user-personas-1 [class^="portrait-"] {
+    width: 100%;
+    height: 200px;
+  }
+
+  .nair-high-user-personas-1 [class^="identity-"] {
+    height: auto;
+    width: 100%;
+    flex: 0 0 auto;
+  }
+
+  .nair-high-user-personas-1 [class^="insights-"] {
+    flex-direction: column;
+    height: auto;
+    flex: 0 0 auto;
+    gap: 20px;
+    padding: 20px;
+  }
+
+  .nair-high-user-personas-1 [class^="divider-"] {
+    display: none;
+  }
+
+  .nair-high-user-personas-1 [class^="goals-"],
+  .nair-high-user-personas-1 [class^="pain-points-"],
+  .nair-high-user-personas-1 [class^="goal-list-"] {
+    height: auto;
+    width: 100%;
+    flex: 0 0 auto;
+  }
+
+  /* ---------- mobile-booking ---------- */
+
+  .mobile-booking-1 .trip-type-29 {
+    height: auto;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+    padding: 4px;
+  }
+
+  .mobile-booking-1 .selected-30,
+  .mobile-booking-1 .option-32 {
+    height: auto;
+    padding: 9px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .enair-auth-email {
+    display: none;
+  }
+
+  .booking-search-1 .flight-option-62,
+  .booking-payment-1 .trip-summary-39 {
+    border-radius: 16px;
+  }
+}
