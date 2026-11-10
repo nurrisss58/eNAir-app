@@ -13,11 +13,11 @@
   // На хостинге API на том же домене; при открытии файлов с диска — локальный Flask.
   const API_BASE = location.protocol === 'file:' ? 'http://127.0.0.1:5000' : '';
 
-  const GREETING = 'Здравствуйте! Я ассистент eNAir. Подскажу по рейсам, тарифам, багажу, регистрации и милям.';
+  const GREETING = 'Здравствуйте! Я ассистент eNAir. Спросите про рейс и свободные места, тарифы, багаж, мили, оплату или возврат — найду ответ в расписании.';
   const DEFAULT_CHIPS = [
     'Сколько стоит билет до Лондона?',
-    'Что входит в тариф Flex?',
-    'Как зарегистрироваться?'
+    'Какие рейсы в Москву?',
+    'Что входит в тариф Flex?'
   ];
 
   const style = document.createElement('style');
@@ -123,6 +123,9 @@
 
   let started = false;
   let busy = false;
+  // Последние реплики: по ним ассистент понимает продолжение разговора
+  // («а сколько мест?» после вопроса про Москву).
+  const history = [];
 
   function bubble(text, kind) {
     const node = document.createElement('div');
@@ -186,7 +189,11 @@
       const response = await fetch(API_BASE + '/api/assistant', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: message })
+        body: JSON.stringify({
+          message: message,
+          history: history.slice(-8),
+          page: (location.pathname.split('/').pop() || '').slice(0, 60)
+        })
       });
 
       let data = null;
@@ -204,6 +211,9 @@
       }
 
       bubble(data.reply, 'bot');
+      history.push({ role: 'user', content: message });
+      history.push({ role: 'assistant', content: data.reply });
+      if (history.length > 16) history.splice(0, history.length - 16);
 
       // Если модель недоступна — честно показываем, что ответил движок правил.
       if (data.ai_error) {

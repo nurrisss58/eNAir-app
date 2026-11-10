@@ -659,19 +659,24 @@ def _money(amount):
 
 def _flights_snapshot(limit=8):
     """Актуальные рейсы из базы — для ответов ассистента и контекста модели."""
+    return _all_flights()[:limit]
+
+
+def _all_flights():
+    """Всё расписание: ассистент должен знать не первые 8 рейсов, а весь список."""
     try:
         conn = get_db()
         cur = conn.cursor()
         cur.execute("""
             SELECT flight_number, departure_city, arrival_city,
                    departure_time, price, seats_available
-            FROM flights ORDER BY departure_time LIMIT %s;
-        """, (limit,))
+            FROM flights ORDER BY departure_time;
+        """)
         rows = cur.fetchall()
         cur.close()
         conn.close()
     except Exception:
-        app.logger.exception("Assistant could not read flights")
+        app.logger.exception("Assistant could not read the schedule")
         return []
 
     return [{
@@ -679,215 +684,510 @@ def _flights_snapshot(limit=8):
         "from": row[1],
         "to": row[2],
         "departure": row[3].strftime("%d.%m.%Y %H:%M"),
+        "when": row[3],
         "price": round(_price_kzt(row[4])),
         "seats": row[5],
     } for row in rows]
 
 
-def _suggestions(message):
-    if re.search(r"[а-яё]", message, re.IGNORECASE):
-        return ["Сколько стоит билет до Лондона?", "Что входит в тариф Flex?", "Как зарегистрироваться?"]
-    return ["How much is a flight to London?", "What is included in Flex?", "How do I sign up?"]
+# ---------------------------------------------------------------------------
+# Что ассистент знает о продукте. Один источник правды и для модели, и для
+# движка правил, чтобы ответы не расходились между режимами.
+# ---------------------------------------------------------------------------
+FACTS = {
+    "fares_ru": (
+        "Тарифов три. Lite — ручная кладь 8 кг, выбор места, лёгкие снеки. "
+        "Flex — 12 кг в салон плюс одно место багажа, бесплатные изменения даты, питание. "
+        "Business — два места багажа, приватная капсула и лаунж."
+    ),
+    "fares_en": (
+        "There are three fares. Lite: an 8 kg cabin bag, seat selection, light snacks. "
+        "Flex: a 12 kg cabin bag plus one checked bag, free date changes, meals. "
+        "Business: two checked bags, a private pod and lounge access."
+    ),
+    "baggage_ru": (
+        "Багаж зависит от тарифа: Lite — только ручная кладь 8 кг, Flex — 12 кг плюс одно место, "
+        "Business — два места по 32 кг."
+    ),
+    "baggage_en": (
+        "Baggage depends on the fare: Lite is an 8 kg cabin bag only, Flex adds a 12 kg bag plus "
+        "one checked bag, Business includes two 32 kg checked bags."
+    ),
+    "loyalty_ru": (
+        "Четыре уровня: Silver — 15 000 миль, Gold — 40 000, Platinum — 85 000, Diamond — 150 000. "
+        "На странице Loyalty есть калькулятор: он считает мили по расстоянию, уровню и классу."
+    ),
+    "loyalty_en": (
+        "Four tiers: Silver at 15,000 miles, Gold at 40,000, Platinum at 85,000 and Diamond at 150,000. "
+        "The Loyalty page has a calculator that uses distance, tier and cabin."
+    ),
+    "refund_ru": (
+        "Условия зависят от тарифа: Lite — возврат с удержанием, Flex — изменения без штрафа, "
+        "Business — самые гибкие условия. Точные правила есть в карточках тарифов на шаге выбора тарифа."
+    ),
+    "refund_en": (
+        "It depends on the fare: Lite allows refunds with a fee, Flex changes are free, Business has "
+        "the most flexible terms. The exact rules are on the fare cards."
+    ),
+    "payment_ru": (
+        "Оплата на сайте демонстрационная: форма работает, бронь и списание мест сохраняются в базе, "
+        "но реальные деньги не списываются — на чеке это написано прямо."
+    ),
+    "payment_en": (
+        "Payment here is a demo: the form works, the booking and the seat count are stored in the "
+        "database, but no real money is charged — the receipt says so."
+    ),
+    "contacts_ru": "Почта консьержа — concierge@enair.aero, форма обратной связи на странице About & Contact.",
+    "contacts_en": "The concierge email is concierge@enair.aero; there is a contact form on About & Contact.",
+}
 
-
-# Русские названия городов -> как они записаны в базе.
 CITY_ALIASES = {
     "лондон": "london", "нью-йорк": "new york", "нью йорк": "new york",
     "дубай": "dubai", "париж": "paris", "токио": "tokyo", "алматы": "almaty",
-    "москва": "moscow", "стамбул": "istanbul", "рим": "rome", "барселона": "barcelona",
+    "алма-ата": "almaty", "москва": "moscow", "москву": "moscow", "москвы": "moscow",
+    "стамбул": "istanbul", "рим": "rome", "рима": "rome", "барселона": "barcelona",
     "сингапур": "singapore", "сидней": "sydney", "рейкьявик": "reykjavik",
-    "афины": "athens", "остров": "bali", "бали": "bali",
+    "афины": "athens", "бали": "bali", "каир": "cairo", "доха": "doha",
+    "ханой": "hanoi", "киото": "kyoto", "окленд": "auckland", "осака": "osaka",
+    "сан-паулу": "sao paulo", "рио": "rio de janeiro",
 }
 
 
-def _mentioned_city(text, flights):
-    """Ищет в вопросе город из расписания (в том числе по русскому названию).
-
-    Сравниваем по первым четырём буквам, чтобы «до Дубая» находило «Дубай»,
-    а «в Лондон» — «London».
-    """
-    normalized = text
-    for alias, english in CITY_ALIASES.items():
-        if alias[:4] in normalized:
-            normalized = normalized + " " + english
+def _schedule_cities(flights):
+    names = []
     for flight in flights:
         for city in (flight["from"], flight["to"]):
-            if city and city.lower()[:4] in normalized:
-                return city
+            if city and city not in names:
+                names.append(city)
+    return names
+
+
+# Русские названия для ответов: база хранит английские, а отвечаем по-русски.
+CITY_RU = {
+    "london": "Лондон", "new york": "Нью-Йорк", "paris": "Париж", "dubai": "Дубай",
+    "moscow": "Москва", "almaty": "Алматы", "tokyo": "Токио", "singapore": "Сингапур",
+    "sydney": "Сидней", "rome": "Рим", "athens": "Афины", "barcelona": "Барселона",
+    "reykjavik": "Рейкьявик", "bali": "Бали", "hanoi": "Ханой", "kyoto": "Киото",
+    "auckland": "Окленд", "sao paulo": "Сан-Паулу", "rio de janeiro": "Рио-де-Жанейро",
+    "istanbul": "Стамбул", "doha": "Доха", "cairo": "Каир", "osaka": "Осака",
+}
+
+# Винительный падеж для оборотов «билет в …», «рейсы в …».
+CITY_RU_ACC = {
+    "moscow": "Москву", "barcelona": "Барселону", "doha": "Доху", "osaka": "Осаку",
+    "athens": "Афины", "bali": "Бали", "almaty": "Алматы", "tokyo": "Токио",
+    "singapore": "Сингапур", "sydney": "Сидней", "london": "Лондон", "new york": "Нью-Йорк",
+    "paris": "Париж", "dubai": "Дубай", "rome": "Рим", "reykjavik": "Рейкьявик",
+    "hanoi": "Ханой", "kyoto": "Киото", "auckland": "Окленд", "sao paulo": "Сан-Паулу",
+    "rio de janeiro": "Рио-де-Жанейро", "istanbul": "Стамбул", "cairo": "Каир",
+}
+
+
+def _city_label(city, ru, form="nom"):
+    if not city:
+        return ""
+    if not ru:
+        return city
+    key = city.lower()
+    if form == "acc":
+        return CITY_RU_ACC.get(key, CITY_RU.get(key, city))
+    return CITY_RU.get(key, city)
+
+
+def _direction(text, city):
+    """«в Москву» — прилёт, «из Москвы» — вылет. None — оба направления."""
+    if not city:
+        return None
+    lowered = (text or "").lower()
+    aliases = [alias for alias, english in CITY_ALIASES.items() if english == city.lower()]
+    aliases.append(city.lower())
+    for alias in aliases:
+        if re.search(r"(в|во|до|to)\s+" + re.escape(alias), lowered):
+            return "to"
+        if re.search(r"(из|от|from)\s+" + re.escape(alias), lowered):
+            return "from"
     return None
 
 
-def _rule_reply(message, flights):
-    """Движок правил: работает без внешнего API и без ключей."""
-    text = message.lower()
+def _find_city(text, flights):
+    """Город из вопроса: сначала русские названия, потом английские из базы."""
+    lowered = " " + (text or "").lower() + " "
+    for alias, english in CITY_ALIASES.items():
+        if alias in lowered:
+            for city in _schedule_cities(flights):
+                if city.lower() == english:
+                    return city
+    for city in _schedule_cities(flights):
+        if city.lower()[:4] in lowered:
+            return city
+    return None
+
+
+def _find_flight(text, flights):
+    """Рейс по номеру: «EN-301», «en301», «EN 301»."""
+    match = re.search(r"\b(e?n)[-\s]?(\d{2,4})\b", text or "", re.IGNORECASE)
+    if not match:
+        return None
+    wanted = "en" + match.group(2)
+    for flight in flights:
+        if re.sub(r"[^a-z0-9]", "", str(flight["number"]).lower()) == wanted:
+            return flight
+    return None
+
+
+def _flight_line(flight):
+    seats = flight.get("seats")
+    tail = ""
+    if isinstance(seats, int):
+        tail = ", свободно {} мест".format(seats) if seats > 0 else ", мест нет"
+    return "{no}: {a} → {b}, {d}, от {p} ₸{tail}".format(
+        no=flight["number"], a=flight["from"], b=flight["to"],
+        d=flight["departure"], p=_money(flight["price"]), tail=tail)
+
+
+def _history_city(history, flights):
+    """Если в вопросе города нет, смотрим, о каком городе говорили раньше."""
+    for item in reversed((history or [])[-6:]):
+        if item.get("role") != "user":
+            continue
+        city = _find_city(str(item.get("content") or ""), flights)
+        if city:
+            return city
+    return None
+
+
+def _route_flights(city, flights, direction=None):
+    if not city:
+        return []
+    key = city.lower()
+    if direction == "to":
+        pool = [f for f in flights if f["to"].lower() == key]
+    elif direction == "from":
+        pool = [f for f in flights if f["from"].lower() == key]
+    else:
+        pool = [f for f in flights if f["from"].lower() == key or f["to"].lower() == key]
+    return pool or [f for f in flights if f["from"].lower() == key or f["to"].lower() == key]
+
+
+def _suggestions(message="", city=None, ru=True, page=""):
+    lowered = (message or "").lower()
+    label = _city_label(city, ru)
+    label_acc = _city_label(city, ru, "acc")
+    if city:
+        if ru:
+            return ["Сколько стоит билет в {}?".format(_city_label(city, ru, "acc")), "Есть ли места на эти рейсы?", "Что входит в тариф Flex?"]
+        return ["How much is a flight to {}?".format(city), "Are there seats left?", "What is included in Flex?"]
+    if "оплат" in lowered or "payment" in lowered:
+        return ["Как проходит оплата?", "Где посмотреть чек?", "Что входит в тариф Flex?"]
+    if "мил" in lowered or "miles" in lowered or "loyalty" in lowered:
+        return ["Как получить Silver?", "Сколько миль даёт Business?", "Куда летает eNAir?"]
+    if ru:
+        return ["Сколько стоит билет до Лондона?", "Какие рейсы в Дубай?", "Что входит в тариф Flex?"]
+    return ["How much is a flight to London?", "Which flights go to Dubai?", "What is included in Flex?"]
+
+
+# Намерения разбираем по ключевым словам. Порядок в списке = приоритет:
+# конкретное («сколько мест») должно проверяться раньше общего («рейсы»).
+def _rule_reply(message, flights, history=None):
+    text = " " + re.sub(r"\s+", " ", (message or "").lower()).strip() + " "
     ru = bool(re.search(r"[а-яё]", text))
+    city = _find_city(text, flights)
+    flight = _find_flight(message, flights)
+    if not city and not flight:
+        city = _history_city(history, flights)
+    direction = _direction(text, city) if city else None
+    label = _city_label(city, ru)
+    label_acc = _city_label(city, ru, "acc")
 
     def has(*words):
         return any(word in text for word in words)
 
-    cheapest = min(flights, key=lambda item: item["price"]) if flights else None
+    def money(value):
+        return "{:,}".format(int(value)).replace(",", " ")
 
-    if has("привет", "здравств", "hello", "hi ", "добрый"):
+    # --- приветствие / благодарность / прощание -------------------------
+    if has("привет", "здравств", "добрый день", "добрый вечер", "hello", "hi ", "hey"):
         if ru:
-            return ("Здравствуйте! Я ассистент eNAir. Подскажу по рейсам, тарифам, багажу, "
-                    "регистрации и милям. О чём рассказать?"), _suggestions(message)
-        return ("Hello! I am the eNAir assistant. I can help with flights, fares, baggage, "
-                "sign-up and miles. What would you like to know?"), _suggestions(message)
+            return ("Здравствуйте! Я ассистент eNAir: подскажу по рейсам и местам, тарифам, багажу, "
+                    "милям, оплате и возврату. С чего начнём?"), _suggestions(message, city, ru)
+        return ("Hello! I am the eNAir assistant. I can help with flights and seats, fares, baggage, "
+                "miles, payment and refunds. Where would you like to start?"), _suggestions(message, city, ru)
 
-    if has("сколько стоит", "цена", "стоимость", "почём", "price", "cost", "how much"):
-        city = _mentioned_city(text, flights)
-        matches = [f for f in flights
-                   if city and city.lower() in (f["from"].lower(), f["to"].lower())][:3]
+    if has("спасибо", "благодар", "thanks", "thank you"):
+        return (("Рад помочь! Если что-то ещё понадобится — я здесь." if ru
+                 else "Happy to help! I am here if you need anything else."),
+                _suggestions(message, city, ru))
 
-        if matches:
-            lines = ["{no}: {a} → {b}, {d}, {p} ₸".format(
-                no=f["number"], a=f["from"], b=f["to"], d=f["departure"], p=_money(f["price"]))
-                for f in matches]
+    if has("пока", "до свидания", "bye", "goodbye"):
+        return (("Хорошего полёта! Возвращайтесь с вопросами." if ru
+                 else "Have a good flight! Come back any time."),
+                _suggestions(message, city, ru))
+
+    # --- кто ты / что умеешь --------------------------------------------
+    if has("кто ты", "ты бот", "что умеешь", "что ты можешь", "who are you", "are you a bot", "what can you do"):
+        if ru:
+            return ("Я ассистент eNAir. Знаю расписание из базы (номера, даты, цены и остаток мест), "
+                    "тарифы и багаж, мили, оплату, возврат и как пройти бронирование. "
+                    "Могу найти рейс по номеру или городу — просто спросите."), _suggestions(message, city, ru)
+        return ("I am the eNAir assistant. I know the live schedule (numbers, dates, prices and seats left), "
+                "fares and baggage, miles, payment, refunds and the booking flow. "
+                "Ask about a city or a flight number and I will look it up."), _suggestions(message, city, ru)
+
+    # --- конкретный рейс по номеру ---------------------------------------
+    if flight:
+        seats = flight.get("seats")
+        seat_text = ("свободно {} мест".format(seats) if isinstance(seats, int) and seats > 0
+                     else "свободных мест нет" if seats == 0 else "остаток мест уточняется")
+        if ru:
+            return ("{no}: {a} → {b}, вылет {d}, от {p} ₸ за пассажира, {seats}. "
+                    "Выбрать тариф и оформить билет можно на странице Book Flights.").format(
+                no=flight["number"], a=flight["from"], b=flight["to"], d=flight["departure"],
+                p=money(flight["price"]), seats=seat_text), _suggestions(message, city, ru)
+        return ("{no}: {a} -> {b}, departs {d}, from {p} KZT per passenger, {seats}. "
+                "Pick a fare and book it on the Book Flights page.").format(
+            no=flight["number"], a=flight["from"], b=flight["to"], d=flight["departure"],
+            p=money(flight["price"]), seats=seat_text), _suggestions(message, city, ru)
+
+    # --- остаток мест -----------------------------------------------------
+    if has("мест", "свободн", "sold out", "seats", "available seat"):
+        pool = _route_flights(city, flights, direction) if city else flights[:3]
+        if pool:
+            lines = ["{no} → {b}: {s}".format(no=f["number"], b=f["to"],
+                                              s=(("{} мест".format(f["seats"])) if f["seats"] else "мест нет"))
+                     for f in pool[:4]]
+            head = ("По рейсу в {}:".format(label_acc) if city else "Свободные места по ближайшим рейсам:")
+            tail = ("\nЕсли мест 0, рейс помечен как Sold out и купить его нельзя. "
+                    "Остаток уменьшается сразу после покупки." if ru else "")
             if ru:
-                return ("Рейсы по запросу:\n" + "\n".join(lines) +
-                        "\nТарифы (Lite, Flex, Business) выбираются на следующем шаге бронирования."
-                        ), _suggestions(message)
-            return ("Flights matching your request:\n" + "\n".join(lines) +
-                    "\nFares (Lite, Flex, Business) are chosen on the next booking step."
-                    ), _suggestions(message)
+                return head + "\n" + "\n".join(lines) + tail, _suggestions(message, city, ru)
+            return ("Seats left:\n" + "\n".join(lines), _suggestions(message, city, ru))
+        if ru:
+            return ("Свободных мест сейчас нет ни на одном рейсе — расписание пустое."), _suggestions(message, city, ru)
+        return ("There are no seats available right now — the schedule is empty."), _suggestions(message, city, ru)
 
+    # --- самый дешёвый ----------------------------------------------------
+    if has("дешёв", "дешев", "недорог", "выгодн", "cheapest", "lowest price", "budget"):
+        pool = _route_flights(city, flights, direction) if city else flights
+        bookable = [f for f in pool if (f.get("seats") or 0) > 0]
+        cheapest = min(bookable or pool, key=lambda item: item["price"]) if pool else None
+        if cheapest:
+            if ru:
+                return ("Самый доступный вариант: " + _flight_line(cheapest) +
+                        ". Тариф выбирается на следующем шаге бронирования."), _suggestions(message, city, ru)
+            return ("The cheapest option is " + _flight_line(cheapest) + "."), _suggestions(message, city, ru)
+        if ru:
+            return ("Сейчас в расписании нет рейсов, поэтому назвать цену не могу."), _suggestions(message, city, ru)
+        return ("There are no flights in the schedule right now."), _suggestions(message, city, ru)
+
+    # --- цена -------------------------------------------------------------
+    if has("сколько стоит", "цена", "стоимость", "почём", "price", "cost", "how much"):
+        pool = _route_flights(city, flights, direction) if city else []
+        if pool:
+            lines = [_flight_line(f) for f in pool[:4]]
+            head = ("Рейсы в {}:".format(label_acc) if ru else "Flights to {}:".format(city))
+            tail = ("\nНадбавка за тариф прибавляется к цене и видна в разбивке на странице оплаты."
+                    if ru else "\nThe fare surcharge is added and shown on the payment page.")
+            return head + "\n" + "\n".join(lines) + tail, _suggestions(message, city, ru)
+        cheapest = min(flights, key=lambda item: item["price"]) if flights else None
+        if cheapest and (cheapest.get("seats") or 0) == 0:
+            bookable = [f for f in flights if (f.get("seats") or 0) > 0]
+            if bookable:
+                cheapest = min(bookable, key=lambda item: item["price"])
         if not cheapest:
-            return ("Сейчас в расписании нет рейсов, поэтому назвать цену не могу. "
-                    "Попробуйте страницу Booking."), _suggestions(message)
+            return (("Сейчас в расписании нет рейсов, поэтому назвать цену не могу." if ru
+                     else "There are no flights in the schedule right now."), _suggestions(message, city, ru))
         if ru:
-            return ("Самый доступный рейс в расписании: {no} {a} → {b}, вылет {d}, "
-                    "от {p} ₸ за пассажира. Полное расписание и выбор тарифа — на странице Booking."
-                    ).format(no=cheapest["number"], a=cheapest["from"], b=cheapest["to"],
-                             d=cheapest["departure"], p=_money(cheapest["price"])), _suggestions(message)
-        return ("The cheapest flight in the schedule is {no} {a} -> {b}, departing {d}, "
-                "from {p} KZT per passenger. The full list is on the Booking page."
-                ).format(no=cheapest["number"], a=cheapest["from"], b=cheapest["to"],
-                         d=cheapest["departure"], p=_money(cheapest["price"])), _suggestions(message)
+            return ("Самый доступный рейс: " + _flight_line(cheapest) +
+                    ". Полное расписание — на странице Book Flights."), _suggestions(message, city, ru)
+        return ("The cheapest flight is " + _flight_line(cheapest) +
+                ". The full list is on the Book Flights page."), _suggestions(message, city, ru)
 
-    if has("рейс", "расписан", "куда лет", "направлен", "flights", "routes", "schedule", "where do you fly"):
-        if not flights:
-            return ("Расписание сейчас пустое." if ru else "The schedule is empty right now."), _suggestions(message)
-        lines = ["{no}: {a} → {b}, {d}, {p} ₸".format(no=f["number"], a=f["from"], b=f["to"],
-                                                      d=f["departure"], p=_money(f["price"]))
-                 for f in flights[:5]]
-        head = "Сейчас в расписании:" if ru else "Current schedule:"
-        tail = ("\nВыбрать рейс можно на странице Booking." if ru
-                else "\nYou can pick a flight on the Booking page.")
-        return head + "\n" + "\n".join(lines) + tail, _suggestions(message)
+    # --- куда вообще летаем ----------------------------------------------
+    if has("какие город", "куда вы лета", "куда летаете", "города", "destinations", "which cities", "where do you fly"):
+        cities = _schedule_cities(flights)
+        if cities:
+            if ru:
+                return ("Сейчас eNAir летает в {} городов: {}.".format(
+                    len(cities), ", ".join(_city_label(c, True) for c in cities)) +
+                    " Расписание с датами и местами — на странице Book Flights."), _suggestions(message, city, ru)
+            return ("eNAir currently flies to {} cities: {}.".format(len(cities), ", ".join(cities)) +
+                    " The schedule with dates and seats is on the Book Flights page."), _suggestions(message, city, ru)
+        if ru:
+            return ("Расписание сейчас пустое."), _suggestions(message, city, ru)
+        return ("The schedule is empty right now."), _suggestions(message, city, ru)
 
+    # --- расписание / куда летаем ----------------------------------------
+    if has("рейс", "расписан", "куда лет", "направлен", "когда лет", "flights", "routes", "schedule"):
+        if has("ближайш", "следующ", "next", "soonest"):
+            upcoming = flights[:1]
+            if upcoming:
+                if ru:
+                    return ("Ближайший рейс: " + _flight_line(upcoming[0]) +
+                            ". Дальше по расписанию — на странице Book Flights."), _suggestions(message, city, ru)
+                return ("The next flight is " + _flight_line(upcoming[0]) + "."), _suggestions(message, city, ru)
+        pool = _route_flights(city, flights, direction) if city else flights[:5]
+        if not pool:
+            if ru:
+                message_empty = ("По этому городу рейсов в расписании пока нет." if city else
+                                 "Не вижу рейсов в расписании: база не отвечает или список пуст. Загляните на страницу Book Flights.")
+                return message_empty, _suggestions(message, city, ru)
+            return (("There are no flights to that city yet." if city else
+                     "I cannot see any flights right now — the schedule may be empty or the database is not responding."),
+                    _suggestions(message, city, ru))
+        lines = [_flight_line(f) for f in pool[:5]]
+        head = ("Рейсы в {}:".format(label_acc) if city else ("Сейчас в расписании:" if ru else "Current schedule:"))
+        tail = ("\nВыбрать рейс можно на странице Book Flights." if ru else "\nYou can pick one on Book Flights.")
+        return head + "\n" + "\n".join(lines) + tail, _suggestions(message, city, ru)
+
+    # --- тарифы (но не путать с вопросом про мили) ------------------------
+    if has("тариф", "fare", "lite", "flex", "business", "что входит", "включено", "what is included") \
+            and not has("мил", "миля", "лояльн", "miles", "loyalty", "tier"):
+        return ((FACTS["fares_ru"] + " Надбавка за тариф видна в разбивке на странице оплаты.") if ru
+                else FACTS["fares_en"]), _suggestions(message, city, ru)
+
+    # --- багаж ------------------------------------------------------------
     if has("багаж", "чемодан", "ручная кладь", "baggage", "luggage", "bags"):
-        if ru:
-            return ("Багаж зависит от тарифа: Lite — только ручная кладь 8 кг, "
-                    "Flex — 12 кг плюс одно место, Business — два места. "
-                    "Полный список — в блоке «Choose Your Fare Tier» на странице бронирования."), _suggestions(message)
-        return ("Baggage depends on the fare: Lite is 8 kg cabin bag only, Flex adds a 12 kg bag "
-                "plus one checked bag, Business includes two checked bags. "
-                "See the fare cards on the booking page."), _suggestions(message)
+        return (FACTS["baggage_ru"] if ru else FACTS["baggage_en"]), _suggestions(message, city, ru)
 
-    if has("тариф", "fare", "lite", "flex", "business", "что входит", "включено", "what is included"):
-        if ru:
-            return ("Тарифов три. Lite — ручная кладь 8 кг, выбор места, экологичные снеки. "
-                    "Flex — 12 кг плюс одно место багажа, изменения без штрафа, питание. "
-                    "Business — два места багажа, приватная капсула и лаунж. "
-                    "Надбавка за тариф прибавляется к цене рейса и видна в разбивке на странице оплаты."), _suggestions(message)
-        return ("There are three fares. Lite: 8 kg cabin bag, seat selection, eco snacks. "
-                "Flex: 12 kg plus one checked bag, free changes, meals. "
-                "Business: two checked bags, a private pod and lounge access. "
-                "The fare surcharge is added to the flight price and shown in the payment breakdown."), _suggestions(message)
+    # --- возврат и изменения ---------------------------------------------
+    if has("возврат", "верн", "обмен", "отмен", "деньги за билет", "refund", "cancel", "change my flight"):
+        return (FACTS["refund_ru"] if ru else FACTS["refund_en"]), _suggestions(message, city, ru)
 
-    if has("забронир", "купить билет", "как купить", "book a flight", "booking", "how to book"):
-        if ru:
-            return ("Путь такой: главная → выберите маршрут и нажмите Search → выберите рейс → "
-                    "тариф → данные пассажиров → оплата. Для брони нужен вход в аккаунт: "
-                    "гостя сайт попросит зарегистрироваться."), _suggestions(message)
-        return ("The flow is: home page -> choose route and press Search -> pick a flight -> "
-                "choose a fare -> passenger details -> payment. Booking requires an account, "
-                "so guests are asked to sign in first."), _suggestions(message)
-
-    if has("регистрац", "регистр", "зарегистр", "войти", "аккаунт", "register", "sign up", "sign in", "login", "log in") or re.search(r"\bвход\b", text):
-        if ru:
-            return ("Кнопка «Войти / Регистрация» в правом верхнем углу. Аккаунт хранится в "
-                    "PostgreSQL (Neon), пароль — только в виде хеша. После входа можно бронировать."), _suggestions(message)
-        return ("Use the Sign in / Register button in the header. Accounts live in PostgreSQL (Neon) "
-                "and passwords are stored only as hashes. Once signed in you can book."), _suggestions(message)
-
-    if has("мили", "миля", "бонус", "лояльн", "miles", "loyalty", "rewards", "tier"):
-        if ru:
-            return ("Четыре уровня: Silver — 15 000 миль, Gold — 40 000, Platinum — 85 000, "
-                    "Diamond — 150 000. На странице Loyalty есть калькулятор: он считает расстояние "
-                    "по формуле гаверсинуса и добавляет бонус за уровень и класс."), _suggestions(message)
-        return ("There are four tiers: Silver at 15,000 miles, Gold at 40,000, Platinum at 85,000 "
-                "and Diamond at 150,000. The Loyalty page has a calculator that uses the haversine "
-                "formula plus tier and cabin bonuses."), _suggestions(message)
-
+    # --- оплата -----------------------------------------------------------
     if has("оплат", "платёж", "платеж", "карта", "payment", "pay", "card"):
-        if ru:
-            return ("Оплата в проекте демонстрационная: форма работает, но реальные деньги не "
-                    "списываются — на экране подтверждения это прямо написано."), _suggestions(message)
-        return ("Payment here is a demo: the form works, but no real money is charged. "
-                "The confirmation screen says so explicitly."), _suggestions(message)
+        return (FACTS["payment_ru"] if ru else FACTS["payment_en"]), _suggestions(message, city, ru)
 
-    if has("возврат", "обмен", "отмен", "refund", "cancel", "change my flight"):
+    # --- бронирование -----------------------------------------------------
+    if has("забронир", "купить билет", "как купить", "оформ", "book a flight", "booking", "how to book"):
         if ru:
-            return ("Условия зависят от тарифа: Lite — возврат с удержанием, Flex — изменения без "
-                    "штрафа, Business — самые гибкие условия. Точные правила указаны в карточках тарифов."), _suggestions(message)
-        return ("It depends on the fare: Lite allows refunds with a fee, Flex changes are free, "
-                "Business has the most flexible terms. Exact rules are on the fare cards."), _suggestions(message)
+            return ("Путь такой: главная → маршрут и Search → выберите рейс → тариф → данные пассажиров → "
+                    "оплата. В конце открывается чек с номером брони. Для брони нужен вход в аккаунт: "
+                    "гостя сайт попросит зарегистрироваться."), _suggestions(message, city, ru)
+        return ("The flow is: home -> route and Search -> pick a flight -> fare -> passenger details -> "
+                "payment. A receipt with the booking reference opens at the end. Booking requires an "
+                "account, so guests are asked to sign in first."), _suggestions(message, city, ru)
 
+    # --- регистрация ------------------------------------------------------
+    if has("регистрац", "регистр", "зарегистр", "войти", "аккаунт", "register", "sign up", "sign in", "login", "log in"):
+        if ru:
+            return ("Кнопка «Войти / Регистрация» в правом верхнем углу. Аккаунт хранится в PostgreSQL (Neon), "
+                    "пароль — только в виде хеша. После входа можно бронировать."), _suggestions(message, city, ru)
+        return ("Use the Sign in / Register button in the header. Accounts live in PostgreSQL (Neon) and "
+                "passwords are stored only as hashes. Once signed in you can book."), _suggestions(message, city, ru)
+
+    # --- мили -------------------------------------------------------------
+    if has("мили", "миль", "миля", "милях", "бонус", "лояльн", "miles", "loyalty", "rewards", "tier"):
+        return (FACTS["loyalty_ru"] if ru else FACTS["loyalty_en"]), _suggestions(message, city, ru)
+
+    # --- регистрация на рейс, документы, виза ----------------------------
+    if has("check-in", "чек-ин", "чек ин", "регистрация на рейс", "паспорт", "виза", "документ", "visa", "passport"):
+        if ru:
+            return ("Регистрация на рейс проходит в приложении: биометрический проход и посадочный талон "
+                    "появляются в профиле заранее. Для международных рейсов нужен паспорт, а визовые "
+                    "требования зависят от страны — их стоит уточнить до покупки."), _suggestions(message, city, ru)
+        return ("Check-in happens in the app: biometric boarding and the boarding pass appear in your "
+                "profile ahead of time. International flights need a passport, and visa rules depend on "
+                "the country, so check them before booking."), _suggestions(message, city, ru)
+
+    # --- животные, дети, помощь ------------------------------------------
+    if has("животн", "питом", "собак", "кот", "pet", "dog", "cat"):
+        if ru:
+            return ("Питомцев можно перевозить в салоне в переноске до 8 кг или в багаже — по правилам "
+                    "тарифа. Точные условия зависят от страны въезда; напишите в консьерж, и вам подберут вариант."), _suggestions(message, city, ru)
+        return ("Pets can travel in the cabin in a carrier up to 8 kg or in the hold, depending on the fare. "
+                "Rules vary by destination — ask the concierge and they will find the right option."), _suggestions(message, city, ru)
+
+    if has("ребен", "ребён", "дети", "child", "kids", "infant"):
+        if ru:
+            return ("Дети летят по детскому тарифу, младенцы до двух лет — на руках у взрослого. "
+                    "Количество пассажиров задаётся в поле Passengers на главной или на странице поиска."), _suggestions(message, city, ru)
+        return ("Children travel on a child fare; infants under two travel on an adult's lap. "
+                "The passenger count is set in the Passengers field on the home or search page."), _suggestions(message, city, ru)
+
+    # --- задержки и погода ------------------------------------------------
+    if has("задерж", "опозда", "погод", "delay", "weather", "canceled", "cancelled"):
+        if ru:
+            return ("Статус рейса в этом прототипе не подключён к реальным данным авиакомпании. "
+                    "О расписании и местах я знаю из базы, а по фактическим задержкам лучше смотреть табло аэропорта."), _suggestions(message, city, ru)
+        return ("Live flight status is not connected to airline data in this prototype. I can tell you the "
+                "schedule and seats from the database; for real delays check the airport board."), _suggestions(message, city, ru)
+
+    # --- контакты ---------------------------------------------------------
     if has("контакт", "поддержк", "телефон", "почта", "contact", "support", "phone", "email"):
-        if ru:
-            return ("Почта консьержа — concierge@enair.aero, а форма обратной связи есть на странице "
-                    "About & Contact. Отвечаем в течение дня."), _suggestions(message)
-        return ("The concierge email is concierge@enair.aero, and there is a contact form on the "
-                "About & Contact page."), _suggestions(message)
+        return (FACTS["contacts_ru"] if ru else FACTS["contacts_en"]), _suggestions(message, city, ru)
 
+    # --- валюта -----------------------------------------------------------
     if has("валют", "тенге", "доллар", "currency", "tenge", "kzt", "usd"):
         if ru:
             return ("В шапке есть переключатель ₸ / $. Курс — 490 ₸ за 1 $, цены в базе хранятся "
-                    "в долларах и показываются в тенге."), _suggestions(message)
-        return ("The header has a KZT / USD switcher. The rate is 490 KZT per USD; prices are stored "
-                "in USD and shown in tenge."), _suggestions(message)
+                    "в долларах и показываются в тенге."), _suggestions(message, city, ru)
+        return ("The header has a KZT / USD switcher. The rate is 490 KZT per USD; prices are stored in USD "
+                "and shown in tenge."), _suggestions(message, city, ru)
 
-    if has("кто ты", "ты бот", "что умеешь", "что умеет", "who are you", "are you a bot", "what can you do"):
-        if ru:
-            return ("Я ассистент eNAir. Отвечаю про рейсы, тарифы, багаж, регистрацию, мили и оплату. "
-                    "Работаю на движке правил и читаю расписание из базы; если на сервере задан "
-                    "ключ ИИ, отвечаю через языковую модель."), _suggestions(message)
-        return ("I am the eNAir assistant. I answer questions about flights, fares, baggage, sign-up, "
-                "miles and payment. I run on a rules engine and read the schedule from the database; "
-                "if an AI key is configured, I answer through a language model."), _suggestions(message)
+    # --- город без уточнения ---------------------------------------------
+    if city:
+        pool = _route_flights(city, flights, direction)
+        if pool:
+            lines = [_flight_line(f) for f in pool[:4]]
+            if ru:
+                return ("Рейсы в {}:".format(label_acc) + "\n" + "\n".join(lines) +
+                        "\nМогу подсказать цену, остаток мест или что входит в тариф."), _suggestions(message, city, ru)
+            return ("Flights to {}:".format(city) + "\n" + "\n".join(lines) +
+                    "\nAsk me about prices, seats left or fares."), _suggestions(message, city, ru)
 
     if ru:
-        return ("Могу рассказать про рейсы и цены, тарифы, багаж, регистрацию, мили и оплату. "
-                "Например: «сколько стоит билет до Лондона?»"), _suggestions(message)
-    return ("I can help with flights and prices, fares, baggage, sign-up, miles and payment. "
-            "Try: \"how much is a flight to London?\""), _suggestions(message)
+        return ("Могу рассказать про рейсы и цены, свободные места, тарифы, багаж, мили, оплату, "
+                "возврат и регистрацию. Например: «сколько стоит билет до Лондона?»"), _suggestions(message, city, ru)
+    return ("I can help with flights and prices, seats left, fares, baggage, miles, payment, refunds "
+            "and sign-up. Try: \"how much is a flight to London?\""), _suggestions(message, city, ru)
 
 
-def _ask_ai_model(message, flights, model):
+def _schedule_for_prompt(flights):
+    if not flights:
+        return "no flights in the schedule"
+    lines = []
+    for flight in flights:
+        lines.append("{no}: {a} -> {b}, {d}, {p} KZT, seats {s}".format(
+            no=flight["number"], a=flight["from"], b=flight["to"],
+            d=flight["departure"], p=flight["price"], s=flight["seats"]))
+    return "\n".join(lines)
+
+
+def _ask_ai_model(message, flights, model, history=None, page=""):
     """Один запрос к модели с явно указанным именем."""
-    schedule = "\n".join(
-        "{no}: {a} -> {b}, {d}, {p} KZT, seats {s}".format(
-            no=f["number"], a=f["from"], b=f["to"], d=f["departure"], p=f["price"], s=f["seats"])
-        for f in flights
-    ) or "no data"
-
     system = (
-        "Ты — вежливый ассистент авиакомпании eNAir на демонстрационном сайте. "
-        "Отвечай кратко, 2-4 предложения, на языке пользователя. "
-        "Не выдумывай рейсы, цены и даты — используй только данные ниже. "
-        "Оплата на сайте демонстрационная, деньги не списываются. "
-        "Актуальные рейсы (цены в тенге):\n" + schedule
+        "Ты — ассистент авиакомпании eNAir на демонстрационном сайте. Отвечай тепло и по делу, "
+        "2–4 предложения, на языке пользователя (русский или английский). "
+        "Если вопрос про конкретный рейс — назови номер, дату, цену и остаток мест из данных ниже. "
+        "Никогда не выдумывай рейсы, цены, даты и правила: если данных нет, честно скажи и предложи, "
+        "куда посмотреть на сайте. Не обещай вернуть деньги: оплата здесь демонстрационная. "
+        "Если вопрос неполный, задай один короткий уточняющий вопрос.\n\n"
+        "Расписание (цены в тенге за пассажира, места — свободный остаток):\n" + _schedule_for_prompt(flights) + "\n\n"
+        "Тарифы: Lite — ручная кладь 8 кг, выбор места, снеки; Flex — 12 кг плюс место багажа, "
+        "бесплатные изменения, питание; Business — два места багажа, капсула, лаунж.\n"
+        "Багаж: Lite 8 кг ручная кладь, Flex +12 кг и одно место, Business два места по 32 кг.\n"
+        "Мили: Silver 15 000, Gold 40 000, Platinum 85 000, Diamond 150 000; калькулятор на странице Loyalty.\n"
+        "Возврат: зависит от тарифа, на странице тарифов есть условия.\n"
+        "Оплата: демонстрационная, деньги не списываются; бронь и списание мест сохраняются в базе, "
+        "после оплаты открывается чек с номером брони.\n"
+        "Контакты: concierge@enair.aero, форма на странице About & Contact."
     )
+    if page:
+        system += "\nПользователь сейчас на странице: {}.".format(page)
+
+    messages = [{"role": "system", "content": system}]
+    for item in (history or [])[-8:]:
+        role = item.get("role")
+        content = str(item.get("content") or "").strip()[:600]
+        if role in ("user", "assistant") and content:
+            messages.append({"role": role, "content": content})
+    messages.append({"role": "user", "content": message})
 
     payload = {
         "model": model,
-        "messages": [
-            {"role": "system", "content": system},
-            {"role": "user", "content": message},
-        ],
-        "temperature": 0.3,
-        "max_tokens": 350,
+        "messages": messages,
+        "temperature": 0.35,
+        "max_tokens": 400,
     }
 
     request_obj = urllib.request.Request(
@@ -904,22 +1204,22 @@ def _ask_ai_model(message, flights, model):
         method="POST",
     )
 
-    with urllib.request.urlopen(request_obj, timeout=15) as response:
+    with urllib.request.urlopen(request_obj, timeout=20) as response:
         data = json.loads(response.read().decode("utf-8"))
 
     return (data["choices"][0]["message"]["content"] or "").strip()
 
 
-def _ask_ai(message, flights):
+def _ask_ai(message, flights, history=None, page=""):
     """Запрос к модели. При 400/404 пробует запасную, при прочих ошибках — откат на правила."""
     try:
-        return _ask_ai_model(message, flights, AI_MODEL)
+        return _ask_ai_model(message, flights, AI_MODEL, history, page)
     except urllib.error.HTTPError as exc:
         if exc.code in (400, 404) and AI_MODEL_FALLBACK and AI_MODEL_FALLBACK != AI_MODEL:
             app.logger.warning(
                 "Model %s is unavailable (%s), retrying with %s", AI_MODEL, exc.code, AI_MODEL_FALLBACK
             )
-            return _ask_ai_model(message, flights, AI_MODEL_FALLBACK)
+            return _ask_ai_model(message, flights, AI_MODEL_FALLBACK, history, page)
         raise
 
 
@@ -927,18 +1227,25 @@ def _ask_ai(message, flights):
 def assistant():
     data = request.get_json(silent=True) or {}
     message = str(data.get("message", ""))[:400].strip()
+    page = str(data.get("page", "") or "")[:60]
+    history = data.get("history") or []
+    if not isinstance(history, list):
+        history = []
+    history = [item for item in history if isinstance(item, dict)][-8:]
 
     if not message:
         return jsonify({"error": "Пустой запрос"}), 400
 
-    flights = _flights_snapshot()
+    flights = _all_flights()
     ai_error = None
 
     if AI_API_KEY:
         try:
-            reply = _ask_ai(message, flights)
+            reply = _ask_ai(message, flights, history, page)
             if reply:
-                return jsonify({"reply": reply, "source": "ai", "suggestions": _suggestions(message)})
+                city = _find_city(message, flights)
+                return jsonify({"reply": reply, "source": "ai",
+                                "suggestions": _suggestions(message, city)})
         except urllib.error.HTTPError as exc:
             ai_error = "HTTP {}".format(exc.code)
             app.logger.exception("AI assistant request failed")
@@ -946,12 +1253,11 @@ def assistant():
             ai_error = "connection"
             app.logger.exception("AI assistant request failed")
 
-    reply, suggestions = _rule_reply(message, flights)
+    reply, suggestions = _rule_reply(message, flights, history)
     payload = {"reply": reply, "source": "rules", "suggestions": suggestions}
     if ai_error:
         payload["ai_error"] = ai_error
     return jsonify(payload)
-
 
 @app.route("/api/assistant/selftest")
 def assistant_selftest():

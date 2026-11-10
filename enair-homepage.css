@@ -2,7 +2,7 @@
 body{width:100%;min-width:320px;background:#fff;-webkit-font-smoothing:antialiased}
 body>div{margin:0 auto}
 img,svg{display:block}
-.enair-homepage-1{position:relative;width:100%;max-width:1440px;min-height:100vh;height:auto;margin:0 auto;background:#f8fafc;display:flex;flex-direction:column;align-items:flex-start;box-sizing:border-box}
+.enair-homepage-1{position:relative;width:100%;max-width:1680px;min-height:100vh;height:auto;margin:0 auto;background:#f8fafc;display:flex;flex-direction:column;align-items:flex-start;box-sizing:border-box}
 .sticky-navigation-2{position:relative;align-self:stretch;flex-shrink:0;background:rgba(255,255,255,0.7);border-bottom:1px solid #e2e8f0;box-sizing:border-box;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:flex;flex-direction:row;justify-content:space-between;align-items:center;padding:16px 80px 16px 80px;box-sizing:border-box}
 .logo-group-3{position:relative;width:110px;flex-shrink:0;display:flex;flex-direction:row;align-items:center;gap:12px;box-sizing:border-box}
 .logo-badge-4{position:relative;width:40px;height:40px;flex-shrink:0;border-radius:12px;background:linear-gradient(135deg, #06b6d4 0%, #8b5cf6 100%);box-shadow:0px 4px 16px 0px rgba(6,182,212,0.2);display:flex;flex-direction:column;justify-content:center;align-items:center;box-sizing:border-box}
@@ -386,6 +386,9 @@ img,svg{display:block}
 .experience-who-311,.experience-who-319{display:flex;flex-direction:column;gap:3px;min-width:0}
 .experience-name-312,.experience-name-320{font-family:'Geist',sans-serif;font-size:15px;font-weight:600;line-height:20px;color:#0f172a}
 .experience-meta-313,.experience-meta-321{font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:18px;color:#64748b}
+.experience-more-322{align-self:flex-start;margin-top:4px;font-family:'Geist',sans-serif;font-size:14px;font-weight:600;
+  color:#0e7490;text-decoration:none;border-bottom:1px solid rgba(14,116,144,.3);padding-bottom:2px;transition:color .16s,border-color .16s}
+.experience-more-322:hover{color:#0891b2;border-bottom-color:#0891b2}
 @media(max-width:1100px){
   .experience-section-300{padding:80px 40px}
   .experience-title-303{font-size:34px;line-height:1.2}

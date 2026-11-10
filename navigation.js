@@ -30,7 +30,8 @@
     search: 'booking-search.html', fare: 'booking-select-fare.html', passengers: 'booking-passengers.html',
     payment: 'booking-payment.html', fleet: 'enair-fleet-experience.html', loyalty: 'enair-loyalty.html',
     about: 'enair-about-contact.html', enrollment: 'enair-rewards-enrollment.html',
-    personas: 'nair-high-user-personas.html', mobileHome: 'mobile-homepage.html',
+    personas: 'nair-high-user-personas.html', experiences: 'enair-experiences.html',
+    mobileHome: 'mobile-homepage.html',
     mobileBooking: 'mobile-booking.html', curatedIceland: 'curated-iceland.html',
     curatedAsia: 'curated-vietnam-bali.html', curatedGreece: 'curated-greece.html',
     fleetA350: 'fleet-a350.html', fleet787: 'fleet-787.html', fleetA380: 'fleet-a380.html'
@@ -160,7 +161,7 @@
       label.textContent = name;
       group.append(
         svgNode('circle', {class: 'hub-halo', r: 14}),
-        svgNode('circle', {class: 'hub-dot', r: 4.6}),
+        svgNode('circle', {class: 'hub-dot', r: 5.2}),
         label
       );
 
@@ -484,9 +485,11 @@
         [class*="footer-bottom-"]{flex-wrap:wrap!important;gap:16px!important}
         .map-section-home-89{overflow:hidden}
       }
-      /* Своя векторная карта: SVG внутри блока, без внешних библиотек */
-      .enair-map-canvas{position:absolute;inset:0;overflow:hidden}
-      .enair-vector-map{display:block;width:100%;height:100%;background:#eef5f7;cursor:grab;touch-action:none;user-select:none}
+      /* Своя векторная карта: SVG внутри блока, без внешних библиотек */      .enair-map-canvas{position:absolute;inset:0;overflow:hidden}
+      .enair-vector-map{display:block;width:100%;height:100%;cursor:grab;touch-action:none;user-select:none;
+        background-color:#eef5f7;
+        background-image:radial-gradient(circle at 1px 1px, rgba(15,23,42,.055) 1px, transparent 0);
+        background-size:18px 18px}
       .enair-map-dragging .enair-vector-map{cursor:grabbing}
       .enair-map-ocean{fill:#eef5f7}
       .enair-map-graticule line{stroke:#dcebee;stroke-width:.7;vector-effect:non-scaling-stroke}
@@ -510,8 +513,54 @@
       .map-illustration-95>.enair-map-frame{background:transparent}
       .enair-map-frame{z-index:0}
       .detailed-high-tech-map-46{position:relative;z-index:0}
+      /* --- Живость страниц: появление секций, акценты, микроанимации ------- */
+      html{scroll-behavior:smooth}
+      body{background:#f8fafc;color:#0f172a}
+      .enair-reveal{opacity:0;transform:translateY(16px);transition:opacity .55s cubic-bezier(.22,.61,.36,1),transform .55s cubic-bezier(.22,.61,.36,1)}
+      .enair-reveal-in{opacity:1;transform:none}
+      [class*="nav-links-"]>div{position:relative}
+      [class*="nav-links-"]>div::after{content:'';position:absolute;left:0;right:0;bottom:-7px;height:2px;border-radius:2px;background:linear-gradient(90deg,#06b6d4,#8b5cf6);transform:scaleX(0);transform-origin:left center;transition:transform .24s ease}
+      [class*="nav-links-"]>div:hover::after,[class*="nav-links-"]>div:focus-within::after{transform:scaleX(1)}
+      .enair-db-flight-select:hover,.enair-fare-continue:hover,.enair-auth-submit:hover,.enair-receipt-print:hover{box-shadow:0 10px 26px rgba(139,92,246,.32)}
+      .enair-map-city{transition:transform .16s ease,background .16s ease}
+      .enair-map-city:hover{transform:translateY(-1px)}
+      .enair-toast{animation:enair-toast-in .22s ease-out}
+      @keyframes enair-toast-in{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}
+      @media(prefers-reduced-motion:reduce){
+        html{scroll-behavior:auto}
+        .enair-reveal{opacity:1!important;transform:none!important;transition:none!important}
+      }
       @media(max-width:700px){.enair-grid{grid-template-columns:1fr}}
     `; document.head.appendChild(s);
+  }
+
+  // Плавное появление секций при прокрутке. Первый экран не трогаем, чтобы
+  // страница не «мигала» при загрузке; уважаем настройку «меньше движения».
+  function injectReveal() {
+    if (!('IntersectionObserver' in window)) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const root = document.querySelector('body > div');
+    if (!root) return;
+    const items = [...root.children].filter((element, index) => {
+      if (index === 0) return false;
+      const style = window.getComputedStyle(element);
+      if (style.position === 'fixed' || style.position === 'sticky' || style.position === 'absolute') return false;
+      return element.getBoundingClientRect().height > 180;
+    });
+    if (!items.length) return;
+    items.forEach(element => element.classList.add('enair-reveal'));
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('enair-reveal-in');
+        observer.unobserve(entry.target);
+      });
+    }, {rootMargin: '0px 0px -6% 0px', threshold: 0.04});
+    items.forEach(element => observer.observe(element));
+    // Страховка: если наблюдатель почему-то не сработал, показываем всё сами.
+    window.setTimeout(() => {
+      items.forEach(element => element.classList.add('enair-reveal-in'));
+    }, 9000);
   }
 
   function toast(msg) { const old = document.querySelector('.enair-toast'); if(old) old.remove(); const t=document.createElement('div'); t.className='enair-toast'; t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),2200); }
@@ -850,6 +899,25 @@
     list.appendChild(item);
   }
 
+  // Ссылка на страницу историй пассажиров: в макете её в навигации не было.
+  function addExperiencesLink(){
+    if(document.querySelector('[data-enair-experiences]'))return;
+    const personasLink=document.querySelector('[data-enair-personas]');
+    let list=personasLink?personasLink.parentElement:null;
+    if(!list){
+      const heading=findAll('Company')[0];
+      if(!heading||!heading.parentElement)return;
+      list=[...heading.parentElement.children].find(child=>child!==heading&&child.children.length>0);
+    }
+    if(!list||!list.lastElementChild)return;
+    const item=list.lastElementChild.cloneNode(true);
+    item.textContent='Experiences';
+    delete item.dataset.enairBound;
+    item.dataset.enairExperiences='1';
+    clickable(item,()=>go(routes.experiences));
+    list.appendChild(item);
+  }
+
   function globalNav(){
     const map={Destinations:routes.destinations,'Book Flights':routes.booking,'Our Fleet':routes.fleet,Loyalty:routes.loyalty,'About eNAir':routes.about,'Book Now':routes.booking};
     Object.entries(map).forEach(([t,u])=>findAll(t).slice(0,3).forEach(el=>clickable(clickableTarget(el),()=>go(u))));
@@ -857,6 +925,7 @@
     const footer={ 'About Us':routes.about,'Fleet Details':routes.fleet,Destinations:routes.destinations,'Loyalty Programs':routes.loyalty,'Contact Support':routes.about };
     Object.entries(footer).forEach(([t,u])=>findAll(t).forEach(el=>clickable(clickableTarget(el),()=>go(u))));
     addPersonasLink();
+    addExperiencesLink();
     renderAuthControl();
     renderCurrencyControl();
     updateCurrencyPrices();
@@ -1764,6 +1833,13 @@
     document.querySelectorAll('.curated-trip-book').forEach(booking=>clickable(booking,()=>{if(destination)setDestination(destination);go(routes.search)}));
   }
 
+  // Страница историй пассажиров: кнопки ведут в бронирование и в контакты.
+  function experiencesPage(){
+    document.querySelectorAll('[data-exp-cta]').forEach(button=>{
+      clickable(button,()=>go(button.dataset.expCta==='booking'?routes.booking:routes.about));
+    });
+  }
+
   function informationalFallbacks(){
     const info={
       'Privacy Policy':'This prototype does not collect or transmit personal information. Booking details are stored only in this browser so the sample booking flow can keep your selections between pages.',
@@ -1836,10 +1912,12 @@
   if(is('fleet-a350.html')||is('fleet-787.html')||is('fleet-a380.html')) aircraftPage();
   if(is('enair-about-contact.html')) aboutPage();
   if(is('curated-iceland.html')||is('curated-vietnam-bali.html')||is('curated-greece.html')) curatedTripPage();
+  if(is('enair-experiences.html')) experiencesPage();
   // Меню нужно на всех страницах: на узких экранах обычные ссылки скрыты.
   mobileMenu();
   globalFallbacks(); informationalFallbacks();
   updateDisplayedRoute();
+  injectReveal();
 
   // Виджет ассистента подключается отдельным файлом, чтобы не раздувать navigation.js.
   function loadAssistant() {

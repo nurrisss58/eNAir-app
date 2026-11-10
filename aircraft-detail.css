@@ -1,6 +1,6 @@
 *{box-sizing:border-box}
 body{margin:0;min-width:320px;background:#f8fafc;color:#0f172a;font-family:'Geist',Arial,sans-serif;-webkit-font-smoothing:antialiased}
-.aircraft-page{max-width:1440px;min-height:100vh;margin:0 auto}
+.aircraft-page{max-width:1680px;min-height:100vh;margin:0 auto}
 .aircraft-nav{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:16px clamp(20px,5.5vw,80px);background:rgba(255,255,255,.95);border-bottom:1px solid #e2e8f0}
 .aircraft-brand{font:800 24px 'Outfit',sans-serif;color:#0f172a;text-decoration:none}
 .aircraft-nav nav{display:flex;align-items:center;gap:clamp(12px,3vw,40px)}
