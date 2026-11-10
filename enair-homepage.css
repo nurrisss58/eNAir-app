@@ -370,3 +370,30 @@ img,svg{display:block}
   .frame-256{min-width:0;max-width:100%}
   [class~="2026-enair-technologies-inc--255"]{max-width:100%;white-space:normal}
 }
+
+/* --- Guest Experience: два отзыва пассажиров перед подвалом ---------------- */
+.experience-section-300{position:relative;align-self:stretch;flex-shrink:0;background:#ffffff;border-top:1px solid #e2e8f0;display:flex;flex-direction:column;align-items:flex-start;gap:48px;padding:100px 80px 100px 80px;box-sizing:border-box}
+.experience-heading-301{display:flex;flex-direction:column;align-items:flex-start;gap:10px;max-width:760px}
+.experience-eyebrow-302{font-family:'Geist',sans-serif;font-size:14px;font-weight:700;line-height:18.2px;letter-spacing:1.5px;text-transform:uppercase;color:#06b6d4}
+.experience-title-303{font-family:'Outfit',sans-serif;font-size:40px;font-weight:800;line-height:50.4px;color:#0f172a}
+.experience-caption-304{font-family:'Geist',sans-serif;font-size:15px;font-weight:400;line-height:22px;color:#64748b}
+.experience-reviews-305{align-self:stretch;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.experience-card-306,.experience-card-314{display:flex;flex-direction:column;gap:20px;padding:32px;border:1px solid #e2e8f0;border-radius:24px;background:#f8fafc;box-sizing:border-box}
+.experience-stars-307,.experience-stars-315{font-size:16px;line-height:20px;letter-spacing:3px;color:#f59e0b}
+.experience-quote-308,.experience-quote-316{margin:0;font-family:'Geist',sans-serif;font-size:16px;font-weight:400;line-height:27px;color:#334155}
+.experience-person-309,.experience-person-317{display:flex;flex-direction:row;align-items:center;gap:14px;margin-top:auto;padding-top:8px}
+.experience-avatar-310,.experience-avatar-318{flex-shrink:0;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#06b6d4,#8b5cf6);color:#ffffff;font-family:'Geist',sans-serif;font-size:15px;font-weight:700;letter-spacing:.5px}
+.experience-who-311,.experience-who-319{display:flex;flex-direction:column;gap:3px;min-width:0}
+.experience-name-312,.experience-name-320{font-family:'Geist',sans-serif;font-size:15px;font-weight:600;line-height:20px;color:#0f172a}
+.experience-meta-313,.experience-meta-321{font-family:'Geist',sans-serif;font-size:13px;font-weight:400;line-height:18px;color:#64748b}
+@media(max-width:1100px){
+  .experience-section-300{padding:80px 40px}
+  .experience-title-303{font-size:34px;line-height:1.2}
+}
+@media(max-width:900px){
+  .experience-section-300{padding:60px 20px;gap:32px}
+  .experience-reviews-305{grid-template-columns:1fr}
+  .experience-card-306,.experience-card-314{padding:24px}
+  .experience-title-303{font-size:clamp(26px,7vw,32px);line-height:1.15}
+  .experience-quote-308,.experience-quote-316{font-size:15px;line-height:25px}
+}

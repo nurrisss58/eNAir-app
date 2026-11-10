@@ -483,9 +483,26 @@
                 route.textContent = `${flight.departure_city || 'Origin'} → ${flight.arrival_city || 'Destination'}`;
                 const times = document.createElement('p');
                 times.textContent = `Departure: ${flight.departure_time || '—'} · Arrival: ${flight.arrival_time || '—'}`;
+                if (flight.aircraft) {
+                    const aircraft = document.createElement('p');
+                    aircraft.textContent = `Aircraft: ${flight.aircraft}`;
+                    details.append(number, route, times, aircraft);
+                } else {
+                    details.append(number, route, times);
+                }
+
+                // Остаток мест из базы: он же уменьшается после каждой покупки.
+                const seatsLeft = flight.seats_available == null ? NaN : Number(flight.seats_available);
                 const seats = document.createElement('p');
-                seats.textContent = `Seats available: ${flight.seats_available != null ? flight.seats_available : '—'}`;
-                details.append(number, route, times, seats);
+                seats.className = 'enair-db-flight-seats';
+                if (Number.isFinite(seatsLeft)) {
+                    seats.textContent = seatsLeft > 0
+                        ? `${seatsLeft} seat${seatsLeft === 1 ? '' : 's'} left`
+                        : 'Sold out';
+                } else {
+                    seats.textContent = 'Seats available: —';
+                }
+                details.append(seats);
 
                 const action = document.createElement('div');
                 action.className = 'enair-db-flight-action';
@@ -496,6 +513,11 @@
                 select.type = 'button';
                 select.className = 'enair-db-flight-select';
                 select.textContent = 'Select';
+                if (Number.isFinite(seatsLeft) && seatsLeft <= 0) {
+                    card.classList.add('enair-db-flight-soldout');
+                    select.disabled = true;
+                    select.textContent = 'Sold out';
+                }
                 select.addEventListener('click', () => {
                     if (typeof window.enairSelectDatabaseFlight !== 'function') {
                         console.error('The eNAir booking handler is unavailable.');

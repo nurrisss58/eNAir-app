@@ -1,5 +1,6 @@
 import json
 import os
+import random
 import re
 import urllib.error
 import urllib.request
@@ -165,24 +166,103 @@ def init_db():
         cur.execute("ALTER TABLE users ALTER COLUMN name DROP NOT NULL;")
         cur.execute("ALTER TABLE users ALTER COLUMN password DROP NOT NULL;")
 
-        # Демо-рейсы добавляем только в пустую таблицу, иначе при каждом деплое
-        # появлялись новые копии одних и тех же рейсов.
-        cur.execute("SELECT COUNT(*) FROM flights;")
-        if cur.fetchone()[0] == 0:
-            now = datetime.utcnow()
-            demo_flights = [
-                ("EN-101", "New York", "London", now + timedelta(days=14), now + timedelta(days=14, hours=8), 2450.00, 120),
-                ("EN-108", "New York", "London", now + timedelta(days=15), now + timedelta(days=15, hours=8, minutes=30), 2548.00, 98),
-                ("EN-214", "New York", "Paris", now + timedelta(days=18), now + timedelta(days=18, hours=7), 2352.00, 85),
-                ("EN-305", "London", "Athens", now + timedelta(days=12), now + timedelta(days=12, hours=5, minutes=20), 420.00, 64),
-            ]
-            for flight_number, dep_city, arr_city, dep_time, arr_time, price, seats in demo_flights:
-                cur.execute("""
-                    INSERT INTO flights (
-                        flight_number, departure_city, arrival_city,
-                        departure_time, arrival_time, price, seats_available
-                    ) VALUES (%s, %s, %s, %s, %s, %s, %s);
-                """, (flight_number, dep_city, arr_city, dep_time, arr_time, price, seats))
+        # Новые колонки расписания: тип борта для карточек и ключ засева,
+        # чтобы повторный деплой не добавлял те же рейсы второй раз.
+        cur.execute("ALTER TABLE flights ADD COLUMN IF NOT EXISTS aircraft VARCHAR(60);")
+        cur.execute("ALTER TABLE flights ADD COLUMN IF NOT EXISTS seed_key VARCHAR(60);")
+        cur.execute("CREATE UNIQUE INDEX IF NOT EXISTS flights_seed_key_key ON flights (seed_key);")
+
+        # Бронь: снимок рейса хранится рядом, чтобы чек не менялся, даже если
+        # рейс потом отредактируют или удалят из расписания.
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS bookings (
+                id SERIAL PRIMARY KEY,
+                reference VARCHAR(16) UNIQUE,
+                user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+                flight_id INTEGER REFERENCES flights(id) ON DELETE SET NULL,
+                flight_number VARCHAR(50),
+                departure_city VARCHAR(120),
+                arrival_city VARCHAR(120),
+                departure_time TIMESTAMP,
+                arrival_time TIMESTAMP,
+                cabin VARCHAR(40),
+                fare VARCHAR(40),
+                passengers INTEGER NOT NULL DEFAULT 1,
+                passenger_names TEXT,
+                total_price NUMERIC(12,2) NOT NULL DEFAULT 0,
+                card_last4 VARCHAR(4),
+                status VARCHAR(20) NOT NULL DEFAULT 'confirmed',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        """)
+        # На Neon таблица bookings могла остаться от прошлой версии сайта
+        # (id, user_id, flight_id, booked_at). Тогда CREATE TABLE IF NOT EXISTS
+        # ничего не меняет, поэтому каждую недостающую колонку добавляем отдельно.
+        booking_columns = [
+            ("reference", "VARCHAR(16)"),
+            ("flight_number", "VARCHAR(50)"),
+            ("departure_city", "VARCHAR(120)"),
+            ("arrival_city", "VARCHAR(120)"),
+            ("departure_time", "TIMESTAMP"),
+            ("arrival_time", "TIMESTAMP"),
+            ("cabin", "VARCHAR(40)"),
+            ("fare", "VARCHAR(40)"),
+            ("passengers", "INTEGER NOT NULL DEFAULT 1"),
+            ("passenger_names", "TEXT"),
+            ("total_price", "NUMERIC(12,2) NOT NULL DEFAULT 0"),
+            ("card_last4", "VARCHAR(4)"),
+            ("status", "VARCHAR(20) NOT NULL DEFAULT 'confirmed'"),
+            ("created_at", "TIMESTAMP DEFAULT CURRENT_TIMESTAMP"),
+        ]
+        for column, definition in booking_columns:
+            cur.execute("ALTER TABLE bookings ADD COLUMN IF NOT EXISTS {} {};".format(column, definition))
+        cur.execute("CREATE UNIQUE INDEX IF NOT EXISTS bookings_reference_key ON bookings (reference);")
+
+        # Демо-рейсы. Список вставляется по одному и только если такого рейса ещё
+        # нет — ни по seed_key, ни по номеру. Поэтому деплой не плодит копии,
+        # а новые рейсы достаточно дописать в этот список.
+        now = datetime.utcnow()
+        start = now.replace(minute=0, second=0, microsecond=0)
+        demo_flights = [
+            # (номер, откуда, куда, дней до вылета, время вылета, время прилёта, цена $, мест, борт)
+            ("EN-101", "New York", "London", 14, 8, 1, 2450.00, 120, "A350-H2 (Hydrogen)"),
+            ("EN-108", "New York", "London", 15, 11, 3, 2548.00, 98, "A350-H2 (Hydrogen)"),
+            ("EN-214", "New York", "Paris", 18, 7, 2, 2352.00, 85, "787 Dreamliner-E"),
+            ("EN-305", "London", "Athens", 12, 5, 8, 420.00, 64, "A320neo-E"),
+            ("EN-301", "New York", "Moscow", 11, 9, 2, 1890.00, 25, "A350-H2 (Hydrogen)"),
+            ("EN-302", "Moscow", "New York", 20, 6, 1, 1890.00, 25, "A350-H2 (Hydrogen)"),
+            ("EN-410", "London", "Dubai", 9, 10, 5, 760.00, 48, "787 Dreamliner-E"),
+            ("EN-411", "Dubai", "London", 16, 12, 6, 760.00, 48, "787 Dreamliner-E"),
+            ("EN-512", "Almaty", "Dubai", 7, 4, 7, 310.00, 25, "A320neo-E"),
+            ("EN-513", "Dubai", "Almaty", 13, 8, 9, 310.00, 25, "A320neo-E"),
+            ("EN-620", "Singapore", "Tokyo", 10, 9, 1, 540.00, 72, "787 Dreamliner-E"),
+            ("EN-621", "Tokyo", "Singapore", 17, 14, 3, 540.00, 72, "787 Dreamliner-E"),
+            ("EN-700", "New York", "Tokyo", 21, 11, 4, 1980.00, 36, "A380 Superjumbo-X"),
+            ("EN-801", "Paris", "Rome", 8, 7, 9, 210.00, 56, "A320neo-E"),
+            ("EN-802", "Rome", "Paris", 19, 15, 2, 210.00, 56, "A320neo-E"),
+            ("EN-906", "Sydney", "Auckland", 6, 8, 6, 260.00, 40, "787 Dreamliner-E"),
+        ]
+
+        def flight_time(days, hour):
+            return (start + timedelta(days=days)).replace(hour=hour)
+
+        for number, dep_city, arr_city, days, dep_hour, arr_hour, price, seats, aircraft in demo_flights:
+            cur.execute(
+                "SELECT 1 FROM flights WHERE seed_key = %s OR flight_number = %s LIMIT 1;",
+                ("demo-" + number, number),
+            )
+            if cur.fetchone():
+                continue
+            departure = flight_time(days, dep_hour)
+            arrival = flight_time(days, arr_hour)
+            if arrival <= departure:
+                arrival += timedelta(days=1)
+            cur.execute("""
+                INSERT INTO flights (
+                    flight_number, departure_city, arrival_city,
+                    departure_time, arrival_time, price, seats_available, aircraft, seed_key
+                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);
+            """, (number, dep_city, arr_city, departure, arrival, price, seats, aircraft, "demo-" + number))
 
         # Чистим полные дубли, оставляя запись с наименьшим id.
         # Удаляет только строки, у которых совпадают номер, маршрут и оба времени.
@@ -250,7 +330,7 @@ def flights():
     cur = conn.cursor()
     cur.execute("""
         SELECT id, flight_number, departure_city, arrival_city,
-               departure_time, arrival_time, price, seats_available
+               departure_time, arrival_time, price, seats_available, aircraft
         FROM flights
         ORDER BY departure_time
     """)
@@ -269,6 +349,7 @@ def flights():
             "arrival_time": row[5].strftime("%d.%m.%Y %H:%M"),
             "price": round(_price_kzt(row[6]), 2),
             "seats_available": row[7],
+            "aircraft": row[8] or "Scheduled flight",
         })
 
     return jsonify(result)
@@ -355,29 +436,211 @@ def login():
             conn.close()
 
 
+class BookingError(Exception):
+    """Ошибка оформления брони с кодом ответа для клиента."""
+
+    def __init__(self, message, status=400):
+        super().__init__(message)
+        self.message = message
+        self.status = status
+
+
+def _new_reference(cur):
+    """Номер брони вида EN123456, которого ещё нет в таблице."""
+    for _ in range(20):
+        reference = "EN" + "".join(random.choice("0123456789") for _ in range(6))
+        cur.execute("SELECT 1 FROM bookings WHERE reference = %s;", (reference,))
+        if not cur.fetchone():
+            return reference
+    raise BookingError("Не удалось создать номер брони, попробуйте ещё раз", 500)
+
+
+def _clean_passenger_names(raw, limit=9):
+    if isinstance(raw, str):
+        raw = [part for part in raw.split(",") if part.strip()]
+    if not isinstance(raw, list):
+        return []
+    names = []
+    for item in raw[:limit]:
+        text = str(item or "").strip()[:120]
+        if text:
+            names.append(text)
+    return names
+
+
 @app.route("/api/book", methods=["POST"])
 def book_flight():
+    """Оформление брони: списывает места с рейса и сохраняет чек в базе.
+
+    Места списываются в той же транзакции, что и создание брони, а строка рейса
+    блокируется (SELECT ... FOR UPDATE). Поэтому два одновременных заказа не
+    могут продать одно и то же последнее место.
+    """
     data = request.get_json(silent=True) or {}
     user_id = data.get("user_id")
     flight_id = data.get("flight_id")
+    card_last4 = re.sub(r"\D", "", str(data.get("card_last4") or ""))[-4:]
 
     if not user_id:
         return jsonify({"error": "Доступ запрещен. Пожалуйста, войдите в систему."}), 401
 
     try:
+        passengers = int(data.get("passengers") or 1)
+    except (TypeError, ValueError):
+        passengers = 1
+    passengers = max(1, min(passengers, 9))
+
+    try:
+        total_price = float(data.get("total") or 0)
+    except (TypeError, ValueError):
+        total_price = 0.0
+    total_price = max(0.0, min(total_price, 100_000_000))
+
+    cabin = str(data.get("cabin") or "Economy").strip()[:40]
+    fare = str(data.get("fare") or "Flex").strip()[:40]
+    passenger_names = _clean_passenger_names(data.get("passenger_names"))
+
+    conn = None
+    cur = None
+    try:
         conn = get_db()
         cur = conn.cursor()
-        cur.execute("SELECT id FROM users WHERE id = %s;", (user_id,))
-        if not cur.fetchone():
-            cur.close()
-            conn.close()
-            return jsonify({"error": "Недействительный пользователь"}), 401
 
-        cur.close()
-        conn.close()
-        return jsonify({"message": "Билет успешно забронирован!"}), 200
-    except Exception as exc:
-        return jsonify({"error": str(exc)}), 500
+        cur.execute("SELECT email FROM users WHERE id = %s;", (user_id,))
+        user = cur.fetchone()
+        if not user:
+            raise BookingError("Недействительный пользователь", 401)
+        user_email = user[0]
+
+        cur.execute("""
+            SELECT flight_number, departure_city, arrival_city,
+                   departure_time, arrival_time, seats_available
+            FROM flights
+            WHERE id = %s
+            FOR UPDATE;
+        """, (flight_id,))
+        flight = cur.fetchone()
+        if not flight:
+            raise BookingError("Рейс не найден — возможно, он уже улетел", 404)
+
+        seats_available = int(flight[5] or 0)
+        if seats_available < passengers:
+            if seats_available <= 0:
+                raise BookingError("На этот рейс не осталось свободных мест", 409)
+            raise BookingError(
+                "Свободных мест осталось всего {} — уменьшите число пассажиров".format(seats_available),
+                409,
+            )
+
+        cur.execute(
+            "UPDATE flights SET seats_available = seats_available - %s WHERE id = %s;",
+            (passengers, flight_id),
+        )
+
+        reference = _new_reference(cur)
+        cur.execute("""
+            INSERT INTO bookings (
+                reference, user_id, flight_id, flight_number, departure_city,
+                arrival_city, departure_time, arrival_time, cabin, fare, passengers,
+                passenger_names, total_price, card_last4, status
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 'confirmed')
+            RETURNING id, created_at;
+        """, (
+            reference, user_id, flight_id, flight[0], flight[1], flight[2],
+            flight[3], flight[4], cabin, fare, passengers,
+            json.dumps(passenger_names, ensure_ascii=False), round(total_price, 2),
+            card_last4 or None,
+        ))
+        booking_id, created_at = cur.fetchone()
+        conn.commit()
+
+        return jsonify({
+            "message": "Билет оформлен",
+            "booking": {
+                "id": booking_id,
+                "reference": reference,
+                "email": user_email,
+                "flight_number": flight[0],
+                "departure_city": flight[1],
+                "arrival_city": flight[2],
+                "departure_time": flight[3].strftime("%d.%m.%Y %H:%M"),
+                "arrival_time": flight[4].strftime("%d.%m.%Y %H:%M"),
+                "cabin": cabin,
+                "fare": fare,
+                "passengers": passengers,
+                "passenger_names": passenger_names,
+                "total_price": round(total_price, 2),
+                "card_last4": card_last4,
+                "seats_left": seats_available - passengers,
+                "status": "confirmed",
+                "created_at": created_at.strftime("%d.%m.%Y %H:%M"),
+            },
+        }), 201
+
+    except BookingError as exc:
+        if conn:
+            conn.rollback()
+        return jsonify({"error": exc.message}), exc.status
+    except Exception:
+        if conn:
+            conn.rollback()
+        app.logger.exception("Flight booking failed")
+        return jsonify({"error": "Сервис бронирования временно недоступен"}), 500
+    finally:
+        if cur:
+            cur.close()
+        if conn:
+            conn.close()
+
+
+@app.route("/api/bookings/<reference>")
+def booking_receipt(reference):
+    """Чек по номеру брони — пригодится, если страницу оплаты закрыли."""
+    reference = str(reference or "").strip().upper()[:16]
+    conn = None
+    cur = None
+    try:
+        conn = get_db()
+        cur = conn.cursor()
+        cur.execute("""
+            SELECT reference, flight_number, departure_city, arrival_city,
+                   departure_time, arrival_time, cabin, fare, passengers,
+                   passenger_names, total_price, card_last4, status, created_at
+            FROM bookings WHERE reference = %s;
+        """, (reference,))
+        row = cur.fetchone()
+        if not row:
+            return jsonify({"error": "Бронь с таким номером не найдена"}), 404
+
+        try:
+            names = json.loads(row[9] or "[]")
+        except ValueError:
+            names = []
+
+        return jsonify({
+            "reference": row[0],
+            "flight_number": row[1],
+            "departure_city": row[2],
+            "arrival_city": row[3],
+            "departure_time": row[4].strftime("%d.%m.%Y %H:%M") if row[4] else "",
+            "arrival_time": row[5].strftime("%d.%m.%Y %H:%M") if row[5] else "",
+            "cabin": row[6],
+            "fare": row[7],
+            "passengers": row[8],
+            "passenger_names": names,
+            "total_price": float(row[10] or 0),
+            "card_last4": row[11],
+            "status": row[12],
+            "created_at": row[13].strftime("%d.%m.%Y %H:%M") if row[13] else "",
+        })
+    except Exception:
+        app.logger.exception("Unable to read the booking receipt")
+        return jsonify({"error": "Сервис бронирования временно недоступен"}), 500
+    finally:
+        if cur:
+            cur.close()
+        if conn:
+            conn.close()
 
 
 @app.route("/healthz")

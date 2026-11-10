@@ -5,6 +5,26 @@
   // При открытии файлов напрямую (file://) — обращаемся к локальному Flask.
   const API_BASE = location.protocol === 'file:' ? 'http://127.0.0.1:5000' : '';
 
+  // Общий вызов API: всегда отдаёт JSON и превращает ошибку сервера в
+  // исключение с человеческим текстом, чтобы обработчики не дублировали разбор.
+  async function apiRequest(path, options) {
+    const response = await fetch(`${API_BASE}${path}`, options);
+    let payload = null;
+    try {
+      payload = await response.json();
+    } catch (error) {
+      payload = null;
+    }
+    if (!response.ok) {
+      const message = (payload && payload.error) || `Request failed (${response.status})`;
+      const failure = new Error(message);
+      failure.status = response.status;
+      throw failure;
+    }
+    return payload;
+  }
+  const fetchFlightsFromApi = () => apiRequest('/api/flights');
+
   const routes = {
     home: 'enair-homepage.html', destinations: 'enair-destinations.html', booking: 'enair-booking.html',
     search: 'booking-search.html', fare: 'booking-select-fare.html', passengers: 'booking-passengers.html',
@@ -41,50 +61,90 @@
     Bali: {code:'DPS', name:'Bali, Indonesia', lat:-8.7482, lon:115.1672},
     Athens: {code:'ATH', name:'Athens, Greece', lat:37.9364, lon:23.9445}
   };
-  const mapEmbedUrl = location => {
-    const south = location.lat - 1.5;
-    const north = location.lat + 1.5;
-    const west = location.lon - 2.5;
-    const east = location.lon + 2.5;
-    const bounds = [west, south, east, north].map(value => value.toFixed(4)).join(',');
-    return `https://www.openstreetmap.org/export/embed.html?bbox=${bounds}&layer=mapnik&marker=${location.lat},${location.lon}`;
-  };
-  function mapFrame(title, location = mapLocations['New York']) {
-    const frame = document.createElement('iframe');
-    frame.className = 'enair-map-frame';
-    frame.title = title;
-    frame.loading = 'lazy';
-    frame.referrerPolicy = 'no-referrer-when-downgrade';
-    frame.src = mapEmbedUrl(location);
-    frame.setAttribute('allowfullscreen', '');
-    return frame;
-  }
-
   // --- Интерактивная карта на Leaflet -------------------------------------
-  // Ключ не нужен: библиотека с CDN, тайлы CARTO на основе OpenStreetMap.
-  // Если Leaflet не загрузился (нет сети, CDN недоступен) — откат на iframe.
+  // Ключ не нужен: библиотека с CDN, тайлы OpenStreetMap.
+  // Если Leaflet не загрузился (нет сети, CDN недоступен), остаётся карта из
+  // макета: она лежит под интерактивной и никогда не даёт пустого прямоугольника.
+  //
+  // Почему источников несколько: раньше библиотека грузилась только с unpkg, и
+  // при первом заходе (холодное соединение, медленный CDN, сеть школы) скрипт
+  // не успевал загрузиться — карта оставалась пустым прямоугольником. Стоило
+  // сходить на другую страницу и вернуться, соединение с CDN уже было тёплым,
+  // и карта появлялась. Теперь источники перебираются по очереди, у каждого
+  // свой таймаут, а поверх подложки карта проявляется только когда пришли тайлы.
   const LEAFLET_VERSION = '1.9.4';
+  const LEAFLET_SOURCES = [
+    `https://unpkg.com/leaflet@${LEAFLET_VERSION}/dist/`,
+    `https://cdn.jsdelivr.net/npm/leaflet@${LEAFLET_VERSION}/dist/`,
+    `https://cdnjs.cloudflare.com/ajax/libs/leaflet/${LEAFLET_VERSION}/`
+  ];
+  const LEAFLET_TIMEOUT_MS = 6000;
   let leafletPromise = null;
 
-  function loadLeaflet() {
-    if (window.L) return Promise.resolve(window.L);
-    if (leafletPromise) return leafletPromise;
-    leafletPromise = new Promise((resolve, reject) => {
+  function loadLeafletFrom(base) {
+    return new Promise((resolve, reject) => {
       if (!document.getElementById('enair-leaflet-css')) {
         const link = document.createElement('link');
         link.id = 'enair-leaflet-css';
         link.rel = 'stylesheet';
-        link.href = `https://unpkg.com/leaflet@${LEAFLET_VERSION}/dist/leaflet.css`;
+        link.href = `${base}leaflet.css`;
         document.head.appendChild(link);
       }
       const script = document.createElement('script');
-      script.src = `https://unpkg.com/leaflet@${LEAFLET_VERSION}/dist/leaflet.js`;
+      script.src = `${base}leaflet.js`;
       script.async = true;
-      script.onload = () => (window.L ? resolve(window.L) : reject(new Error('Leaflet is unavailable')));
-      script.onerror = () => reject(new Error('Leaflet failed to load'));
+      let settled = false;
+      const finish = (error) => {
+        if (settled) return;
+        settled = true;
+        window.clearTimeout(timer);
+        if (error) {
+          script.remove();
+          reject(error);
+          return;
+        }
+        if (window.L) resolve(window.L);
+        else reject(new Error(`Leaflet is unavailable (${base})`));
+      };
+      // Без таймаута «зависший» запрос держал бы карту пустой бесконечно.
+      const timer = window.setTimeout(() => finish(new Error(`Leaflet timed out (${base})`)), LEAFLET_TIMEOUT_MS);
+      script.onload = () => finish(null);
+      script.onerror = () => finish(new Error(`Leaflet failed to load (${base})`));
       document.head.appendChild(script);
     });
-    return leafletPromise;
+  }
+
+  function loadLeaflet() {
+    if (window.L) return Promise.resolve(window.L);
+    if (leafletPromise) return leafletPromise;
+    leafletPromise = LEAFLET_SOURCES.reduce(
+      (attempt, base) => attempt.catch(error => {
+        console.warn(error.message + ' — пробуем следующий CDN');
+        return loadLeafletFrom(base);
+      }),
+      Promise.reject(new Error('Leaflet: ни один CDN ещё не пробовали'))
+    );
+    // Неудачу не запоминаем навсегда: следующий вызов попробует источники снова
+    // (например, когда сеть восстановилась).
+    return leafletPromise.catch(error => {
+      leafletPromise = null;
+      throw error;
+    });
+  }
+
+  // Карта создаётся только когда у контейнера есть размер: Leaflet, созданный
+  // в блоке нулевой высоты, остаётся невидимым до ручного invalidateSize().
+  function whenSized(host, callback, attempt = 0) {
+    if (host.isConnected && host.clientWidth > 8 && host.clientHeight > 8) {
+      callback();
+      return;
+    }
+    // После ~4 секунд отдаём управление как есть — дальше размер ловит ResizeObserver.
+    if (attempt >= 40) {
+      callback();
+      return;
+    }
+    window.setTimeout(() => whenSized(host, callback, attempt + 1), 100);
   }
 
   // Дуга между двумя точками — чтобы маршруты не резали карту по прямой.
@@ -138,40 +198,63 @@
 
     loadLeaflet().then(L => {
       host.classList.add('enair-leaflet-map');
-      const start = controller.pending || initial;
-      const map = L.map(host, {
-        scrollWheelZoom: false,
-        worldCopyJump: true,
-        minZoom: 2,
-        zoomControl: false
-      }).setView([start.lat, start.lon], 4);
+      whenSized(host, () => {
+        const start = controller.pending || initial;
+        const map = L.map(host, {
+          scrollWheelZoom: false,
+          worldCopyJump: true,
+          minZoom: 2,
+          zoomControl: false
+        }).setView([start.lat, start.lon], 4);
 
-      L.control.zoom({position: zoomPosition}).addTo(map);
+        L.control.zoom({position: zoomPosition}).addTo(map);
 
-      // Тайлы OpenStreetMap: без ключа и без регистрации (CARTO теперь требует ключ).
-      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors',
-        maxZoom: 19
-      }).addTo(map);
+        // Тайлы OpenStreetMap: без ключа и без регистрации (CARTO теперь требует ключ).
+        const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; OpenStreetMap contributors',
+          maxZoom: 19
+        }).addTo(map);
 
-      Object.entries(mapLocations).forEach(([name, city]) => {
-        L.circleMarker([city.lat, city.lon], {
-          radius: 6, color: '#06b6d4', weight: 2, fillColor: '#ffffff', fillOpacity: 1
-        }).addTo(map).bindTooltip(name, {direction: 'top', offset: [0, -6]});
+        // Подложка (карта из макета) видна до первого тайла, поэтому пустого
+        // прямоугольника не бывает даже на медленной сети.
+        tiles.once('tileload', () => wrapper.classList.add('enair-map-ready'));
+
+        Object.entries(mapLocations).forEach(([name, city]) => {
+          L.circleMarker([city.lat, city.lon], {
+            radius: 6, color: '#06b6d4', weight: 2, fillColor: '#ffffff', fillOpacity: 1
+          }).addTo(map).bindTooltip(name, {direction: 'top', offset: [0, -6]});
+        });
+
+        controller.map = map;
+        drawNetwork(controller.pending || initial);
+
+        // Leaflet считает размеры в момент создания. Пересчитываем на всех
+        // событиях, после которых размер блока мог измениться.
+        const refresh = () => {
+          if (!controller.map) return;
+          map.invalidateSize();
+        };
+        window.requestAnimationFrame(refresh);
+        window.addEventListener('load', refresh);
+        window.addEventListener('resize', refresh);
+        window.addEventListener('pageshow', refresh);
+        document.addEventListener('visibilitychange', () => {
+          if (!document.hidden) refresh();
+        });
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(refresh).catch(() => {});
+        if (window.ResizeObserver) new ResizeObserver(refresh).observe(host);
       });
-
-      controller.map = map;
-      drawNetwork(controller.pending || initial);
-      window.setTimeout(() => map.invalidateSize(), 80);
-      window.addEventListener('resize', () => map.invalidateSize());
     }).catch(error => {
-      console.warn('Leaflet недоступен, показываем встроенную карту:', error);
+      // Интерактивной карты не будет: убираем пустой слой, под ним остаётся
+      // карта из макета с подписями городов. Раньше здесь подставлялся iframe
+      // OpenStreetMap, но на медленной сети он показывал пустое поле с булавкой —
+      // именно это и выглядело как «карта не появилась».
+      console.warn('Leaflet недоступен, остаётся карта из макета:', error);
+      controller.unavailable = true;
+      controller.map = null;
+      // Обёртку не убираем: на главной она прозрачная (видна карта из макета),
+      // на странице направлений — с картинкой мира в фоне.
       host.remove();
-      const frame = mapFrame(title, controller.pending || initial);
-      wrapper.replaceChildren(frame);
-      controller.flyTo = location => {
-        if (location) frame.src = mapEmbedUrl(location);
-      };
     });
 
     return controller;
@@ -276,6 +359,39 @@
       .enair-editable{cursor:text!important}.enair-editable:focus{outline:2px solid #06b6d4;border-radius:4px}
       .enair-confirm{position:fixed;inset:0;z-index:100000;background:rgba(15,23,42,.55);display:flex;align-items:center;justify-content:center;padding:20px}.enair-confirm-card{background:#fff;border-radius:24px;padding:32px;max-width:480px;text-align:center;box-shadow:0 30px 100px rgba(0,0,0,.3)}
       .enair-confirm-icon{width:64px;height:64px;border-radius:50%;background:#ecfeff;color:#0891b2;display:grid;place-items:center;font-size:30px;margin:0 auto 16px}.enair-confirm-card h2{margin:0 0 8px}.enair-confirm-card p{color:#64748b;line-height:1.6}.enair-confirm-card button{border:0;background:#0f172a;color:#fff;border-radius:10px;padding:11px 18px;cursor:pointer}
+      /* Чек после оплаты */
+      .enair-receipt{position:fixed;inset:0;z-index:100001;display:flex;align-items:flex-start;justify-content:center;padding:32px 20px;overflow:auto;background:rgba(15,23,42,.6);backdrop-filter:blur(6px)}
+      .enair-receipt-card{position:relative;width:min(560px,100%);margin:auto;background:#fff;border-radius:24px;padding:32px;box-shadow:0 30px 90px rgba(15,23,42,.35);font:14px 'Geist',sans-serif;color:#0f172a}
+      .enair-receipt-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+      .enair-receipt-brand{font:800 20px 'Outfit',sans-serif;letter-spacing:-.02em}
+      .enair-receipt-status{border-radius:999px;background:#ecfdf5;color:#047857;font:700 11px 'Geist',sans-serif;letter-spacing:.08em;padding:6px 12px}
+      .enair-receipt-title{margin:0 0 4px;font:800 26px 'Outfit',sans-serif}
+      .enair-receipt-ref{margin:0 0 20px;color:#64748b}
+      .enair-receipt-ref strong{color:#0f172a;font-weight:700;letter-spacing:.04em}
+      .enair-receipt-rows{display:grid;gap:10px;padding:18px 0;border-top:1px dashed #e2e8f0;border-bottom:1px dashed #e2e8f0}
+      .enair-receipt-row{display:flex;justify-content:space-between;gap:16px}
+      .enair-receipt-key{color:#64748b;flex-shrink:0}
+      .enair-receipt-value{text-align:right;font-weight:600}
+      .enair-receipt-money{padding:18px 0 0;display:grid;gap:8px}
+      .enair-receipt-seats{margin:0 0 6px;color:#0891b2;font-weight:600}
+      .enair-receipt-breakdown{display:grid;gap:6px}
+      .enair-receipt-line{display:flex;justify-content:space-between;gap:16px;color:#475569}
+      .enair-receipt-total{margin:8px 0 0;font:800 28px 'Outfit',sans-serif;color:#0f172a}
+      .enair-receipt-caption{margin:0;color:#94a3b8;font-size:12px}
+      .enair-receipt-note{margin:18px 0 0;color:#64748b;font-size:12px;line-height:1.6}
+      .enair-receipt-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+      .enair-receipt-print{border:0;border-radius:12px;background:linear-gradient(110deg,#06b6d4,#8b5cf6);color:#fff;font:700 14px 'Geist',sans-serif;padding:12px 18px;cursor:pointer}
+      .enair-receipt-close{border:1px solid #e2e8f0;border-radius:12px;background:#fff;color:#0f172a;font:600 14px 'Geist',sans-serif;padding:12px 18px;cursor:pointer}
+      .enair-flight-soldout{opacity:.55;cursor:not-allowed!important}
+      .enair-issuing{opacity:.75;pointer-events:none}
+      /* В печати остаётся только чек: кнопка «Print / Save PDF» даёт чистый PDF. */
+      @media print{
+        body{background:#fff!important}
+        body>*{display:none!important}
+        body>.enair-receipt{display:block!important;position:static!important;padding:0!important;background:#fff!important;overflow:visible!important;backdrop-filter:none!important}
+        body>.enair-receipt .enair-receipt-card{width:100%!important;max-width:none!important;margin:0!important;border:1px solid #e2e8f0!important;border-radius:0!important;box-shadow:none!important}
+        .enair-receipt-actions{display:none!important}
+      }
       .enair-auth-actions{display:flex;align-items:center;gap:10px;flex-shrink:0;margin-left:12px;font:500 13px 'Geist',sans-serif}
       .enair-auth-email{max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#334155}
       .enair-auth-trigger,.enair-auth-logout{border:1px solid #e2e8f0;border-radius:999px;background:#fff;color:#0f172a;padding:10px 14px;font:600 13px 'Geist',sans-serif;white-space:nowrap;cursor:pointer}
@@ -314,6 +430,11 @@
         .map-section-home-89{overflow:hidden}
       }
       .enair-leaflet-map{position:relative;width:100%;height:100%;background:#eaf3f4;overflow:hidden}
+      /* Карта проявляется только когда пришёл первый тайл: под ней остаётся
+         карта из макета, поэтому блок не бывает пустым на медленной сети. */
+      .enair-leaflet-map{opacity:0;transition:opacity .45s ease;pointer-events:none}
+      .enair-map-ready .enair-leaflet-map{opacity:1;pointer-events:auto}
+      .map-illustration-95>.enair-map-frame{background:transparent}
       /* Карта создаёт свой контекст наложения, иначе панели Leaflet перекрывают чипы городов */
       .enair-map-frame{z-index:0}
       .detailed-high-tech-map-46{position:relative;z-index:0}
@@ -625,7 +746,9 @@
       dep: formatTime(flight.departure_time),
       arr: formatTime(flight.arrival_time),
       duration,
-      price: Number(flight.price)
+      price: Number(flight.price),
+      // Остаток мест нужен, чтобы показать «Sold out» и не продать лишнее.
+      seats: Number.isFinite(Number(flight.seats_available)) ? Number(flight.seats_available) : undefined
     };
   }
 
@@ -738,12 +861,17 @@
     const wrapper=document.createElement('div');wrapper.className='enair-map-frame';
     const host=document.createElement('div');
     wrapper.append(host);
-    map.replaceChildren(wrapper,picker);
+    // Карта из макета остаётся под интерактивной: она видна, пока Leaflet и тайлы
+    // не загрузились, поэтому блок никогда не выглядит пустым.
+    map.append(wrapper,picker);
     const controller=networkMap(host,wrapper,'Interactive map of the eNAir network',mapLocations['New York'],'topright');
     Object.keys(mapLocations).slice(0,6).forEach((name,index)=>{
       const button=document.createElement('button');button.type='button';button.className='enair-map-city';button.textContent=name;
       button.setAttribute('aria-pressed',String(index===0));
       button.addEventListener('click',()=>{
+        // Если интерактивная карта не загрузилась, чипы всё равно полезны:
+        // они выбирают город как пункт назначения для поиска.
+        if(controller.unavailable){setDestination(name);toast(`${name} selected as your destination`);return;}
         controller.flyTo(mapLocations[name]);
         picker.querySelectorAll('button').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));
       });
@@ -1066,6 +1194,35 @@
     bindText('Book Now',()=>go(routes.booking));
   }
 
+  // «New York, USA» -> «new york»: так города из базы сравниваются с маршрутом.
+  const cityKey = label => String(label || '').split(',')[0].trim().toLowerCase();
+
+  // Перерисовка карточки рейса данными из базы: номер, время, цена и остаток мест.
+  function paintFlightRow(row, offer) {
+    if (!row || !offer) return;
+    const number = row.querySelector('[class^="number-"]');
+    if (number) number.textContent = offer.no;
+    const aircraftLabels = [...row.querySelectorAll('[class^="aircraft-"]')];
+    const aircraft = aircraftLabels[aircraftLabels.length - 1];
+    if (aircraft) aircraft.textContent = offer.aircraft;
+    const departure = row.querySelector('[class^="departure-"]');
+    if (departure) departure.textContent = offer.dep;
+    const arrival = row.querySelector('[class^="arrival-"]');
+    if (arrival) arrival.textContent = offer.arr;
+    const duration = row.querySelector('[class^="time-"]');
+    const seats = Number(offer.seats);
+    if (duration) {
+      duration.textContent = seats <= 0
+        ? `${offer.duration} · NON-STOP · SOLD OUT`
+        : `${offer.duration} · NON-STOP · ${seats} seat${seats === 1 ? '' : 's'} left`;
+    }
+    const price = row.querySelector('[class^="price-"]');
+    if (price) price.dataset.priceKzt = String(Math.round(Number(offer.price) || 0));
+    row.classList.toggle('enair-flight-soldout', seats <= 0);
+    row.setAttribute('aria-disabled', String(seats <= 0));
+    updateCurrencyPrices(row);
+  }
+
   function searchPage(){
     // Turn the exported fields into controls.
     findAll('Round-trip').forEach(el=>clickable(el,()=>{state.trip='Round-trip';save();toast('Round-trip selected')}));
@@ -1074,7 +1231,29 @@
     const cabin=find('Economy  ·  Premium  ·  Business  ·  First'); if(cabin)clickable(cabin,passengerPicker);
     updateDisplayedDates(); bindDateFields();
     // Make every flight row selectable, not only its text button.
-    document.querySelectorAll('[class^="flight-option-"]').forEach((row,i)=>{row.classList.add('enair-card-hover');clickable(row,()=>requireAuthentication(()=>{state.flight=flights[i%flights.length];save();go(routes.fare)}));});
+    const rows=[...document.querySelectorAll('[class^="flight-option-"]')];
+    let offers=flights.slice();
+    rows.forEach((row,index)=>{
+      row.classList.add('enair-card-hover');
+      clickable(row,()=>requireAuthentication(()=>{
+        const offer=offers[index%offers.length];
+        if(offer&&Number(offer.seats)===0){toast('Этот рейс распродан — выберите другой');return;}
+        state.flight=offer;save();go(routes.fare);
+      }));
+    });
+    // Карточки заполняются расписанием из базы: именно по этим рейсам
+    // списываются места, поэтому номер, цена и остаток должны быть настоящими.
+    fetchFlightsFromApi().then(list=>{
+      if(!Array.isArray(list)||!list.length)return;
+      const from=cityKey(state.fromName), to=cityKey(state.toName);
+      const matching=list.filter(flight=>cityKey(flight.departure_city)===from&&cityKey(flight.arrival_city)===to);
+      const pool=(matching.length?matching:list).slice(0,Math.max(rows.length,1));
+      offers=pool.map(normalizeDatabaseFlight);
+      rows.forEach((row,index)=>{
+        if(index<offers.length)paintFlightRow(row,offers[index]);
+        else row.classList.add('enair-filter-hidden');
+      });
+    }).catch(error=>console.warn('Расписание из базы недоступно:',error.message));
     updateDisplayedRoute();
   }
 
@@ -1128,24 +1307,246 @@
     [totalPrice,payButton].forEach(element=>{if(element)element.dataset.priceKzt=String(breakdown.total)});
     updateCurrencyPrices();
   }
+  // Значение поля по подписи: на страницах бронирования поля свёрстаны
+  // парами «label-*» / «value-*», а не настоящими input.
+  function fieldValueByLabel(root, label) {
+    const blocks = [...root.querySelectorAll('[class^="field-"]')];
+    const block = blocks.find(node => {
+      const caption = node.querySelector('[class^="label-"]');
+      return caption && clean(caption.textContent).toLowerCase() === label;
+    });
+    const value = block && block.querySelector('[class^="value-"]');
+    return value ? clean(value.textContent) : '';
+  }
+
+  // Имена пассажиров со страницы «Who's travelling?» — они нужны в чеке.
+  function collectPassengers() {
+    const names = [];
+    document.querySelectorAll('[class^="card-"]').forEach(card => {
+      const title = card.querySelector('[class^="title-"]');
+      if (!title || !/^Passenger\s+\d+/i.test(clean(title.textContent))) return;
+      const name = [fieldValueByLabel(card, 'first name'), fieldValueByLabel(card, 'last name')]
+        .filter(Boolean).join(' ');
+      if (name) names.push(name);
+    });
+    return names;
+  }
+
   function passengersPage(){
     makeEditableValues();
+    const names=collectPassengers();
+    if(names.length){state.passengers=names;save();}
     const priceSummary=document.querySelector('.price-45');
     if(priceSummary)priceSummary.dataset.priceKzt=String(currentTotal());
     updateCurrencyPrices();
-    bindText('Continue to payment',()=>{save();go(routes.payment)});
+    // Имена перечитываем в момент перехода: поля на странице редактируемые,
+    // и правки должны попасть в чек.
+    bindText('Continue to payment',()=>{
+      const edited=collectPassengers();
+      if(edited.length)state.passengers=edited;
+      save();go(routes.payment);
+    });
   }
 
   function paymentPage(){
     makeEditableValues();
     refreshTotal();
+    // Данные карты тоже живут в «value-*»: из номера берём последние 4 цифры,
+    // чтобы они попали в чек, а имя держателя — как запасное имя пассажира.
+    const cardDigits=fieldValueByLabel(document,'card number').replace(/\D/g,'');
+    if(cardDigits)state.cardLast4=cardDigits.slice(-4);
+    if(!(state.passengers||[]).length){
+      const holder=fieldValueByLabel(document,'cardholder name');
+      if(holder)state.passengers=[holder];
+      save();
+    }
     const payButton=document.querySelector('.button-84');
     if(payButton)clickable(payButton,completeBooking);
     findAll('Pay by card').forEach(el=>clickable(el,()=>toast('Card payment mode selected')));
   }
-  function completeBooking(){
-    const code='EN'+Math.floor(100000+Math.random()*899999); state.confirmation=code; save();
-    const wrap=document.createElement('div');wrap.className='enair-confirm';wrap.innerHTML=`<div class="enair-confirm-card"><div class="enair-confirm-icon">✓</div><h2>Booking confirmed</h2><p>This is a prototype checkout. No real payment was processed.<br><strong>Confirmation: ${code}</strong></p><button>Back to eNAir home</button></div>`;document.body.append(wrap);wrap.querySelector('button').onclick=()=>go(routes.home);
+  // --- Чек и оформление брони ---------------------------------------------
+  let bookingInFlight = false;
+
+  function receiptRow(label, value) {
+    const row = document.createElement('div');
+    row.className = 'enair-receipt-row';
+    const key = document.createElement('span');
+    key.className = 'enair-receipt-key';
+    key.textContent = label;
+    const val = document.createElement('span');
+    val.className = 'enair-receipt-value';
+    val.textContent = value || '—';
+    row.append(key, val);
+    return row;
+  }
+
+  function receiptLine(label, amount, strong) {
+    const line = document.createElement('div');
+    line.className = 'enair-receipt-line' + (strong ? ' enair-receipt-line-total' : '');
+    const key = document.createElement('span');
+    key.textContent = label;
+    const val = document.createElement('span');
+    val.textContent = formatPriceKzt(amount);
+    line.append(key, val);
+    return line;
+  }
+
+  // Экран чека: остаётся на странице, печатается в PDF кнопкой «Print / Save PDF»
+  // (в печати видны только строки чека, остальная страница скрыта).
+  function showReceipt(booking, breakdown) {
+    const existing = document.querySelector('.enair-receipt');
+    if (existing) existing.remove();
+
+    const overlay = document.createElement('div');
+    overlay.className = 'enair-receipt';
+
+    const card = document.createElement('div');
+    card.className = 'enair-receipt-card';
+
+    const head = document.createElement('div');
+    head.className = 'enair-receipt-head';
+    const brand = document.createElement('div');
+    brand.className = 'enair-receipt-brand';
+    brand.textContent = 'eNAir';
+    const status = document.createElement('div');
+    status.className = 'enair-receipt-status';
+    status.textContent = 'PAID · DEMO';
+    head.append(brand, status);
+
+    const title = document.createElement('h2');
+    title.className = 'enair-receipt-title';
+    title.textContent = 'Booking receipt';
+
+    const reference = document.createElement('p');
+    reference.className = 'enair-receipt-ref';
+    const refLabel = document.createElement('span');
+    refLabel.textContent = 'Booking reference ';
+    const refValue = document.createElement('strong');
+    refValue.textContent = booking.reference || '—';
+    reference.append(refLabel, refValue);
+
+    const rows = document.createElement('div');
+    rows.className = 'enair-receipt-rows';
+    const passengers = (booking.passenger_names || []).filter(Boolean);
+    rows.append(
+      receiptRow('Passenger', passengers.length ? passengers.join(', ') : (booking.email || '')),
+      receiptRow('Route', booking.departure_city && booking.arrival_city
+        ? `${booking.departure_city} → ${booking.arrival_city}` : ''),
+      receiptRow('Flight', booking.flight_number),
+      receiptRow('Departure', booking.departure_time),
+      receiptRow('Arrival', booking.arrival_time),
+      receiptRow('Cabin / fare', [booking.cabin, booking.fare].filter(Boolean).join(' · ')),
+      receiptRow('Travellers', booking.passengers ? `${booking.passengers}` : ''),
+      receiptRow('Paid with', booking.card_last4 ? `Card •••• ${booking.card_last4}` : 'Card (demo checkout)'),
+      receiptRow('Issued', booking.created_at)
+    );
+
+    const money = document.createElement('div');
+    money.className = 'enair-receipt-money';
+    const seatsLeft = Number(booking.seats_left);
+    if (Number.isFinite(seatsLeft)) {
+      const seats = document.createElement('p');
+      seats.className = 'enair-receipt-seats';
+      seats.textContent = seatsLeft > 0
+        ? `${seatsLeft} seat${seatsLeft === 1 ? '' : 's'} left on this flight after your booking`
+        : 'This booking took the last seats on the flight';
+      money.append(seats);
+    }
+    const breakdownLines = document.createElement('div');
+    breakdownLines.className = 'enair-receipt-breakdown';
+    breakdownLines.append(
+      receiptLine('Flights', breakdown.flights),
+      receiptLine(`${booking.cabin || 'Economy'} ${booking.fare || ''} fare`.trim(), breakdown.fare),
+      receiptLine('Taxes & fees', breakdown.taxes)
+    );
+    const total = document.createElement('p');
+    total.className = 'enair-receipt-total';
+    total.textContent = formatPriceKzt(breakdown.total);
+    const totalCaption = document.createElement('p');
+    totalCaption.className = 'enair-receipt-caption';
+    totalCaption.textContent = 'Total charged in tenge (₸)';
+    money.append(breakdownLines, total, totalCaption);
+
+    const note = document.createElement('p');
+    note.className = 'enair-receipt-note';
+    note.textContent = 'This is a prototype checkout: no real payment was processed, and the receipt is a demo document. Keep the booking reference to look the booking up.';
+
+    const actions = document.createElement('div');
+    actions.className = 'enair-receipt-actions';
+    const printButton = document.createElement('button');
+    printButton.type = 'button';
+    printButton.className = 'enair-receipt-print';
+    printButton.textContent = 'Print / Save PDF';
+    printButton.addEventListener('click', () => window.print());
+    const homeButton = document.createElement('button');
+    homeButton.type = 'button';
+    homeButton.className = 'enair-receipt-close';
+    homeButton.textContent = 'Back to eNAir home';
+    homeButton.addEventListener('click', () => go(routes.home));
+    actions.append(printButton, homeButton);
+
+    card.append(head, title, reference, rows, money, note, actions);
+    overlay.append(card);
+    document.body.append(overlay);
+    printButton.focus();
+  }
+
+  async function completeBooking(){
+    if(bookingInFlight)return;
+    if(!activeUser){requireAuthentication(completeBooking);return;}
+    const flight=state.flight;
+    if(!flight){toast('Сначала выберите рейс');go(routes.search);return;}
+    if(!flight.id){
+      toast('Это демо-рейс без связи с базой — выберите рейс на странице Book Flights');
+      return;
+    }
+    const passengers=Math.max(1,(Number(state.adults)||1)+(Number(state.children)||0));
+    if(Number(flight.seats)===0){toast('Этот рейс распродан');return;}
+    if(Number.isFinite(Number(flight.seats))&&Number(flight.seats)<passengers){
+      toast(`Свободных мест осталось только ${flight.seats}`);
+      return;
+    }
+
+    const breakdown=currentPriceBreakdown();
+    const names=(state.passengers||[]).slice(0,passengers);
+    const payButton=document.querySelector('.button-84');
+    const payLabel=document.querySelector('.label-85');
+    const originalLabel=payLabel?payLabel.textContent:'';
+
+    bookingInFlight=true;
+    if(payButton)payButton.classList.add('enair-issuing');
+    if(payLabel)payLabel.textContent='Issuing ticket…';
+
+    try{
+      const result=await apiRequest('/api/book',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          user_id:activeUser.id,
+          flight_id:flight.id,
+          passengers,
+          cabin:state.cabin,
+          fare:state.fare,
+          total:breakdown.total,
+          passenger_names:names,
+          card_last4:state.cardLast4||''
+        })
+      });
+      const booking=(result&&result.booking)||{};
+      state.confirmation=booking.reference||'';
+      if(Number.isFinite(Number(booking.seats_left)))state.flight=Object.assign({},flight,{seats:Number(booking.seats_left)});
+      save();
+      showReceipt(booking,breakdown);
+    }catch(error){
+      console.error('Booking failed:',error.message);
+      if(error.status===409)toast(error.message);
+      else if(error.status===401){toast('Сессия истекла — войдите заново');requireAuthentication(()=>{});}
+      else toast(error.message||'Не удалось оформить бронь');
+    }finally{
+      bookingInFlight=false;
+      if(payButton)payButton.classList.remove('enair-issuing');
+      if(payLabel)payLabel.textContent=originalLabel;
+    }
   }
 
   function fleetPage(){
