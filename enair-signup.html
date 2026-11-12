@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Create account · eNAir</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="enair-app.css">
+</head>
+<body>
+
+<header class="nav">
+  <a class="brand" href="enair-homepage.html"><span class="brand-badge">eN</span>eNAir</a>
+  <nav class="nav-links">
+    <a href="enair-destinations.html">Destinations</a>
+    <a href="enair-booking.html">Book Flights</a>
+    <a href="enair-fleet-experience.html">Our Fleet</a>
+    <a href="enair-loyalty.html">Loyalty</a>
+    <a href="enair-about-contact.html">About eNAir</a>
+  </nav>
+  <div class="nav-actions">
+    <span class="currency">₸ <span>KZT</span> ▾</span>
+    <a class="btn btn-dark btn-sm" href="enair-signin.html">Sign in</a>
+  </div>
+</header>
+
+<main class="auth" style="grid-template-columns:minmax(0,1fr) minmax(0,1.05fr)">
+  <section class="auth-panel">
+    <div class="auth-card">
+      <span class="eyebrow">eNAir Rewards</span>
+      <h1>Create your account</h1>
+      <p class="lead">One profile for bookings, seats and eNMiles. It takes about a minute.</p>
+
+      <form id="signup" novalidate>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div class="field" id="f-first">
+            <label for="first">First name</label>
+            <input class="input" id="first" placeholder="Alex" autocomplete="given-name">
+            <span class="error">Enter your first name</span>
+          </div>
+          <div class="field" id="f-last">
+            <label for="last">Last name</label>
+            <input class="input" id="last" placeholder="Morgan" autocomplete="family-name">
+            <span class="error">Enter your last name</span>
+          </div>
+        </div>
+
+        <div class="field" id="f-email">
+          <label for="email">Email address</label>
+          <input class="input" id="email" type="email" placeholder="you@example.com" autocomplete="email">
+          <span class="error">Enter a valid email address</span>
+        </div>
+
+        <div class="field" id="f-pass">
+          <label for="password">Password</label>
+          <input class="input" id="password" type="password" placeholder="8+ characters, letters and numbers" autocomplete="new-password">
+          <div class="strength" id="strength"><i></i><i></i><i></i><i></i></div>
+          <span class="hint">Use 8 or more characters with a letter and a number.</span>
+          <span class="error">Password must be 8+ characters with a number</span>
+        </div>
+
+        <div class="field" id="f-confirm">
+          <label for="confirm">Confirm password</label>
+          <input class="input" id="confirm" type="password" placeholder="Repeat your password" autocomplete="new-password">
+          <span class="error">Passwords don't match</span>
+        </div>
+
+        <div class="field" id="f-terms" style="margin-top:4px">
+          <label class="check">
+            <input type="checkbox" id="terms">
+            <span>I agree to the <a href="#">Terms of carriage</a> and <a href="#">Privacy policy</a>.</span>
+          </label>
+          <span class="error">Accept the terms to continue</span>
+        </div>
+
+        <button class="btn btn-primary btn-block btn-lg" type="submit">Create account</button>
+      </form>
+
+      <p class="auth-foot">Already a member? <a class="link" href="enair-signin.html">Sign in</a></p>
+    </div>
+  </section>
+
+  <section class="auth-visual" style="margin:26px 26px 26px 0;background-image:url('images/fafef836bb78074b019671a3741c92f8a0dd6e6b.jpg')">
+    <span class="eyebrow">Join 12,480 travellers</span>
+    <h2>Every trip starts with a little more room.</h2>
+    <p>Members board earlier, bring an extra bag and collect eNMiles on every eligible flight —
+       from the first booking, not the tenth.</p>
+    <div class="quote-by">
+      <span class="avatar">AM</span>
+      <span>Amelia Hart · Gold member</span>
+    </div>
+  </section>
+</main>
+
+<script>
+  const pass = document.getElementById('password');
+  const bars = [...document.querySelectorAll('#strength i')];
+  pass.addEventListener('input', () => {
+    const v = pass.value;
+    let score = 0;
+    if (v.length >= 8) score++;
+    if (/[a-z]/i.test(v) && /\d/.test(v)) score++;
+    if (v.length >= 12) score++;
+    if (/[^a-z0-9]/i.test(v)) score++;
+    bars.forEach((b, i) => {
+      b.className = '';
+      if (i < score) b.className = score < 2 ? 'on weak' : 'on';
+    });
+  });
+
+  document.getElementById('signup').addEventListener('submit', e => {
+    e.preventDefault();
+    const first = document.getElementById('first').value.trim();
+    const last = document.getElementById('last').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = pass.value;
+    const confirm = document.getElementById('confirm').value;
+    const terms = document.getElementById('terms').checked;
+
+    const checks = {
+      'f-first': first.length >= 2,
+      'f-last': last.length >= 2,
+      'f-email': /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email),
+      'f-pass': password.length >= 8 && /[a-z]/i.test(password) && /\d/.test(password),
+      'f-confirm': password.length > 0 && password === confirm,
+      'f-terms': terms
+    };
+    let valid = true;
+    Object.entries(checks).forEach(([id, ok]) => {
+      document.getElementById(id).classList.toggle('has-error', !ok);
+      if (!ok) valid = false;
+    });
+    if (valid) location.href = 'enair-profile.html';
+  });
+</script>
+</body>
+</html>

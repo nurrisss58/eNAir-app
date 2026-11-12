@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>You're booked · eNAir</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="enair-app.css">
+</head>
+<body>
+
+<header class="nav">
+  <a class="brand" href="enair-homepage.html"><span class="brand-badge">eN</span>eNAir</a>
+  <nav class="nav-links">
+    <a href="enair-destinations.html">Destinations</a>
+    <a class="is-active" href="enair-booking.html">Book Flights</a>
+    <a href="enair-fleet-experience.html">Our Fleet</a>
+    <a href="enair-loyalty.html">Loyalty</a>
+    <a href="enair-about-contact.html">About eNAir</a>
+  </nav>
+  <div class="nav-actions">
+    <span class="currency">₸ <span>KZT</span> ▾</span>
+    <a class="btn btn-dark btn-sm" href="enair-profile.html">My account</a>
+  </div>
+</header>
+
+<main class="confirm">
+  <div class="success-ico">
+    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m4 12.5 5 5L20 6.5"/></svg>
+  </div>
+  <span class="eyebrow">Payment confirmed</span>
+  <h1>You're booked</h1>
+  <p class="muted" style="max-width:520px;margin:0 auto">Your e-ticket is ready. A copy has been sent to
+     <strong style="color:var(--ink)">alex.morgan@email.com</strong>.</p>
+
+  <div class="ref">
+    <span style="color:var(--muted);letter-spacing:.06em">BOOKING REFERENCE</span>
+    <span>EN482913</span>
+  </div>
+
+  <article class="ticket">
+    <div class="ticket-main">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:14px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="brand-badge" style="width:34px;height:34px;border-radius:10px;font-size:15px">eN</span>
+          <div>
+            <strong style="font:700 15px 'Geist';display:block">eNAir · Boarding pass</strong>
+            <span class="small muted">Hydrogen-electric · Long-haul</span>
+          </div>
+        </div>
+        <span class="badge badge-green">Confirmed</span>
+      </div>
+
+      <div class="ticket-flight">
+        <div><div class="time">08:15</div><div class="ap">JFK · New York</div></div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px">
+          <span class="small muted">7h 15m · non-stop</span>
+          <span style="width:100%;height:2px;background:linear-gradient(90deg,var(--cyan),var(--violet));border-radius:2px;position:relative"></span>
+          <span class="small muted">Fri, 28 Mar 2026</span>
+        </div>
+        <div style="text-align:right"><div class="time">20:30</div><div class="ap">LHR · London</div></div>
+      </div>
+
+      <div class="ticket-grid">
+        <div><span>Flight</span><strong>eN-102 · A350-H2</strong></div>
+        <div><span>Terminal / Gate</span><strong>T4 · B22</strong></div>
+        <div><span>Passengers</span><strong>2 adults</strong></div>
+        <div><span>Seats</span><strong>12A · 12B</strong></div>
+        <div><span>Class</span><strong>Economy Flex</strong></div>
+        <div><span>Boarding</span><strong>07:25</strong></div>
+        <div><span>Baggage</span><strong>2 × 23 kg</strong></div>
+        <div><span>Total paid</span><strong>₸ 604,660</strong></div>
+      </div>
+    </div>
+
+    <aside class="ticket-stub">
+      <div>
+        <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">Booking reference</div>
+        <div style="font:800 20px 'Outfit';letter-spacing:.14em;margin-top:4px">EN482913</div>
+      </div>
+      <div class="barcode"></div>
+      <div class="small muted">Scan at the gate. One code per passenger.</div>
+      <div style="margin-top:auto;display:flex;justify-content:space-between;font-size:12px">
+        <span class="muted">Fare</span><strong>Economy Flex</strong>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:12px">
+        <span class="muted">Seats</span><strong>12A · 12B</strong>
+      </div>
+    </aside>
+  </article>
+
+  <div class="ticket-actions">
+    <button class="btn btn-primary btn-lg" onclick="window.print()">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3v11m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+      Download e-ticket
+    </button>
+    <button class="btn btn-ghost btn-lg">Add to calendar</button>
+    <a class="btn btn-ghost btn-lg" href="enair-homepage.html">Back to home</a>
+  </div>
+
+  <p class="small muted" style="margin-top:22px">
+    Need to change something? <a class="link" href="enair-profile.html">Manage booking</a> — changes are free up to 24 hours before departure.
+  </p>
+</main>
+
+<script>
+  document.querySelector('.barcode')?.addEventListener('click', () => window.print());
+</script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+﻿№;Фрейм;Размер;Тип;Источник;Статус;Приоритет;Сценарий;Заметки
+01;Home;1440×3520;Desktop;enair-homepage.html;есть;минимум;все;Уже в .fig
+02;Destinations;1440×3174;Desktop;enair-destinations.html;есть;минимум;-;Уже в .fig
+03;Book Flights;1440×3013;Desktop;enair-booking.html;есть;минимум;1;Уже в .fig
+04;Flight Search;1440×2300;Desktop;booking-search.html;есть;минимум;1;Уже в .fig
+05;Select Fare;1440×1684;Desktop;booking-select-fare.html;есть;минимум;1;Уже в .fig
+06;Passengers;1440×2267;Desktop;booking-passengers.html;есть;минимум;1;Уже в .fig
+07;Seat Selection;1440×auto;Desktop;booking-seats.html;свёрстано;минимум;1;Готово к импорту
+08;Payment;1440×1648;Desktop;booking-payment.html;есть;минимум;1;Уже в .fig
+09;Confirmation;1440×auto;Desktop;booking-confirmation.html;свёрстано;минимум;1;Билет + штрихкод
+10;Sign In;1440×auto;Desktop;enair-signin.html;свёрстано;минимум;2;Сплит + форма + валидация
+11;Create Account;1440×auto;Desktop;enair-signup.html;свёрстано;минимум;2;Валидация + сила пароля
+12;Profile;1440×auto;Desktop;enair-profile.html;свёрстано;минимум;2;Билет + мили + история
+13;Loyalty;1440×3284;Desktop;enair-loyalty.html;есть;минимум;3;Уже в .fig
+14;Rewards Enrollment;1440×auto;Desktop;enair-rewards-enrollment.html;импорт;минимум;3;Свёрстана, нет в Figma
+15;Fleet & Experience;1440×4843;Desktop;enair-fleet-experience.html;есть;минимум;-;Уже в .fig
+16;Aircraft A350;1440×auto;Desktop;fleet-a350.html;импорт;минимум;-;Свёрстана, нет в Figma
+17;Aircraft 787;1440×auto;Desktop;fleet-787.html;импорт;минимум;-;Свёрстана, нет в Figma
+18;Aircraft A380;1440×auto;Desktop;fleet-a380.html;импорт;минимум;-;Свёрстана, нет в Figma
+19;Guest Experience;1440×auto;Desktop;enair-experiences.html;импорт;минимум;-;Свёрстана, нет в Figma
+20;About & Contact;1440×3543;Desktop;enair-about-contact.html;есть;минимум;4;Уже в .fig
+21;Curated: Iceland;1440×auto;Desktop;curated-iceland.html;импорт;минимум;-;Свёрстана, нет в Figma
+22;Curated: Vietnam & Bali;1440×auto;Desktop;curated-vietnam-bali.html;импорт;минимум;-;Свёрстана, нет в Figma
+23;Curated: Greece;1440×auto;Desktop;curated-greece.html;импорт;минимум;-;Свёрстана, нет в Figma
+24;Destination: Tokyo;1440×1200;Desktop;new;нарисовать;буфер;-;Если останется время
+25;Help Center;1440×auto;Desktop;enair-help.html;свёрстано;минимум;4;Поиск + категории
+26;AI Concierge;1440×900;Desktop;new;нарисовать;буфер;4;Чат + быстрые действия
+27;Mobile Home;401×2350;Mobile;mobile-homepage.html;есть;минимум;5;Уже в .fig
+28;Mobile Booking;401×2102;Mobile;mobile-booking.html;есть;минимум;5;Уже в .fig
+29;Mobile Search;401×auto;Mobile;mobile-search.html;свёрстано;минимум;5;Даты + фильтры
+30;Mobile Payment;401×844;Mobile;new;нарисовать;буфер;5;Карта + Apple Pay
+P1;NAir High user personas;1440×1024;Research;nair-high-user-personas.html;есть;research;-;Уже в .fig
+S1;Sign In · Error;1440×auto;State;копия 10;нарисовать;анимация;2;Красные поля + алерт
+S2;Create Account · Errors;1440×auto;State;копия 11;нарисовать;анимация;2;4 ошибки
+S3;Payment · Declined;1440×1648;State;копия 08;нарисовать;анимация;1;Баннер declined
+S4;Mobile menu open;401×auto;State;копия 27;нарисовать;анимация;5;Выезд справа
+S5;Currency dropdown;1440×auto;State;копия 01;нарисовать;анимация;-;KZT/USD/EUR
+S6;Search · Empty;1440×2300;State;копия 04;нарисовать;анимация;1;No flights + даты

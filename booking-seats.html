@@ -1,0 +1,179 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Choose your seats · eNAir</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="enair-app.css">
+</head>
+<body>
+
+<header class="nav">
+  <a class="brand" href="enair-homepage.html"><span class="brand-badge">eN</span>eNAir</a>
+  <nav class="nav-links">
+    <a href="enair-destinations.html">Destinations</a>
+    <a class="is-active" href="enair-booking.html">Book Flights</a>
+    <a href="enair-fleet-experience.html">Our Fleet</a>
+    <a href="enair-loyalty.html">Loyalty</a>
+    <a href="enair-about-contact.html">About eNAir</a>
+  </nav>
+  <div class="nav-actions">
+    <span class="currency">₸ <span>KZT</span> ▾</span>
+    <a class="btn btn-dark btn-sm" href="enair-signin.html">Sign in</a>
+  </div>
+</header>
+
+<section style="padding:34px 80px 10px;max-width:1440px;margin:0 auto">
+  <span class="eyebrow">Instant flight booking</span>
+  <h1 style="font-size:44px;margin:8px 0 22px">Choose your seats</h1>
+
+  <div class="stepper">
+    <span class="step is-done"><span class="n">01</span>Search Flights</span>
+    <span class="step-line"></span>
+    <span class="step is-done"><span class="n">02</span>Select Fare</span>
+    <span class="step-line"></span>
+    <span class="step is-on"><span class="n">03</span>Passengers · Seats</span>
+    <span class="step-line"></span>
+    <span class="step"><span class="n">04</span>Payment</span>
+  </div>
+</section>
+
+<main class="seats-layout">
+  <section class="card plane-card">
+    <div class="plane-head">
+      <div>
+        <span class="badge badge-violet">A350-H2 · Economy</span>
+        <h3 style="font-size:20px;margin-top:8px">Main cabin · rows 10–24</h3>
+      </div>
+      <span class="small muted">2 seats included in Economy Flex</span>
+    </div>
+
+    <div class="legend">
+      <span><i style="background:#fff;border:1px solid var(--line)"></i>Available</span>
+      <span><i style="background:var(--grad)"></i>Selected</span>
+      <span><i style="background:var(--soft)"></i>Occupied</span>
+      <span><i style="background:#faf5ff;border:1px solid #c4b5fd"></i>Extra legroom +$25</span>
+    </div>
+
+    <div class="cabin">
+      <div class="cabin-label">Exit row · extra legroom</div>
+      <div class="seat-grid" id="seats-1"></div>
+      <div class="cabin-label" style="margin-top:22px">Main cabin</div>
+      <div class="seat-grid" id="seats-2"></div>
+    </div>
+  </section>
+
+  <aside class="summary">
+    <div class="card card-pad">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span class="badge badge-cyan">Outbound</span>
+        <span class="small muted">Fri, 28 Mar</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin:14px 0 4px;font:700 20px 'Outfit'">
+        JFK <span style="color:var(--muted);font-weight:500">08:15</span>
+        <span style="flex:1;height:2px;background:linear-gradient(90deg,var(--cyan),var(--violet));border-radius:2px"></span>
+        LHR <span style="color:var(--muted);font-weight:500">20:30</span>
+      </div>
+      <div class="small muted">eN-102 · A350-H2 · 7h 15m non-stop · Economy Flex</div>
+
+      <hr class="divider">
+
+      <div class="pax"><span>Passenger 1 · Alex Morgan</span><span class="seat-chip" id="chip-1">12A</span></div>
+      <div class="pax"><span>Passenger 2 · Amelia Hart</span><span class="seat-chip" id="chip-2">12B</span></div>
+
+      <hr class="divider">
+
+      <div class="sum-row"><span>Fare · 2 adults</span><strong>₸ 533,120</strong></div>
+      <div class="sum-row"><span>Seat selection · <span id="seat-count">2</span> seats</span><strong id="seat-price">₸ 24,500</strong></div>
+      <div class="sum-row"><span>Taxes &amp; fees</span><strong>₸ 47,040</strong></div>
+
+      <div class="sum-total">
+        <span class="small muted">Total</span>
+        <span class="price" id="total">₸ 604,660</span>
+      </div>
+
+      <a class="btn btn-primary btn-block btn-lg" href="booking-payment.html">Continue to payment</a>
+      <p class="small muted center" style="margin-top:12px">
+        <a class="link" href="booking-payment.html">Skip — seats assigned at check-in</a>
+      </p>
+    </div>
+
+    <div class="note" style="margin-top:16px">
+      <span style="font-size:15px">↺</span>
+      <span>Seats can be changed free of charge up to 24 hours before departure.</span>
+    </div>
+  </aside>
+</main>
+
+<script>
+  const occupied = new Set(['10C','11D','13A','14E','15B','16C','17D','18F','19A','20E','21C','22B','23F','24A']);
+  const premiumRows = [10, 11];
+  const cols = ['A','B','C','D','E','F'];
+  let selected = ['12A', '12B'];
+
+  function seatRow(row) {
+    const wrap = document.createElement('div');
+    wrap.style.display = 'contents';
+    cols.forEach((c, i) => {
+      if (i === 3) {
+        const aisle = document.createElement('div');
+        aisle.className = 'seat-num';
+        aisle.textContent = row;
+        wrap.appendChild(aisle);
+      }
+      const id = row + c;
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'seat';
+      b.textContent = id;
+      b.dataset.seat = id;
+      if (occupied.has(id)) b.classList.add('occupied');
+      if (premiumRows.includes(row)) b.classList.add('premium');
+      if (selected.includes(id)) b.classList.add('selected');
+      wrap.appendChild(b);
+    });
+    return wrap;
+  }
+
+  function paint() {
+    const g1 = document.getElementById('seats-1');
+    const g2 = document.getElementById('seats-2');
+    g1.innerHTML = ''; g2.innerHTML = '';
+    for (let r = 10; r <= 11; r++) g1.appendChild(seatRow(r));
+    for (let r = 12; r <= 24; r++) g2.appendChild(seatRow(r));
+    document.querySelectorAll('.seat').forEach(b => {
+      b.addEventListener('click', () => {
+        const id = b.dataset.seat;
+        if (b.classList.contains('occupied')) return;
+        if (selected.includes(id)) {
+          selected = selected.filter(s => s !== id);
+          b.classList.remove('selected');
+        } else {
+          if (selected.length >= 2) selected.shift();
+          selected.push(id);
+          document.querySelectorAll('.seat.selected').forEach(s => {
+            if (!selected.includes(s.dataset.seat)) s.classList.remove('selected');
+          });
+          b.classList.add('selected');
+        }
+        sync();
+      });
+    });
+  }
+
+  function sync() {
+    const chips = [...document.querySelectorAll('.seat-chip')];
+    chips.forEach((chip, i) => chip.textContent = selected[i] || '—');
+    document.getElementById('seat-count').textContent = selected.length;
+    const seatPrice = selected.length * 12250;
+    document.getElementById('seat-price').textContent = '₸ ' + seatPrice.toLocaleString('en-US').replace(/,/g, ',');
+    const total = 533120 + seatPrice + 47040;
+    document.getElementById('total').textContent = '₸ ' + total.toLocaleString('en-US');
+  }
+
+  paint();
+  sync();
+</script>
+</body>
+</html>

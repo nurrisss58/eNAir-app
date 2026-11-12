@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flights · JFK → LHR · eNAir</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="enair-app.css">
+</head>
+<body style="background:#eef2f6">
+
+<div class="m-page">
+  <header class="m-top">
+    <a class="m-back" href="mobile-booking.html" aria-label="Back">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 5-7 7 7 7"/></svg>
+    </a>
+    <h1>JFK → LHR</h1>
+    <button class="chip" style="height:30px;font-size:11px">Edit</button>
+  </header>
+
+  <section class="m-route">
+    <div class="pair">JFK <span style="color:#94a3b8">→</span> LHR</div>
+    <small>Fri, 28 Mar · 2 passengers · Economy</small>
+  </section>
+
+  <div class="m-dates">
+    <div class="m-date"><b>26</b><span>Wed</span></div>
+    <div class="m-date"><b>27</b><span>Thu</span></div>
+    <div class="m-date is-on"><b>28</b><span>Fri</span></div>
+    <div class="m-date"><b>29</b><span>Sat</span></div>
+    <div class="m-date"><b>30</b><span>Sun</span></div>
+    <div class="m-date"><b>31</b><span>Mon</span></div>
+  </div>
+
+  <div class="m-filters">
+    <button class="chip is-on">Non-stop</button>
+    <button class="chip">Sort · Price</button>
+    <button class="chip">Filters</button>
+  </div>
+
+  <div class="m-list">
+    <article class="card m-flight">
+      <div class="top"><span>eN-102 · A350-H2</span><span>7h 15m · non-stop</span></div>
+      <div class="times"><b>08:15</b><span class="line"></span><b>20:30</b></div>
+      <div class="small muted">New York JFK → London Heathrow</div>
+      <div class="bottom">
+        <div class="price">₸244,510<small>from, per adult</small></div>
+        <a class="btn btn-primary btn-sm" href="booking-select-fare.html">Select</a>
+      </div>
+    </article>
+
+    <article class="card m-flight">
+      <div class="top"><span>eN-108 · 787-E</span><span>7h 15m · non-stop</span></div>
+      <div class="times"><b>11:30</b><span class="line"></span><b>23:45</b></div>
+      <div class="small muted">New York JFK → London Heathrow</div>
+      <div class="bottom">
+        <div class="price">₸254,800<small>from, per adult</small></div>
+        <a class="btn btn-primary btn-sm" href="booking-select-fare.html">Select</a>
+      </div>
+    </article>
+
+    <article class="card m-flight sold">
+      <div class="top"><span>eN-214 · A380-X</span><span>Sold out</span></div>
+      <div class="times"><b>15:00</b><span class="line"></span><b>03:20<sup style="font-size:10px">+1</sup></b></div>
+      <div class="small muted">New York JFK → London Heathrow</div>
+      <div class="bottom">
+        <div class="price">₸235,200<small>from, per adult</small></div>
+        <button class="btn btn-ghost btn-sm" disabled>Sold out</button>
+      </div>
+    </article>
+  </div>
+
+  <div class="m-bar">
+    <div class="info"><b>2 passengers</b>Economy · 28 Mar</div>
+    <a class="btn btn-dark btn-sm" href="enair-booking.html">Change search</a>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My eNAir · Profile</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="enair-app.css">
+</head>
+<body>
+
+<header class="nav">
+  <a class="brand" href="enair-homepage.html"><span class="brand-badge">eN</span>eNAir</a>
+  <nav class="nav-links">
+    <a href="enair-destinations.html">Destinations</a>
+    <a href="enair-booking.html">Book Flights</a>
+    <a href="enair-fleet-experience.html">Our Fleet</a>
+    <a href="enair-loyalty.html">Loyalty</a>
+    <a href="enair-about-contact.html">About eNAir</a>
+  </nav>
+  <div class="nav-actions">
+    <span class="currency">₸ <span>KZT</span> ▾</span>
+    <a class="btn btn-dark btn-sm" href="enair-signin.html">Sign out</a>
+  </div>
+</header>
+
+<main class="dash">
+  <aside class="card side-card">
+    <div class="side-user">
+      <span class="avatar">AM</span>
+      <div><strong>Alex Morgan</strong><span>Gold member · since 2024</span></div>
+    </div>
+
+    <div class="miles-card">
+      <div class="sub">eNMiles balance</div>
+      <div class="num">48,200</div>
+      <div class="sub">1,800 to Platinum</div>
+      <div class="miles-bar"><i></i></div>
+    </div>
+
+    <nav class="side-nav">
+      <a class="is-on" href="#"><span class="dot"></span>Overview</a>
+      <a href="#"><span class="dot"></span>My bookings</a>
+      <a href="#"><span class="dot"></span>Miles &amp; tier</a>
+      <a href="#"><span class="dot"></span>Payment methods</a>
+      <a href="#"><span class="dot"></span>Settings</a>
+    </nav>
+
+    <a class="btn btn-ghost btn-block btn-sm" href="enair-signin.html">Sign out</a>
+  </aside>
+
+  <section class="dash-main">
+    <div class="dash-head">
+      <div>
+        <span class="eyebrow">Member since 2024</span>
+        <h1 style="margin-top:6px">Hi, Alex</h1>
+        <p class="muted" style="margin-top:6px">Your next trip is in 12 days. Everything is on track.</p>
+      </div>
+      <a class="btn btn-primary" href="enair-booking.html">Book a flight</a>
+    </div>
+
+    <article class="card trip">
+      <div class="trip-main">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+          <span class="badge badge-green">Confirmed</span>
+          <span class="small muted">Fri, 28 Mar 2026 · eN-102</span>
+        </div>
+        <div class="route">
+          <div><span class="code">JFK</span><div class="city">08:15</div><span class="small muted">New York</span></div>
+          <span class="arrow"></span>
+          <div style="text-align:right"><span class="code">LHR</span><div class="city">20:30</div><span class="small muted">London</span></div>
+        </div>
+        <div class="meta">
+          <div><span>Flight</span><strong>eN-102 · A350-H2</strong></div>
+          <div><span>Seats</span><strong>12A · 12B</strong></div>
+          <div><span>Terminal</span><strong>T4 · Gate B22</strong></div>
+          <div><span>Fare</span><strong>Economy Flex</strong></div>
+        </div>
+      </div>
+      <div class="trip-stub">
+        <div>
+          <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">Booking reference</div>
+          <div style="font:700 18px 'Outfit';letter-spacing:.12em;margin-top:4px">EN482913</div>
+        </div>
+        <div class="barcode" style="height:44px"></div>
+        <div style="display:flex;gap:8px">
+          <a class="btn btn-primary btn-sm" href="booking-confirmation.html" style="flex:1">Manage</a>
+          <button class="btn btn-ghost btn-sm" style="flex:1">Check-in</button>
+        </div>
+      </div>
+    </article>
+
+    <div class="grid-2">
+      <article class="card card-pad">
+        <h3>Past trips</h3>
+        <p class="sub">Miles are credited within 48 hours of landing.</p>
+        <table class="table">
+          <thead><tr><th>Date</th><th>Route</th><th>Reference</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>12 Feb 2026</td><td><strong>LHR → JFK</strong></td><td>EN471220</td><td><span class="badge badge-green">Completed</span></td></tr>
+            <tr><td>04 Jan 2026</td><td><strong>JFK → NRT</strong></td><td>EN462087</td><td><span class="badge badge-green">Completed</span></td></tr>
+            <tr><td>18 Nov 2025</td><td><strong>SIN → SYD</strong></td><td>EN448310</td><td><span class="badge badge-green">Completed</span></td></tr>
+          </tbody>
+        </table>
+        <a class="link small" href="#" style="display:inline-block;margin-top:14px">View all bookings →</a>
+      </article>
+
+      <article class="card card-pad">
+        <h3>Payment methods</h3>
+        <p class="sub">Used for seat upgrades and extra baggage.</p>
+        <div class="pay-card">
+          <span class="pay-logo">VISA</span>
+          <div style="flex:1"><strong style="font-size:14px">Visa •••• 4242</strong>
+            <div class="small muted">Expires 08/29</div></div>
+          <span class="badge badge-violet">Default</span>
+        </div>
+        <button class="btn btn-ghost btn-block btn-sm" style="margin-top:14px">Add payment method</button>
+        <hr class="divider">
+        <div class="switch-row">
+          <div><strong style="font-size:13px">Email updates</strong><div class="small muted">Gate changes and check-in reminders</div></div>
+          <button class="toggle is-on" aria-label="Email updates"></button>
+        </div>
+        <div class="switch-row">
+          <div><strong style="font-size:13px">SMS alerts</strong><div class="small muted">Only for delays over 30 minutes</div></div>
+          <button class="toggle" aria-label="SMS alerts"></button>
+        </div>
+      </article>
+    </div>
+  </section>
+</main>
+
+<script>
+  document.querySelectorAll('.toggle').forEach(t => t.addEventListener('click', () => t.classList.toggle('is-on')));
+</script>
+</body>
+</html>
