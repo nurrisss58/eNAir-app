@@ -28,7 +28,9 @@
   const routes = {
     home: 'enair-homepage.html', destinations: 'enair-destinations.html', booking: 'enair-booking.html',
     search: 'booking-search.html', fare: 'booking-select-fare.html', passengers: 'booking-passengers.html',
-    payment: 'booking-payment.html', fleet: 'enair-fleet-experience.html', loyalty: 'enair-loyalty.html',
+    seats: 'booking-seats.html', payment: 'booking-payment.html', confirmation: 'booking-confirmation.html',
+    signin: 'enair-signin.html', signup: 'enair-signup.html', profile: 'enair-profile.html', help: 'enair-help.html',
+    fleet: 'enair-fleet-experience.html', loyalty: 'enair-loyalty.html',
     about: 'enair-about-contact.html', enrollment: 'enair-rewards-enrollment.html',
     personas: 'nair-high-user-personas.html', experiences: 'enair-experiences.html',
     mobileHome: 'mobile-homepage.html',
@@ -805,10 +807,15 @@
     const map={Destinations:routes.destinations,'Book Flights':routes.booking,'Our Fleet':routes.fleet,Loyalty:routes.loyalty,'About eNAir':routes.about,'Book Now':routes.booking};
     Object.entries(map).forEach(([t,u])=>findAll(t).slice(0,3).forEach(el=>clickable(clickableTarget(el),()=>go(u))));
     document.querySelectorAll('.brand-3,.logo-group-3,.logo-group-4,.logo-group,.brand').forEach(el=>clickable(el,()=>go(routes.home)));
-    const footer={ 'About Us':routes.about,'Fleet Details':routes.fleet,Destinations:routes.destinations,'Loyalty Programs':routes.loyalty,'Contact Support':routes.about };
+    const footer={ 'About Us':routes.about,'Fleet Details':routes.fleet,Destinations:routes.destinations,'Loyalty Programs':routes.loyalty,'Contact Support':routes.about,'Help Center':routes.help,'Help':routes.help,'My account':routes.profile,'Create account':routes.signup };
     Object.entries(footer).forEach(([t,u])=>findAll(t).forEach(el=>clickable(clickableTarget(el),()=>go(u))));
     addPersonasLink();
     addExperiencesLink();
+    document.querySelectorAll('.nav-links,.nav-links-7').forEach(list=>{
+      if(![...list.querySelectorAll('a,div')].some(item=>clean(item.textContent)==='Help')){
+        const link=document.createElement('a');link.href=routes.help;link.textContent='Help';list.append(link);
+      }
+    });
     renderAuthControl();
     renderCurrencyControl();
     renderLanguageControl();
@@ -1007,19 +1014,7 @@
       const button=document.querySelector(selector);
       if(!button)return;
       button.setAttribute('aria-pressed','false');
-      clickable(button,()=>{
-        requireAuthentication(()=>{
-          flightButtons.forEach(other=>{
-            const item=document.querySelector(other);
-            if(item){item.classList.remove('enair-flight-selected');item.setAttribute('aria-pressed','false');}
-          });
-          button.classList.add('enair-flight-selected');
-          button.setAttribute('aria-pressed','true');
-          state.flight=flights[index];
-          save();
-          go(routes.fare);
-        });
-      });
+      clickable(button,()=>go(routes.search));
     });
     const fareCards=[
       ['Lite','.frame-214','.frame-236 .select-lite-237'],
@@ -1270,8 +1265,9 @@
       row.classList.add('enair-card-hover');
       clickable(row,()=>requireAuthentication(()=>{
         const offer=offers[index%offers.length];
+        if(!offer?.id){toast('Live flight availability is not available right now. Please try again shortly.');return;}
         if(offer&&Number(offer.seats)===0){toast('Этот рейс распродан — выберите другой');return;}
-        state.flight=offer;save();go(routes.fare);
+        state.flight=offer;state.seats=[];save();go(routes.fare);
       }));
     });
     // Карточки заполняются расписанием из базы: именно по этим рейсам
@@ -1291,7 +1287,8 @@
   }
 
   function farePage(){
-    const flight=state.flight||flights[0];
+    const flight=state.flight;
+    if(!flight?.id){toast('Choose an available flight from search results first.');go(routes.search);return;}
     const route=document.querySelector('.flight-41');
     const details=document.querySelector('.details-42');
     const fareSummary=document.querySelector('.tier-44');
@@ -1316,9 +1313,10 @@
     const passengers=Math.max(1,Number(state.adults)||1);
     const fareSurchargeUsd={Lite:0,Flex:70,Business:260,First:520}[state.fare] ?? 70;
     const flights=Math.round(base*passengers);
+    const seatSelection=Math.max(0,(state.seats||[]).length)*12250;
     const fare=Math.round(fareSurchargeUsd*KZT_PER_USD*passengers);
     const taxes=96*KZT_PER_USD;
-    return {flights,fare,taxes,total:flights+fare+taxes};
+    return {flights,seatSelection,fare,taxes,total:flights+seatSelection+fare+taxes};
   }
   function currentTotal(){
     return currentPriceBreakdown().total;
@@ -1377,7 +1375,7 @@
     bindText('Continue to payment',()=>{
       const edited=collectPassengers();
       if(edited.length)state.passengers=edited;
-      save();go(routes.payment);
+      save();go(routes.seats);
     });
   }
 
@@ -1489,6 +1487,7 @@
     breakdownLines.className = 'enair-receipt-breakdown';
     breakdownLines.append(
       receiptLine('Flights', breakdown.flights),
+      ...(breakdown.seatSelection ? [receiptLine('Seat selection', breakdown.seatSelection)] : []),
       receiptLine(`${booking.cabin || 'Economy'} ${booking.fare || ''} fare`.trim(), breakdown.fare),
       receiptLine('Taxes & fees', breakdown.taxes)
     );
@@ -1567,9 +1566,10 @@
       });
       const booking=(result&&result.booking)||{};
       state.confirmation=booking.reference||'';
+      state.receipt={booking,breakdown};
       if(Number.isFinite(Number(booking.seats_left)))state.flight=Object.assign({},flight,{seats:Number(booking.seats_left)});
       save();
-      showReceipt(booking,breakdown);
+      go(routes.confirmation);
     }catch(error){
       console.error('Booking failed:',error.message);
       if(error.status===409)toast(error.message);
@@ -1724,6 +1724,93 @@
     });
   }
 
+  function confirmationPage(){
+    const receipt=state.receipt;
+    if(!receipt)return;
+    const booking=receipt.booking||{};
+    const ref=booking.reference||state.confirmation||'';
+    const set=(selector,value)=>{const el=document.querySelector(selector);if(el&&value)el.textContent=value;};
+    set('.ref span:last-child',ref);
+    set('.ticket-stub div div:nth-child(2)',ref);
+    set('.confirm > p strong',booking.email);
+    const origin=state.fromName||booking.departure_city||'';
+    const destination=state.toName||booking.arrival_city||'';
+    const airports=[...document.querySelectorAll('.ticket-flight .ap')];
+    if(airports[0])airports[0].textContent=`${state.from||''} · ${origin}`.trim();
+    if(airports[1])airports[1].textContent=`${state.to||''} · ${destination}`.trim();
+    const values=[booking.flight_number,booking.terminal_gate||'—',booking.passengers?`${booking.passengers} passengers`:null,(state.seats||[]).join(' · ')||'Assigned at check-in',[booking.cabin,booking.fare].filter(Boolean).join(' '),booking.boarding_time||'—',booking.baggage||'—',formatPriceKzt(receipt.breakdown?.total)];
+    const cells=[...document.querySelectorAll('.ticket-grid > div strong')];
+    values.forEach((value,index)=>{if(value&&cells[index])cells[index].textContent=value;});
+    const qr=document.querySelector('.barcode');
+    if(qr&&ref){
+      qr.setAttribute('aria-label',`QR code for booking ${ref}`);
+      qr.style.cssText='width:132px;height:132px;margin:12px auto;background:#fff;border-radius:12px;display:grid;place-items:center';
+      const script=document.createElement('script');script.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';script.onload=()=>new window.QRCode(qr,{text:ref,width:116,height:116,colorDark:'#0f172a',colorLight:'#ffffff',correctLevel:window.QRCode.CorrectLevel.M});document.head.append(script);
+    }
+    const ticketLink=document.querySelector('.ticket-actions .btn-primary');
+    if(ticketLink)ticketLink.textContent='Print / Save e-ticket';
+    const manage=document.querySelector('.confirm .link');
+    if(manage)manage.href=routes.profile;
+  }
+  function authFormsPage(){
+    document.addEventListener('submit',async event=>{
+      const form=event.target;
+      if(!(form instanceof HTMLFormElement)||!['signin','signup'].includes(form.id))return;
+      event.preventDefault();event.stopImmediatePropagation();
+      const signup=form.id==='signup';
+      const email=form.querySelector('#email')?.value.trim()||'';
+      const password=form.querySelector('#password')?.value||'';
+      const first=form.querySelector('#first')?.value.trim()||'';
+      const last=form.querySelector('#last')?.value.trim()||'';
+      const emailOk=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+      const passOk=signup?password.length>=8&&/[a-z]/i.test(password)&&/\d/.test(password):password.length>=8;
+      const valid=emailOk&&passOk&&(!signup||(first.length>=2&&last.length>=2&&password===form.querySelector('#confirm')?.value&&form.querySelector('#terms')?.checked));
+      ['f-email','f-pass','f-first','f-last','f-confirm','f-terms'].forEach(id=>{const field=form.querySelector(`#${id}`);if(field)field.classList.toggle('has-error',!valid&&((id==='f-email'&&!emailOk)||(id==='f-pass'&&!passOk)||(id==='f-first'&&first.length<2)||(id==='f-last'&&last.length<2)||(id==='f-confirm'&&password!==form.querySelector('#confirm')?.value)||(id==='f-terms'&&!form.querySelector('#terms')?.checked)));});
+      if(!valid)return;
+      let message=form.querySelector('.enair-form-message');
+      if(!message){message=document.createElement('p');message.className='enair-form-message';message.setAttribute('role','status');form.append(message);}
+      const submit=form.querySelector('[type="submit"]');if(submit){submit.disabled=true;submit.dataset.label=submit.textContent;submit.textContent=signup?'Creating account…':'Signing in…';}
+      try{
+        const response=await fetch(`${API_BASE}/api/${signup?'register':'login'}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:`${first} ${last}`.trim(),email,password})});
+        const result=await response.json().catch(()=>({}));
+        if(!response.ok)throw new Error(result.error||'Unable to complete this request.');
+        if(!result.user)throw new Error('The server did not return an account.');
+        localStorage.setItem(authStorageKey,JSON.stringify({id:result.user.id,email:result.user.email}));
+        go(routes.profile);
+      }catch(error){message.textContent=error.message||'Could not connect to the account service.';}
+      finally{if(submit){submit.disabled=false;submit.textContent=submit.dataset.label||'Continue';}}
+    },true);
+  }
+
+  function profilePage(){
+    document.querySelectorAll('a[href="#"]').forEach(link=>{
+      const label=clean(link.textContent);
+      if(/My bookings|Bookings/i.test(label))link.href=routes.confirmation;
+      else if(/Payment methods|Miles|Settings/i.test(label))link.href=routes.loyalty;
+    });
+    document.querySelectorAll('.nav-actions a.btn-dark,.profile-actions a').forEach(link=>{
+      if(/Sign out/i.test(link.textContent))link.addEventListener('click',()=>localStorage.removeItem(authStorageKey));
+    });
+    const receipt=state.receipt;
+    if(receipt?.booking){
+      const ref=receipt.booking.reference||state.confirmation;
+      const bookingLink=document.querySelector('.profile-booking a,.booking-card a');
+      if(bookingLink&&ref)bookingLink.href=routes.confirmation;
+    }
+  }
+
+  function helpPage(){
+    const search=document.querySelector('.search-lg input');
+    const articles=[...document.querySelectorAll('.cat,.article')];
+    search?.addEventListener('input',()=>{
+      const query=clean(search.value).toLowerCase();
+      articles.forEach(article=>article.hidden=!!query&&!clean(article.textContent).toLowerCase().includes(query));
+    });
+    findAll('Contact support').forEach(el=>{if(el.tagName==='A')el.href=routes.about;});
+    const assistant=document.querySelector('.help-cta button');
+    if(assistant)clickable(assistant,()=>document.querySelector('.enair-assistant-toggle,.assistant-toggle')?.click());
+  }
+
   function informationalFallbacks(){
     const info={
       'Privacy Policy':'This prototype does not collect or transmit personal information. Booking details are stored only in this browser so the sample booking flow can keep your selections between pages.',
@@ -1762,7 +1849,7 @@
   }
 
   function mobileMenu(){
-    const navigation=document.querySelector('.sticky-navigation-2,.navigation-2');
+    const navigation=document.querySelector('.sticky-navigation-2,.navigation-2,.nav');
     // На мобильных страницах уже есть своя иконка меню — вторую кнопку не добавляем.
     if(navigation&&!navigation.querySelector('.menu-mobile')&&!navigation.querySelector('[class^="menu-"]')){
       const button=document.createElement('button');
@@ -1775,7 +1862,7 @@
       menu.setAttribute('aria-label','Open navigation menu');
       clickable(menu,()=>{
         const choices=document.createElement('div');choices.className='enair-grid';
-        [['Destinations',routes.destinations],['Book Flights',routes.booking],['Our Fleet',routes.fleet],['Loyalty',routes.loyalty],['About eNAir',routes.about]]
+        [['Destinations',routes.destinations],['Book Flights',routes.booking],['Our Fleet',routes.fleet],['Loyalty',routes.loyalty],['Help',routes.help],['About eNAir',routes.about]]
           .forEach(([label,url])=>{const button=document.createElement('button');button.className='enair-choice';button.textContent=label;button.onclick=()=>go(url);choices.append(button)});
         modal('Explore eNAir','Choose a page',choices);
       });
@@ -1783,12 +1870,16 @@
   }
 
   injectResponsive(); injectCSS(); globalNav();
+  authFormsPage();
   if(is('enair-homepage.html')||is('mobile-homepage.html')) homePage();
   if(is('enair-booking.html')||is('mobile-booking.html')) bookingPage();
   if(is('enair-destinations.html')) destinationsPage();
   if(is('booking-search.html')) searchPage();
   if(is('booking-select-fare.html')) farePage();
   if(is('booking-passengers.html')) passengersPage();
+  if(is('booking-confirmation.html')) confirmationPage();
+  if(is('enair-profile.html')) profilePage();
+  if(is('enair-help.html')) helpPage();
   if(is('booking-payment.html')) paymentPage();
   if(is('enair-fleet-experience.html')) fleetPage();
   if(is('enair-loyalty.html')) loyaltyPage();

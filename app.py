@@ -358,6 +358,7 @@ def flights():
 @app.route("/api/register", methods=["POST"])
 def register():
     data = request.get_json(silent=True) or {}
+    name = (data.get("name") or "").strip()[:255]
     email = data.get("email")
     password = data.get("password")
 
@@ -376,8 +377,8 @@ def register():
             return jsonify({"error": "Пользователь с таким email уже существует"}), 400
 
         cur.execute(
-            "INSERT INTO users (email, password_hash) VALUES (%s, %s) RETURNING id, email;",
-            (email, password_hash)
+            "INSERT INTO users (name, email, password_hash) VALUES (%s, %s, %s) RETURNING id, email;",
+            (name or None, email, password_hash)
         )
         new_user = cur.fetchone()
         conn.commit()

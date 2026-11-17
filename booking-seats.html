@@ -110,7 +110,8 @@
   const occupied = new Set(['10C','11D','13A','14E','15B','16C','17D','18F','19A','20E','21C','22B','23F','24A']);
   const premiumRows = [10, 11];
   const cols = ['A','B','C','D','E','F'];
-  let selected = ['12A', '12B'];
+  const bookingState = JSON.parse(localStorage.getItem('enairState') || '{}');
+  let selected = Array.isArray(bookingState.seats) ? bookingState.seats : ['12A', '12B'];
 
   function seatRow(row) {
     const wrap = document.createElement('div');
@@ -163,6 +164,9 @@
   }
 
   function sync() {
+    const latestState = JSON.parse(localStorage.getItem('enairState') || '{}');
+    latestState.seats = selected;
+    localStorage.setItem('enairState', JSON.stringify(latestState));
     const chips = [...document.querySelectorAll('.seat-chip')];
     chips.forEach((chip, i) => chip.textContent = selected[i] || '—');
     document.getElementById('seat-count').textContent = selected.length;
@@ -175,6 +179,7 @@
   paint();
   sync();
 </script>
+<script src="navigation.js"></script>
   <script src='language.js'></script>
 </body>
 </html>
