@@ -90,232 +90,75 @@
     return node;
   }
 
-  function networkMap(host, wrapper, title, initial, zoomPosition = 'topright') {
-    const view = {x: 0, y: 0, w: MAP_W, h: MAP_H};
-    const controller = {
-      map: null,
-      pending: initial || mapLocations['New York'],
-      onSelect: null,
-      flyTo(location) {
-        if (!location) return;
-        controller.pending = location;
-        if (!controller.map) return;
-        drawNetwork(location);
-        const [x, y] = projectGeo(location.lat, location.lon);
-        animateTo(viewFromCenter(x, y, 2.4));
-      }
-    };
-
-    const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
-
-    const svg = svgNode('svg', {
-      class: 'enair-vector-map',
-      viewBox: `0 0 ${MAP_W} ${MAP_H}`,
-      preserveAspectRatio: 'xMidYMid meet',
-      role: 'img',
-      'aria-label': title
-    });
-
-    svg.append(svgNode('rect', {class: 'enair-map-ocean', x: 0, y: 0, width: MAP_W, height: MAP_H}));
-
-    // Сетка параллелей и меридианов: даёт «картографический» вид и глубину.
-    const graticule = svgNode('g', {class: 'enair-map-graticule'});
-    for (let lon = -150; lon <= 150; lon += 30) {
-      const x = (lon + 180) / 360 * MAP_W;
-      graticule.append(svgNode('line', {x1: x, y1: 0, x2: x, y2: MAP_H}));
-    }
-    for (let lat = -60; lat <= 60; lat += 30) {
-      const y = (90 - lat) / 180 * MAP_H;
-      graticule.append(svgNode('line', {x1: 0, y1: y, x2: MAP_W, y2: y}));
-    }
-    svg.append(graticule);
-    svg.append(svgNode('path', {class: 'enair-map-land', d: WORLD_OUTLINE}));
-
-    const routes = svgNode('g', {class: 'enair-map-routes'});
-    const hubLayer = svgNode('g', {class: 'enair-map-hubs'});
-    svg.append(routes, hubLayer);
-
-    const tooltip = document.createElement('div');
-    tooltip.className = 'enair-map-tooltip';
-    tooltip.hidden = true;
-
-    host.classList.add('enair-map-canvas');
-    host.append(svg);
-    wrapper.append(tooltip);
-
-    // --- города-хабы ------------------------------------------------------
-    const hubs = {};
-    let dragEndedAt = 0;
-
-    Object.entries(mapLocations).forEach(([name, city]) => {
-      const [x, y] = projectGeo(city.lat, city.lon);
-      const group = svgNode('g', {
-        class: 'enair-map-hub',
-        transform: `translate(${x.toFixed(1)} ${y.toFixed(1)})`,
-        tabindex: '0',
-        role: 'button',
-        'aria-label': `${name} — показать маршруты`,
-        'data-city': name
-      });
-      const label = svgNode('text', {class: 'hub-label', x: 0, y: -11});
-      label.textContent = name;
-      group.append(
-        svgNode('circle', {class: 'hub-halo', r: 14}),
-        svgNode('circle', {class: 'hub-dot', r: 5.2}),
-        label
-      );
-
-      const select = () => {
-        // После перетаскивания клик по городу не нужен — это был drag.
-        if (Date.now() - dragEndedAt < 150) return;
-        if (controller.onSelect) controller.onSelect(name, city);
-        else controller.flyTo(city);
-      };
-      group.addEventListener('click', select);
-      group.addEventListener('keydown', event => {
-        if (event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar') {
-          event.preventDefault();
-          select();
+  let leafletLoader;
+  function loadLeaflet() {
+    if (window.L) return Promise.resolve(window.L);
+    if (!leafletLoader) {
+      leafletLoader = new Promise((resolve, reject) => {
+        if (!document.querySelector('link[data-leaflet-css]')) {
+          const css = document.createElement('link');
+          css.rel = 'stylesheet';
+          css.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+          css.dataset.leafletCss = 'true';
+          document.head.append(css);
         }
-      });
-      group.addEventListener('mouseenter', () => {
-        tooltip.textContent = `${name} · ${city.code}`;
-        tooltip.hidden = false;
-        const box = group.getBoundingClientRect();
-        const base = wrapper.getBoundingClientRect();
-        tooltip.style.left = `${box.left - base.left + box.width / 2}px`;
-        tooltip.style.top = `${box.top - base.top}px`;
-      });
-      group.addEventListener('mouseleave', () => { tooltip.hidden = true; });
-
-      hubLayer.append(group);
-      hubs[name] = group;
-    });
-
-    // --- масштаб ----------------------------------------------------------
-    const zoomBox = document.createElement('div');
-    zoomBox.className = `enair-map-zoom ${zoomPosition === 'bottomleft' ? 'bottomleft' : 'topright'}`;
-    const zoomIn = document.createElement('button');
-    zoomIn.type = 'button';
-    zoomIn.textContent = '+';
-    zoomIn.setAttribute('aria-label', 'Приблизить карту');
-    const zoomOut = document.createElement('button');
-    zoomOut.type = 'button';
-    zoomOut.textContent = '−';
-    zoomOut.setAttribute('aria-label', 'Отдалить карту');
-    zoomIn.addEventListener('click', () => zoomBy(1.5));
-    zoomOut.addEventListener('click', () => zoomBy(1 / 1.5));
-    zoomBox.append(zoomIn, zoomOut);
-    wrapper.append(zoomBox);
-
-    // --- вид (viewBox) ----------------------------------------------------
-    function viewFromCenter(cx, cy, zoom) {
-      const w = MAP_W / clamp(zoom, MAP_MIN_ZOOM, MAP_MAX_ZOOM);
-      const h = w / 2;
-      return {
-        x: clamp(cx - w / 2, 0, MAP_W - w),
-        y: clamp(cy - h / 2, 0, MAP_H - h),
-        w,
-        h
-      };
-    }
-
-    function applyView() {
-      svg.setAttribute('viewBox', `${view.x.toFixed(2)} ${view.y.toFixed(2)} ${view.w.toFixed(2)} ${view.h.toFixed(2)}`);
-      // Подписи городов не должны расти вместе с зумом: пересчитываем размер
-      // в единицах карты так, чтобы на экране он оставался одинаковым.
-      svg.style.setProperty('--hub-label-size', `${(view.w / MAP_W) * 11}px`);
-      wrapper.classList.toggle('enair-map-zoomed', view.w < MAP_W * 0.92);
-    }
-
-    let animation = null;
-    function animateTo(target) {
-      if (animation) cancelAnimationFrame(animation);
-      const start = {x: view.x, y: view.y, w: view.w, h: view.h};
-      const from = performance.now();
-      const duration = 520;
-      const ease = t => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
-      const step = now => {
-        const k = ease(Math.min(1, (now - from) / duration));
-        view.x = start.x + (target.x - start.x) * k;
-        view.y = start.y + (target.y - start.y) * k;
-        view.w = start.w + (target.w - start.w) * k;
-        view.h = start.h + (target.h - start.h) * k;
-        applyView();
-        animation = k < 1 ? requestAnimationFrame(step) : null;
-      };
-      animation = requestAnimationFrame(step);
-    }
-
-    function zoomBy(factor) {
-      const zoom = (MAP_W / view.w) * factor;
-      animateTo(viewFromCenter(view.x + view.w / 2, view.y + view.h / 2, zoom));
-    }
-
-    // --- перетаскивание ---------------------------------------------------
-    let drag = null;
-    svg.addEventListener('pointerdown', event => {
-      if (event.button !== 0) return;
-      if (animation) {
-        cancelAnimationFrame(animation);
-        animation = null;
-      }
-      // Масштаб в CSS-пикселях фиксируем на старте: за время drag viewBox
-      // меняется, и пересчёт «на лету» давал бы рывки.
-      drag = {
-        x: event.clientX,
-        y: event.clientY,
-        startX: view.x,
-        startY: view.y,
-        scale: Math.min(svg.clientWidth / view.w, svg.clientHeight / view.h)
-      };
-      svg.setPointerCapture(event.pointerId);
-      tooltip.hidden = true;
-      wrapper.classList.add('enair-map-dragging');
-    });
-    svg.addEventListener('pointermove', event => {
-      if (!drag || !drag.scale) return;
-      const dx = (event.clientX - drag.x) / drag.scale;
-      const dy = (event.clientY - drag.y) / drag.scale;
-      view.x = clamp(drag.startX - dx, 0, MAP_W - view.w);
-      view.y = clamp(drag.startY - dy, 0, MAP_H - view.h);
-      applyView();
-    });
-    const endDrag = () => {
-      if (!drag) return;
-      drag = null;
-      dragEndedAt = Date.now();
-      wrapper.classList.remove('enair-map-dragging');
-    };
-    svg.addEventListener('pointerup', endDrag);
-    svg.addEventListener('pointercancel', endDrag);
-
-    // --- дуги маршрутов ---------------------------------------------------
-    function arcPath(from, to) {
-      const [x1, y1] = projectGeo(from.lat, from.lon);
-      const [x2, y2] = projectGeo(to.lat, to.lon);
-      // Небольшое искривление, чтобы линии не резали карту по прямой.
-      const mx = (x1 + x2) / 2 + (y2 - y1) * 0.16;
-      const my = (y1 + y2) / 2 - (x2 - x1) * 0.16;
-      return `M${x1.toFixed(1)} ${y1.toFixed(1)}Q${mx.toFixed(1)} ${my.toFixed(1)} ${x2.toFixed(1)} ${y2.toFixed(1)}`;
-    }
-
-    function drawNetwork(origin) {
-      routes.replaceChildren();
-      Object.entries(mapLocations).forEach(([name, city]) => {
-        hubs[name].setAttribute('data-active', String(city.code === origin.code));
-        if (city.code === origin.code) return;
-        routes.append(svgNode('path', {class: 'enair-map-route', d: arcPath(origin, city)}));
+        const script = document.createElement('script');
+        script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+        script.onload = () => resolve(window.L);
+        script.onerror = () => reject(new Error('Map library could not be loaded'));
+        document.head.append(script);
       });
     }
-
-    controller.map = svg;
-    drawNetwork(controller.pending);
-    applyView();
-
-    return controller;
+    return leafletLoader;
   }
 
+  function networkMap(host, wrapper, title, initial, zoomPosition = 'topright') {
+    const controller = {map:null, pending:initial, onSelect:null, markers:{}, flyTo(city){
+      this.pending=city;
+      if(this.map){this.map.flyTo([city.lat,city.lon],5,{duration:1.15});this.markers[city.code]?.openPopup();}
+    }};
+    host.classList.add('enair-map-canvas');
+    host.setAttribute('role','region');
+    host.setAttribute('aria-label',title);
+    host.innerHTML='<div class="enair-leaflet-map"></div>';
+    const mapEl=host.firstElementChild;
+    const layerControl=document.createElement('div');
+    layerControl.className='enair-map-layers';
+    layerControl.setAttribute('aria-label','Map style');
+    layerControl.innerHTML='<button type="button" data-layer="streets" aria-pressed="true">Map</button><button type="button" data-layer="satellite" aria-pressed="false">Satellite</button>';
+    wrapper.append(layerControl);
+    loadLeaflet().then(L=>{
+      const map=L.map(mapEl,{zoomControl:false,scrollWheelZoom:false,worldCopyJump:true,zoomSnap:.25}).setView([initial.lat,initial.lon],2.25);
+      controller.map=map;
+      const street=L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{maxZoom:19,subdomains:'abcd',attribution:'&copy; OpenStreetMap contributors &copy; CARTO'});
+      const satellite=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,attribution:'Tiles &copy; Esri'});
+      const labels=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,opacity:.9,attribution:'Labels &copy; Esri'});
+      street.addTo(map);
+      const setLayer=kind=>{
+        const isSatellite=kind==='satellite';
+        if(map.hasLayer(street))map.removeLayer(street);
+        if(map.hasLayer(satellite))map.removeLayer(satellite);
+        if(map.hasLayer(labels))map.removeLayer(labels);
+        if(isSatellite){satellite.addTo(map);labels.addTo(map);}else street.addTo(map);
+        layerControl.querySelectorAll('button').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.layer===kind)));
+      };
+      layerControl.querySelectorAll('button').forEach(button=>button.addEventListener('click',()=>setLayer(button.dataset.layer)));
+      L.control.zoom({position:zoomPosition}).addTo(map);
+      Object.entries(mapLocations).forEach(([name,city])=>{
+        const icon=L.divIcon({className:'',html:`<span class="enair-map-pin"><i></i><b>${name}</b></span>`,iconSize:[32,40],iconAnchor:[16,36],popupAnchor:[0,-32]});
+        const marker=L.marker([city.lat,city.lon],{icon,title:city.name,alt:`Explore ${city.name}`}).addTo(map);
+        marker.bindPopup(`<div class="enair-map-popup"><strong>${name}</strong><span>${city.code} · ${city.name}</span><small>Click to explore this destination</small></div>`);
+        marker.on('click',()=>{controller.onSelect?.(name,city);map.flyTo([city.lat,city.lon],5,{duration:1.15});});
+        controller.markers[city.code]=marker;
+      });
+      if(controller.pending!==initial)controller.flyTo(controller.pending);
+      requestAnimationFrame(()=>map.invalidateSize());
+    }).catch(error=>{
+      console.error('Unable to load the interactive map.',error);
+      mapEl.innerHTML='<div class="enair-map-error">The map could not load. Check your internet connection and refresh.</div>';
+    });
+    return controller;
+  }
   const flights = [
     {no:'eN-102', aircraft:'A350-H2 (Hydrogen)', from:'JFK', to:'LHR', dep:'08:15 AM', arr:'20:30 PM', duration:'7h 15m', price:244510},
     {no:'eN-108', aircraft:'A350-H2 (Hydrogen)', from:'JFK', to:'LHR', dep:'11:30 AM', arr:'23:45 PM', duration:'7h 15m', price:254800},
@@ -471,12 +314,17 @@
       .enair-auth-message{min-height:20px;margin:0;color:#b91c1c;line-height:1.4}
       .enair-auth-message:empty{display:none}
       .enair-header-controls{display:flex;align-items:center;gap:8px;flex-shrink:0;margin-left:12px}
-      .enair-currency-select,.enair-language-select{max-width:100%;border:1px solid transparent;border-radius:999px;background:linear-gradient(#fff,#fff) padding-box,linear-gradient(120deg,#06b6d4,#8b5cf6) border-box;padding:8px 10px;color:#0f172a;font:600 12px 'Geist',sans-serif;cursor:pointer;box-shadow:0 3px 12px rgba(15,23,42,.06)}
+      .enair-switch-group{display:inline-flex;align-items:center;gap:3px;padding:4px;border:1px solid #e7eaf1;border-radius:14px;background:rgba(255,255,255,.92);box-shadow:0 5px 16px rgba(15,23,42,.08)}
+      .enair-switch-group button{border:0;border-radius:10px;background:transparent;padding:8px 11px;color:#64748b;font:700 12px 'Geist',sans-serif;cursor:pointer;transition:background .18s,color .18s,transform .18s}
+      .enair-switch-group button:hover{background:#f3f4ff;color:#4f46e5;transform:translateY(-1px)}
+      .enair-switch-group button.is-active{background:linear-gradient(115deg,#06b6d4,#8b5cf6);color:#fff;box-shadow:0 4px 10px rgba(99,102,241,.28)}
+      .enair-currency-switch button{min-width:52px}
+      .nav .enair-header-controls{margin-left:8px}
       .enair-header-controls{position:relative}
       .menu-mobile{display:none;border:1px solid #e2e8f0;border-radius:10px;background:#fff;padding:10px 14px;color:#0f172a;font:600 14px 'Geist',sans-serif;cursor:pointer}
       @media(max-width:900px){.enair-auth-actions{margin-left:0}.enair-auth-email{max-width:120px}}
       @media(max-width:900px){.enair-header-controls{margin-left:0}.menu-mobile{display:block}.navigation-2>[class^="book-now-"]{display:none!important}}
-      @media(max-width:480px){.enair-header-controls{gap:4px}.enair-auth-actions{gap:4px}.enair-auth-trigger,.enair-auth-logout{padding:8px;font-size:12px}.enair-auth-email{max-width:56px}.enair-currency-select{padding:8px 6px;font-size:11px}.enair-auth-dialog{padding:26px 20px}.menu-mobile{padding:8px 10px!important;font-size:12px!important}}
+      @media(max-width:480px){.enair-header-controls{gap:4px}.enair-switch-group{padding:3px;gap:1px}.enair-switch-group button{padding:7px 8px;font-size:11px}.enair-auth-actions{gap:4px}.enair-auth-trigger,.enair-auth-logout{padding:8px;font-size:12px}.enair-auth-email{max-width:56px}.enair-auth-dialog{padding:26px 20px}.menu-mobile{padding:8px 10px!important;font-size:12px!important}}
       @media(max-width:360px){.sticky-navigation-2 .logo-group-3,.navigation-2 .brand-3{width:40px!important}.sticky-navigation-2 .enair-6,.navigation-2 .wordmark-6{display:none!important}}
       @media(max-width:900px){
         body{overflow-x:clip}
@@ -512,6 +360,31 @@
       .enair-map-zoom button:hover{background:#ffffff;color:#0891b2}
       .enair-map-tooltip{position:absolute;z-index:4;transform:translate(-50%,-145%);background:#0f172a;color:#fff;font:600 12px 'Geist',sans-serif;padding:5px 9px;border-radius:8px;pointer-events:none;white-space:nowrap;box-shadow:0 6px 18px rgba(15,23,42,.25)}
       .enair-map-tooltip[hidden]{display:none}
+      .enair-leaflet-map{position:absolute;inset:0;width:100%;height:100%;z-index:0;background:#e9f3f7}
+      .enair-map-canvas{position:absolute;inset:0;overflow:hidden;border-radius:inherit}
+      .enair-map-canvas .leaflet-container{width:100%;height:100%;font:13px 'Geist',sans-serif;background:#e9f3f7}
+      .enair-map-layers{position:absolute;z-index:700;top:14px;left:14px;display:flex;gap:4px;padding:5px;border:1px solid rgba(255,255,255,.75);border-radius:15px;background:rgba(255,255,255,.88);box-shadow:0 8px 24px rgba(15,23,42,.2);backdrop-filter:blur(14px)}
+      .enair-map-layers button{border:0;border-radius:10px;padding:9px 13px;background:transparent;color:#475569;font:700 12px 'Geist',sans-serif;cursor:pointer;transition:.2s}
+      .enair-map-layers button:hover{background:#f1f5f9;color:#4f46e5}
+      .enair-map-layers button[aria-pressed="true"]{color:#fff;background:linear-gradient(115deg,#06b6d4,#8b5cf6);box-shadow:0 4px 12px rgba(99,102,241,.28)}
+      .enair-map-picker{bottom:34px!important;border-color:rgba(255,255,255,.9)!important;background:rgba(255,255,255,.82)!important;backdrop-filter:blur(16px)!important}
+      .enair-map-city,.enair-destination-map-city{border:1px solid rgba(255,255,255,.9)!important;background:rgba(255,255,255,.94)!important;color:#334155!important;box-shadow:0 5px 14px rgba(15,23,42,.13)!important;transition:transform .18s,box-shadow .18s,background .18s!important}
+      .enair-map-city:hover,.enair-destination-map-city:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(99,102,241,.2)!important}
+      .enair-map-city[aria-pressed="true"],.enair-destination-map-city[aria-pressed="true"]{background:linear-gradient(115deg,#06b6d4,#8b5cf6)!important;border-color:transparent!important;color:#fff!important}
+      .enair-destination-map-picker{top:68px!important;pointer-events:none}
+      .enair-map-pin{position:relative;display:block;width:32px;height:40px;font:700 11px 'Geist',sans-serif;color:#0f172a;text-shadow:0 1px 3px #fff,1px 0 3px #fff,-1px 0 3px #fff}
+      .enair-map-pin i{position:absolute;left:8px;bottom:1px;display:block;width:13px;height:13px;border:3px solid #fff;border-radius:50%;background:#8b5cf6;box-shadow:0 0 0 3px rgba(139,92,246,.28),0 4px 12px rgba(15,23,42,.3);transition:transform .15s,background .15s}
+      .enair-map-pin b{position:absolute;left:27px;bottom:9px;white-space:nowrap}
+      .leaflet-marker-icon:hover .enair-map-pin i{background:#06b6d4;transform:scale(1.2)}
+      .enair-map-layers button{white-space:nowrap}
+      .enair-leaflet-map .leaflet-control-attribution{font-size:10px}
+      @media(max-width:600px){.enair-map-layers{top:10px;left:10px}.enair-map-layers button{padding:8px 10px}.enair-map-pin b{font-size:10px}.enair-map-picker{bottom:34px!important}.enair-destination-map-picker{top:66px!important}}
+      .enair-map-popup{display:grid;gap:4px;min-width:150px;font-family:'Geist',sans-serif}
+      .enair-map-popup strong{font-size:15px;color:#0f172a}
+      .enair-map-popup span{font-size:12px;color:#475569}
+      .enair-map-popup small{margin-top:4px;color:#0891b2;font-weight:600}
+      .enair-map-error{display:grid;place-items:center;height:100%;padding:24px;text-align:center;background:linear-gradient(135deg,#e0f2fe,#f5f3ff);color:#334155;font:600 14px 'Geist',sans-serif}
+      .leaflet-control-zoom a{color:#334155!important}
       .map-illustration-95>.enair-map-frame{background:transparent}
       .enair-map-frame{z-index:0}
       .detailed-high-tech-map-46{position:relative;z-index:0}
@@ -632,94 +505,51 @@
   }
 
   function renderCurrencyControl() {
-    document.querySelectorAll('.sticky-navigation-2,.navigation-2').forEach(navigation => {
-      let controls = navigation.querySelector('.enair-header-controls');
-      if (!controls) {
-        controls = document.createElement('div');
-        controls.className = 'enair-header-controls';
-        navigation.append(controls);
+    document.querySelectorAll('.sticky-navigation-2,.navigation-2,.nav').forEach(navigation=>{
+      navigation.querySelectorAll('.currency').forEach(oldControl=>oldControl.remove());
+      let controls=navigation.querySelector('.enair-header-controls');
+      if(!controls){controls=document.createElement('div');controls.className='enair-header-controls';(navigation.querySelector('.nav-actions')||navigation).append(controls);}
+      let group=controls.querySelector('.enair-currency-switch');
+      if(!group){
+        group=document.createElement('div');group.className='enair-switch-group enair-currency-switch';group.setAttribute('aria-label','Display currency');
+        [['KZT','₸'],['USD','$']].forEach(([currency,symbol])=>{
+          const button=document.createElement('button');button.type='button';button.dataset.currency=currency;button.textContent=`${symbol} ${currency}`;
+          button.addEventListener('click',()=>{
+            activeCurrency=currency;
+            try{localStorage.setItem(CURRENCY_STORAGE_KEY,activeCurrency);}catch(error){console.error('Unable to save selected currency.',error);}
+            group.querySelectorAll('button').forEach(item=>{item.classList.toggle('is-active',item.dataset.currency===currency);item.setAttribute('aria-pressed',String(item.dataset.currency===currency));});
+            updateCurrencyPrices();window.dispatchEvent(new CustomEvent('enair:currencychange',{detail:{currency:activeCurrency}}));
+          });group.append(button);
+        });controls.prepend(group);
       }
-      let select = controls.querySelector('.enair-currency-select');
-      if (!select) {
-        select = document.createElement('select');
-        select.className = 'enair-currency-select';
-        select.setAttribute('aria-label', 'Display currency');
-        [['KZT', '₸ KZT'], ['USD', '$ USD']].forEach(([value, label]) => {
-          const option = document.createElement('option');
-          option.value = value;
-          option.textContent = label;
-          select.append(option);
-        });
-        select.addEventListener('change', () => {
-          activeCurrency = select.value === 'USD' ? 'USD' : 'KZT';
-          try {
-            localStorage.setItem(CURRENCY_STORAGE_KEY, activeCurrency);
-          } catch (error) {
-            console.error('Unable to save the selected currency.', error);
-            toast('Валюта изменена, но не сохранена');
-          }
-          document.querySelectorAll('.enair-currency-select').forEach(control => { control.value = activeCurrency; });
-          updateCurrencyPrices();
-          window.dispatchEvent(new CustomEvent('enair:currencychange', {detail: {currency: activeCurrency}}));
-        });
-        controls.prepend(select);
-      }
-      select.value = activeCurrency;
+      group.querySelectorAll('button').forEach(button=>{const active=button.dataset.currency===activeCurrency;button.classList.toggle('is-active',active);button.setAttribute('aria-pressed',String(active));});
     });
   }
-
   function renderLanguageControl() {
-    document.querySelectorAll('.sticky-navigation-2,.navigation-2').forEach(navigation => {
-      let controls = navigation.querySelector('.enair-header-controls');
-      if (!controls) {
-        controls = document.createElement('div');
-        controls.className = 'enair-header-controls';
-        navigation.append(controls);
+    document.querySelectorAll('.sticky-navigation-2,.navigation-2,.nav').forEach(navigation=>{
+      let controls=navigation.querySelector('.enair-header-controls');
+      if(!controls){controls=document.createElement('div');controls.className='enair-header-controls';(navigation.querySelector('.nav-actions')||navigation).append(controls);}
+      let group=controls.querySelector('.enair-language-switch');
+      if(!group){
+        group=document.createElement('div');group.className='enair-switch-group enair-language-switch';group.setAttribute('aria-label','Language');
+        [['en','EN'],['ru','RU']].forEach(([language,label])=>{
+          const button=document.createElement('button');button.type='button';button.dataset.language=language;button.textContent=label;
+          button.addEventListener('click',()=>{
+            activeLanguage=language;
+            try{localStorage.setItem(LANGUAGE_STORAGE_KEY,language);}catch(_){}
+            document.cookie=`googtrans=/en/${language};path=/;max-age=31536000;SameSite=Lax`;
+            location.reload();
+          });group.append(button);
+        });controls.prepend(group);
       }
-      let select = controls.querySelector('.enair-language-select');
-      if (!select) {
-        select = document.createElement('select');
-        select.className = 'enair-language-select';
-        select.setAttribute('aria-label', 'Language / Язык');
-        [['en', 'EN'], ['ru', 'RU']].forEach(([value, label]) => {
-          const option = document.createElement('option');
-          option.value = value;
-          option.textContent = label;
-          select.append(option);
-        });
-        select.addEventListener('change', () => {
-          activeLanguage = select.value === 'ru' ? 'ru' : 'en';
-          try { localStorage.setItem(LANGUAGE_STORAGE_KEY, activeLanguage); } catch (_) {}
-          // Google Translate handles the complete page, including page-specific copy.
-          document.cookie = `googtrans=/en/${activeLanguage};path=/;max-age=31536000;SameSite=Lax`;
-          location.reload();
-        });
-        controls.prepend(select);
-      }
-      select.value = activeLanguage;
+      group.querySelectorAll('button').forEach(button=>{const active=button.dataset.language===activeLanguage;button.classList.toggle('is-active',active);button.setAttribute('aria-pressed',String(active));});
     });
-    if (activeLanguage === 'ru' && !window.google?.translate) {
-      if (!document.getElementById('enair-translate-host')) {
-        const host = document.createElement('div');
-        host.id = 'enair-translate-host';
-        host.hidden = true;
-        document.body.append(host);
-      }
-      window.googleTranslateElementInit = () => {
-        if (window.google?.translate?.TranslateElement) {
-          new window.google.translate.TranslateElement({pageLanguage:'en', includedLanguages:'en,ru', autoDisplay:false}, 'enair-translate-host');
-        }
-      };
-      if (!document.getElementById('enair-translate-script')) {
-        const script = document.createElement('script');
-        script.id = 'enair-translate-script';
-        script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
-        script.async = true;
-        document.head.append(script);
-      }
+    if(activeLanguage==='ru'&&!window.google?.translate){
+      if(!document.getElementById('enair-translate-host')){const host=document.createElement('div');host.id='enair-translate-host';host.hidden=true;document.body.append(host);}
+      window.googleTranslateElementInit=()=>{if(window.google?.translate?.TranslateElement)new window.google.translate.TranslateElement({pageLanguage:'en',includedLanguages:'en,ru',autoDisplay:false},'enair-translate-host');};
+      if(!document.getElementById('enair-translate-script')){const script=document.createElement('script');script.id='enair-translate-script';script.src='https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';script.async=true;document.head.append(script);}
     }
   }
-
   function updateAuthButtonLabels() {
     const compact = window.matchMedia('(max-width: 1100px)').matches;
     document.querySelectorAll('.enair-auth-trigger').forEach(button => {
@@ -1054,7 +884,7 @@
     wrapper.append(host);
     // Карта из макета остаётся под слоем SVG: если скрипты почему-то не
     // выполнились, блок всё равно выглядит как карта, а не как пустое поле.
-    map.append(wrapper,picker);
+    map.replaceChildren(wrapper,picker);
     const controller=networkMap(host,wrapper,'Interactive map of the eNAir network',mapLocations['New York'],'topright');
     const markChip=name=>picker.querySelectorAll('button').forEach(item=>{
       item.setAttribute('aria-pressed',String(item.textContent===name));
