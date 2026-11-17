@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Search results · eNAir</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="enair-app.css">
+<link rel="stylesheet" href="lab7.css">
+</head>
+<body>
+
+<header class="nav">
+  <a class="brand" href="enair-homepage.html"><span class="brand-badge">eN</span>eNAir</a>
+  <nav class="nav-links">
+    <a href="enair-destinations.html">Destinations</a>
+    <a class="is-active" href="enair-booking.html">Book Flights</a>
+    <a href="enair-fleet-experience.html">Our Fleet</a>
+    <a href="enair-loyalty.html">Loyalty</a>
+    <a href="enair-about-contact.html">About eNAir</a>
+  </nav>
+  <div class="nav-actions">
+    <span class="currency">₸ <span>KZT</span> ▾</span>
+    <a class="btn btn-dark btn-sm" href="enair-signin.html">Sign in</a>
+  </div>
+</header>
+
+<main class="lab-main">
+  <a class="backlink" href="enair-booking.html">← Back to booking</a>
+
+  <div class="page-head">
+    <div>
+      <span class="eyebrow">Search results</span>
+      <h1>New York → London</h1>
+      <p>Fri, 28 Mar 2026 · 2 adults · Economy · Round trip</p>
+    </div>
+    <a class="btn btn-ghost btn-sm" href="enair-booking.html">Modify search</a>
+  </div>
+
+  <section class="card search-panel">
+    <div class="alert-error">
+      <span>⚠</span>
+      <span><b>Please fix 1 issue before searching.</b> The destination must be different from the origin.</span>
+    </div>
+    <div class="search-grid">
+      <div class="field">
+        <label>From</label>
+        <input class="input" value="JFK · New York">
+      </div>
+      <div class="field has-error">
+        <label>To</label>
+        <input class="input" value="JFK · New York">
+        <span class="error">Destination must differ from origin</span>
+      </div>
+      <div class="field">
+        <label>Departure</label>
+        <input class="input" value="Fri, 28 Mar 2026">
+      </div>
+      <div class="field">
+        <label>Return</label>
+        <input class="input" value="Fri, 04 Apr 2026">
+      </div>
+      <div class="field">
+        <label>Passengers</label>
+        <input class="input" value="2 adults · Economy">
+      </div>
+      <button class="btn btn-primary" style="height:48px;padding:0 26px">Search</button>
+    </div>
+  </section>
+
+  <div class="results-head">
+    <h3>4 flights · New York → London</h3>
+    <span class="currency-note">All prices in KZT (₸), taxes included</span>
+  </div>
+
+  <div class="chips">
+    <button class="chip is-on">Non-stop</button>
+    <button class="chip">Morning</button>
+    <button class="chip">Under ₸250,000</button>
+    <button class="chip">Sort: Price</button>
+  </div>
+
+  <div class="flight-list">
+    <article class="flight-row">
+      <div class="flight-meta"><strong>eN-102</strong><span>A350-H2 · hydrogen-electric</span></div>
+      <div class="flight-times">
+        <b>08:15</b>
+        <div class="line"><span>7h 15m · non-stop</span></div>
+        <b>20:30</b>
+      </div>
+      <div class="flight-price"><strong>₸244,510</strong><span>12 seats left</span></div>
+      <a class="btn btn-primary" href="booking-select-fare.html">Select</a>
+    </article>
+
+    <article class="flight-row">
+      <div class="flight-meta"><strong>eN-108</strong><span>787-E · hydrogen-electric</span></div>
+      <div class="flight-times">
+        <b>11:30</b>
+        <div class="line"><span>7h 15m · non-stop</span></div>
+        <b>23:45</b>
+      </div>
+      <div class="flight-price"><strong>₸254,800</strong><span>4 seats left</span></div>
+      <a class="btn btn-primary" href="booking-select-fare.html">Select</a>
+    </article>
+
+    <article class="flight-row">
+      <div class="flight-meta"><strong>eN-214</strong><span>A380-X · hybrid-electric</span></div>
+      <div class="flight-times">
+        <b>15:00</b>
+        <div class="line"><span>7h 15m · non-stop</span></div>
+        <b>03:20 <small style="font-size:10px;color:var(--muted)">+1</small></b>
+      </div>
+      <div class="flight-price"><strong>₸235,200</strong><span>Sold out</span></div>
+      <button class="btn btn-ghost" disabled style="height:42px;padding:0 20px">Sold out</button>
+    </article>
+
+    <article class="flight-row">
+      <div class="flight-meta"><strong>eN-220</strong><span>A350-H2 · hydrogen-electric</span></div>
+      <div class="flight-times">
+        <b>18:45</b>
+        <div class="line"><span>7h 15m · non-stop</span></div>
+        <b>07:00 <small style="font-size:10px;color:var(--muted)">+1</small></b>
+      </div>
+      <div class="flight-price"><strong>₸261,400</strong><span>9 seats left</span></div>
+      <a class="btn btn-primary" href="booking-select-fare.html">Select</a>
+    </article>
+  </div>
+</main>
+  <script src='language.js'></script>
+</body>
+</html>

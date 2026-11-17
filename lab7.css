@@ -1,0 +1,67 @@
+﻿/* Lab 7 — redesign mockups (before/after) */
+
+.lab-main{max-width:1440px;margin:0 auto;padding:28px 80px 70px}
+.backlink{display:inline-flex;align-items:center;gap:8px;font:600 13px 'Geist';color:var(--muted);margin-bottom:18px}
+.backlink:hover{color:var(--violet)}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:22px}
+.page-head h1{font-size:40px;margin:6px 0 6px}
+.page-head p{color:var(--muted);font-size:14px}
+
+.card{background:#fff;border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow)}
+
+.search-panel{padding:22px;margin-bottom:24px}
+.search-grid{display:grid;grid-template-columns:1.25fr 1.25fr 1fr 1fr 1fr auto;gap:12px;align-items:end}
+.field{margin:0}
+.field label{font:600 10px 'Geist';letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.field .input{height:48px;font-size:14px}
+.field .error{display:none}
+.field.has-error .input{border-color:#DC2626;box-shadow:0 0 0 4px rgba(220,38,38,.08)}
+.field.has-error .error{display:block;color:#DC2626;font-size:11px}
+
+.alert-error{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:12px;background:#FEF2F2;border:1px solid #FECACA;color:#991B1B;font-size:12.5px;margin-bottom:16px}
+.alert-error b{font-weight:700}
+
+.results-head{display:flex;align-items:center;justify-content:space-between;margin:6px 0 14px}
+.results-head h3{font-size:20px;margin:0}
+.currency-note{font-size:11px;color:var(--muted)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+
+.flight-list{display:flex;flex-direction:column;gap:12px}
+.flight-row{display:grid;grid-template-columns:210px minmax(0,1fr) 190px auto;align-items:center;gap:26px;padding:20px 24px;border:1px solid var(--line);border-radius:20px;background:#fff}
+.flight-meta strong{display:block;font:700 15px 'Geist'}
+.flight-meta span{font-size:11px;color:var(--muted)}
+.flight-times{display:flex;align-items:center;gap:16px}
+.flight-times b{font:800 26px 'Outfit';letter-spacing:-.02em}
+.flight-times .line{position:relative;flex:1;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--cyan),var(--violet));min-width:90px}
+.flight-times .line::after{content:"";position:absolute;right:0;top:-3px;width:8px;height:8px;border-top:2px solid var(--violet);border-right:2px solid var(--violet);transform:rotate(45deg)}
+.flight-times .line span{position:absolute;left:50%;top:-19px;transform:translateX(-50%);font:500 10px 'Geist';color:var(--muted);white-space:nowrap}
+.flight-price{text-align:right}
+.flight-price strong{display:block;font:800 22px 'Outfit'}
+.flight-price span{font-size:10px;color:var(--muted)}
+.flight-row .btn{height:42px;padding:0 20px;font-size:13px}
+
+.pay-grid{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:24px;align-items:start}
+.pay-form{padding:26px 28px}
+.pay-form h2{font-size:24px;margin:0 0 4px}
+.pay-form .sub{font-size:12px;color:var(--muted);margin-bottom:18px}
+.pay-grid .stepper{margin:0 0 24px}
+
+.error-banner{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:12px;background:#FEF2F2;border:1px solid #FECACA;color:#991B1B;font-size:12.5px;margin-bottom:18px}
+.tabs{display:inline-flex;padding:4px;background:var(--soft);border-radius:12px;gap:4px;margin-bottom:20px}
+.tabs button{border:0;background:transparent;border-radius:9px;height:34px;padding:0 16px;font:600 12px 'Geist';color:var(--muted);cursor:pointer}
+.tabs button.on{background:#fff;color:var(--ink);box-shadow:0 2px 6px rgba(15,23,42,.08)}
+.pay-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.saved-card{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;margin:4px 0 16px;font-size:12px;color:var(--muted)}
+.saved-card b{color:var(--ink);font-size:13px}
+.pay-actions{margin-top:8px}
+.secure-note{font-size:11px;color:var(--muted);text-align:center;margin-top:10px}
+
+.summary-card{padding:24px;position:sticky;top:100px}
+.summary-card .route{font:700 18px 'Outfit';display:flex;align-items:center;gap:10px;margin:10px 0 4px}
+.summary-card .route .arrow{flex:1;height:2px;background:linear-gradient(90deg,var(--cyan),var(--violet))}
+.summary-card .meta{font-size:11px;color:var(--muted);margin-bottom:18px}
+.sum-row{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);padding:6px 0}
+.sum-row b{color:var(--ink)}
+.sum-total{display:flex;justify-content:space-between;align-items:flex-end;padding-top:14px;border-top:1px solid var(--line);margin-top:10px}
+.sum-total span{font-size:12px;color:var(--muted)}
+.sum-total b{font:800 26px 'Outfit'}

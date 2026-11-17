@@ -354,6 +354,8 @@
   const save = () => localStorage.setItem('enairState', JSON.stringify(state));
   const CURRENCY_STORAGE_KEY = 'site_currency';
   const KZT_PER_USD = 490;
+  const LANGUAGE_STORAGE_KEY = 'site_language';
+  let activeLanguage = localStorage.getItem(LANGUAGE_STORAGE_KEY) === 'ru' ? 'ru' : 'en';
   const storedCurrency = localStorage.getItem(CURRENCY_STORAGE_KEY);
   let activeCurrency = storedCurrency === 'USD' ? 'USD' : 'KZT';
   function formatPriceKzt(amount) {
@@ -469,7 +471,8 @@
       .enair-auth-message{min-height:20px;margin:0;color:#b91c1c;line-height:1.4}
       .enair-auth-message:empty{display:none}
       .enair-header-controls{display:flex;align-items:center;gap:8px;flex-shrink:0;margin-left:12px}
-      .enair-currency-select{max-width:100%;border:1px solid #e2e8f0;border-radius:999px;background:#fff;padding:9px 10px;color:#0f172a;font:600 12px 'Geist',sans-serif;cursor:pointer}
+      .enair-currency-select,.enair-language-select{max-width:100%;border:1px solid transparent;border-radius:999px;background:linear-gradient(#fff,#fff) padding-box,linear-gradient(120deg,#06b6d4,#8b5cf6) border-box;padding:8px 10px;color:#0f172a;font:600 12px 'Geist',sans-serif;cursor:pointer;box-shadow:0 3px 12px rgba(15,23,42,.06)}
+      .enair-header-controls{position:relative}
       .menu-mobile{display:none;border:1px solid #e2e8f0;border-radius:10px;background:#fff;padding:10px 14px;color:#0f172a;font:600 14px 'Geist',sans-serif;cursor:pointer}
       @media(max-width:900px){.enair-auth-actions{margin-left:0}.enair-auth-email{max-width:120px}}
       @media(max-width:900px){.enair-header-controls{margin-left:0}.menu-mobile{display:block}.navigation-2>[class^="book-now-"]{display:none!important}}
@@ -487,14 +490,13 @@
       }
       /* Своя векторная карта: SVG внутри блока, без внешних библиотек */      .enair-map-canvas{position:absolute;inset:0;overflow:hidden}
       .enair-vector-map{display:block;width:100%;height:100%;cursor:grab;touch-action:none;user-select:none;
-        background-color:#eef5f7;
-        background-image:radial-gradient(circle at 1px 1px, rgba(15,23,42,.055) 1px, transparent 0);
-        background-size:18px 18px}
+        background-color:#e8f5ff;
+        background-image:radial-gradient(ellipse at 15% 20%,rgba(6,182,212,.14),transparent 45%),radial-gradient(ellipse at 85% 80%,rgba(139,92,246,.10),transparent 42%)}
       .enair-map-dragging .enair-vector-map{cursor:grabbing}
-      .enair-map-ocean{fill:#eef5f7}
-      .enair-map-graticule line{stroke:#dcebee;stroke-width:.7;vector-effect:non-scaling-stroke}
-      .enair-map-land{fill:#dae7ec;stroke:#c2d6dc;stroke-width:.9;stroke-linejoin:round;vector-effect:non-scaling-stroke}
-      .enair-map-route{fill:none;stroke:#06b6d4;stroke-width:1.4;stroke-dasharray:5 7;opacity:.6;vector-effect:non-scaling-stroke}
+      .enair-map-ocean{fill:#e8f5ff}
+      .enair-map-graticule line{stroke:#c6e1ee;stroke-width:.7;vector-effect:non-scaling-stroke}
+      .enair-map-land{fill:#cfe8dc;stroke:#a8d1c0;stroke-width:.9;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+      .enair-map-route{fill:none;stroke:#8b5cf6;stroke-width:1.7;stroke-dasharray:5 7;opacity:.75;vector-effect:non-scaling-stroke}
       .enair-map-hub{cursor:pointer;outline:none}
       .enair-map-hub .hub-halo{fill:transparent}
       .enair-map-hub .hub-dot{fill:#ffffff;stroke:#06b6d4;stroke-width:2;vector-effect:non-scaling-stroke;transition:fill .15s,stroke .15s}
@@ -666,13 +668,64 @@
     });
   }
 
+  function renderLanguageControl() {
+    document.querySelectorAll('.sticky-navigation-2,.navigation-2').forEach(navigation => {
+      let controls = navigation.querySelector('.enair-header-controls');
+      if (!controls) {
+        controls = document.createElement('div');
+        controls.className = 'enair-header-controls';
+        navigation.append(controls);
+      }
+      let select = controls.querySelector('.enair-language-select');
+      if (!select) {
+        select = document.createElement('select');
+        select.className = 'enair-language-select';
+        select.setAttribute('aria-label', 'Language / Язык');
+        [['en', 'EN'], ['ru', 'RU']].forEach(([value, label]) => {
+          const option = document.createElement('option');
+          option.value = value;
+          option.textContent = label;
+          select.append(option);
+        });
+        select.addEventListener('change', () => {
+          activeLanguage = select.value === 'ru' ? 'ru' : 'en';
+          try { localStorage.setItem(LANGUAGE_STORAGE_KEY, activeLanguage); } catch (_) {}
+          // Google Translate handles the complete page, including page-specific copy.
+          document.cookie = `googtrans=/en/${activeLanguage};path=/;max-age=31536000;SameSite=Lax`;
+          location.reload();
+        });
+        controls.prepend(select);
+      }
+      select.value = activeLanguage;
+    });
+    if (activeLanguage === 'ru' && !window.google?.translate) {
+      if (!document.getElementById('enair-translate-host')) {
+        const host = document.createElement('div');
+        host.id = 'enair-translate-host';
+        host.hidden = true;
+        document.body.append(host);
+      }
+      window.googleTranslateElementInit = () => {
+        if (window.google?.translate?.TranslateElement) {
+          new window.google.translate.TranslateElement({pageLanguage:'en', includedLanguages:'en,ru', autoDisplay:false}, 'enair-translate-host');
+        }
+      };
+      if (!document.getElementById('enair-translate-script')) {
+        const script = document.createElement('script');
+        script.id = 'enair-translate-script';
+        script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+        script.async = true;
+        document.head.append(script);
+      }
+    }
+  }
+
   function updateAuthButtonLabels() {
     const compact = window.matchMedia('(max-width: 1100px)').matches;
     document.querySelectorAll('.enair-auth-trigger').forEach(button => {
-      button.textContent = compact ? 'Войти' : 'Войти / Регистрация';
+      button.textContent = compact ? 'Sign in' : 'Sign in / Register';
     });
-  }
-  window.addEventListener('resize', updateAuthButtonLabels);
+  }  window.addEventListener('resize', updateAuthButtonLabels);
 
   function openAuthModal(initialMode = 'login') {
     if (document.querySelector('.enair-auth-backdrop')) return;
@@ -928,6 +981,7 @@
     addExperiencesLink();
     renderAuthControl();
     renderCurrencyControl();
+    renderLanguageControl();
     updateCurrencyPrices();
   }
 

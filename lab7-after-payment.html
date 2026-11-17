@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Secure payment · eNAir</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="enair-app.css">
+<link rel="stylesheet" href="lab7.css">
+</head>
+<body>
+
+<header class="nav">
+  <a class="brand" href="enair-homepage.html"><span class="brand-badge">eN</span>eNAir</a>
+  <nav class="nav-links">
+    <a href="enair-destinations.html">Destinations</a>
+    <a class="is-active" href="enair-booking.html">Book Flights</a>
+    <a href="enair-fleet-experience.html">Our Fleet</a>
+    <a href="enair-loyalty.html">Loyalty</a>
+    <a href="enair-about-contact.html">About eNAir</a>
+  </nav>
+  <div class="nav-actions">
+    <span class="currency">₸ <span>KZT</span> ▾</span>
+    <a class="btn btn-dark btn-sm" href="enair-signin.html">Sign in</a>
+  </div>
+</header>
+
+<main class="lab-main">
+  <a class="backlink" href="booking-passengers.html">← Back to passengers</a>
+
+  <div class="page-head">
+    <div>
+      <span class="eyebrow">Payment</span>
+      <h1>Secure payment</h1>
+      <p>eN-102 · New York → London · 2 adults · Economy Flex</p>
+    </div>
+    <span class="badge badge-violet">Step 4 of 4</span>
+  </div>
+
+  <div class="pay-grid">
+    <section class="card pay-form">
+      <div class="error-banner">
+        <span>⚠</span>
+        <span><b>Card declined.</b> Your bank declined this card. Try another card or a different payment method.</span>
+      </div>
+
+      <h2>Pay by card</h2>
+      <p class="sub">All fields are encrypted. This is a demo payment — no real charge is made.</p>
+
+      <div class="stepper">
+        <span class="step is-done"><span class="n">01</span>Search</span>
+        <span class="step-line"></span>
+        <span class="step is-done"><span class="n">02</span>Fare</span>
+        <span class="step-line"></span>
+        <span class="step is-done"><span class="n">03</span>Passengers</span>
+        <span class="step-line"></span>
+        <span class="step is-on"><span class="n">04</span>Payment</span>
+      </div>
+
+      <div class="tabs">
+        <button class="on">Card</button>
+        <button>Saved card</button>
+      </div>
+
+      <div class="saved-card">
+        <span><b>Visa •••• 4242</b> · saved for this account</span>
+        <button class="btn btn-ghost btn-sm" style="height:34px;padding:0 12px;font-size:12px">Use card</button>
+      </div>
+
+      <div class="field">
+        <label for="cardholder">Cardholder name</label>
+        <input class="input" id="cardholder" value="ALEX MORGAN">
+      </div>
+
+      <div class="field has-error">
+        <label for="cardnumber">Card number</label>
+        <input class="input" id="cardnumber" value="4000 0000 0000 0002">
+        <span class="error">Card declined by the issuer — try another card</span>
+      </div>
+
+      <div class="pay-row">
+        <div class="field">
+          <label for="expiry">Expiry</label>
+          <input class="input" id="expiry" value="08 / 29">
+        </div>
+        <div class="field">
+          <label for="cvc">CVC</label>
+          <input class="input" id="cvc" value="•••">
+        </div>
+      </div>
+
+      <label class="check" style="margin:6px 0 18px">
+        <input type="checkbox">
+        <span>Save this card for next time</span>
+      </label>
+
+      <div class="pay-actions">
+        <button class="btn btn-primary btn-block btn-lg">Pay ₸604,660</button>
+        <p class="secure-note">🔒 256-bit encrypted · PCI-DSS compliant · no card data is stored</p>
+      </div>
+    </section>
+
+    <aside class="card summary-card">
+      <span class="badge badge-cyan">Order summary</span>
+      <div class="route">
+        JFK <span style="color:var(--muted);font-weight:500">08:15</span>
+        <span class="arrow"></span>
+        LHR <span style="color:var(--muted);font-weight:500">20:30</span>
+      </div>
+      <div class="meta">Fri, 28 Mar 2026 · eN-102 · 7h 15m non-stop</div>
+
+      <div class="sum-row"><span>2 adults · Economy Flex</span><b>₸533,120</b></div>
+      <div class="sum-row"><span>Seat selection (12A, 12B)</span><b>₸24,500</b></div>
+      <div class="sum-row"><span>Taxes &amp; fees</span><b>₸47,040</b></div>
+      <div class="sum-total"><span>Total</span><b>₸604,660</b></div>
+
+      <p class="currency-note" style="margin-top:12px">All amounts in KZT (₸). The same currency is used in search and in the receipt.</p>
+
+      <hr class="divider">
+      <div class="sum-row"><span>Passengers</span><b>Alex Morgan, Maya Chen</b></div>
+      <div class="sum-row"><span>Booking reference</span><b>EN482913</b></div>
+      <div class="sum-row"><span>Status</span><b>Awaiting payment</b></div>
+    </aside>
+  </div>
+</main>
+  <script src='language.js'></script>
+</body>
+</html>
