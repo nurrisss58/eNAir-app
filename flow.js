@@ -216,6 +216,23 @@
           const base = link.getAttribute('data-ref-link');
           link.setAttribute('href', base + (base.indexOf('?') >= 0 ? '&' : '?') + 'ref=' + encodeURIComponent(ref));
         });
+        const status = data.status || 'confirmed';
+        const badge = $('#trip-status');
+        if (badge) {
+          badge.textContent = status === 'cancelled' ? 'Cancelled'
+            : status === 'checked_in' ? 'Checked in' : 'Confirmed';
+          badge.className = 'badge ' + (status === 'cancelled' ? 'badge-slate'
+            : status === 'checked_in' ? 'badge-violet' : 'badge-green');
+        }
+        const refundBox = $('#trip-refund');
+        const cancelled = status === 'cancelled';
+        if (refundBox) {
+          refundBox.classList.toggle('hidden', !cancelled);
+          if (cancelled) {
+            $$('[data-trip="refund"]').forEach(el => { el.textContent = money(data.refund_amount || 0); });
+          }
+        }
+        $$('[data-action]').forEach(el => el.classList.toggle('hidden', cancelled));
         result.classList.remove('hidden');
         error.classList.add('hidden');
       };
@@ -362,6 +379,7 @@
     refund() {
       const confirm = $('#refund-confirm');
       if (!confirm) return;
+      const ref = param('ref', DEMO_BOOKING.reference);
       const total = Number(param('total', DEMO_BOOKING.total_price)) || DEMO_BOOKING.total_price;
       const fee = Math.round(total * 0.138);
       const refund = total - fee;
@@ -370,12 +388,32 @@
       set('[data-fee]', fee);
       set('[data-refund]', refund);
 
-      confirm.addEventListener('click', () => {
-        $('#refund-form').classList.add('hidden');
-        const done = $('#refund-done');
-        done.classList.remove('hidden');
-        $('[data-refund-done]').textContent = money(refund);
-        toast('Booking cancelled · refund will arrive in 5–7 days', 'ok');
+      confirm.addEventListener('click', async () => {
+        confirm.disabled = true;
+        const chosen = document.querySelector('input[name="reason"]:checked');
+        try {
+          const response = await fetch('/api/bookings/' + encodeURIComponent(ref) + '/cancel', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'same-origin',
+            body: JSON.stringify({ reason: chosen ? chosen.value : 'Change of plans' })
+          });
+          const data = await response.json();
+          if (!response.ok) throw new Error(data.error || 'Could not cancel');
+          const form = $('#refund-form');
+          if (form) form.classList.add('hidden');
+          const done = $('#refund-done');
+          if (done) done.classList.remove('hidden');
+          $$('[data-refund-done]').forEach(el => { el.textContent = money(data.refund || refund); });
+          $$('[data-refund-fee]').forEach(el => { el.textContent = money(data.fee || fee); });
+          const back = $('#refund-back');
+          if (back) back.href = 'enair-manage-booking.html?ref=' + encodeURIComponent(ref);
+          toast('Booking cancelled · refund ' + money(data.refund || refund), 'ok');
+        } catch (error) {
+          toast(error.message || 'Could not cancel the booking', 'err');
+        } finally {
+          confirm.disabled = false;
+        }
       });
     },
 
@@ -514,15 +552,31 @@
 
     async account() {
       const banner = $('#account-demo');
+      const statusLine = $('#account-status');
+      const form = $('#account-form');
+      const fields = {
+        first_name: $('#first_name'),
+        last_name: $('#last_name'),
+        phone: $('#phone'),
+        language: $('#language'),
+        email: $('#email')
+      };
       const setText = (key, value) => {
         $$('[data-account="' + key + '"]').forEach(el => { el.textContent = value; });
       };
       const languageName = code => ({ en: 'English', ru: 'Русский', kk: 'Қазақша' }[code] || 'English');
 
-      const applyProfile = (user, demo) => {
+      const applyProfile = user => {
+        if (!fields.first_name) return;
+        fields.first_name.value = user.first_name || '';
+        fields.last_name.value = user.last_name || '';
+        fields.phone.value = user.phone || '';
+        fields.language.value = user.language || 'en';
+        fields.email.value = user.email || '';
         setText('first_name', user.first_name || 'there');
         setText('name', user.name || ((user.first_name || '') + ' ' + (user.last_name || '')).trim());
-        setText('tier', user.tier || 'Gold');
+        setText('tier', user.tier || 'Member');
+        setText('tier_label', (user.tier || 'Member') === 'Member' ? 'Member' : (user.tier || 'Member') + ' member');
         setText('member_since', user.member_since || '—');
         setText('membership_number', user.membership_number || '—');
         setText('miles', Number(user.miles || 0).toLocaleString('en-US'));
@@ -534,7 +588,6 @@
         setText('notify_updates', notifications.updates ? 'On' : 'Off');
         setText('notify_checkin', notifications.checkin ? 'On' : 'Off');
         setText('notify_offers', notifications.offers ? 'On' : 'Off');
-        if (banner) banner.classList.toggle('hidden', !demo);
       };
 
       const renderBookings = list => {
@@ -547,15 +600,18 @@
           return;
         }
         if (empty) empty.classList.add('hidden');
-        list.slice(0, 2).forEach(booking => {
+        list.slice(0, 5).forEach(booking => {
           const row = document.createElement('a');
           row.className = 'option is-static';
           row.href = 'enair-manage-booking.html?ref=' + encodeURIComponent(booking.reference || '');
-          row.innerHTML = '<span class="radio"></span>' +
-            '<span><b class="times">' + (booking.departure_city || '') + ' → ' + (booking.arrival_city || '') + '</b>' +
+          const status = booking.status === 'cancelled' ? 'Cancelled'
+            : booking.status === 'checked_in' ? 'Checked in' : 'Confirmed';
+          const cls = booking.status === 'cancelled' ? 'badge-slate'
+            : booking.status === 'checked_in' ? 'badge-violet' : 'badge-green';
+          row.innerHTML = '<span><b class="times">' + (booking.departure_city || '') + ' → ' + (booking.arrival_city || '') + '</b>' +
             '<span class="meta">' + (booking.flight_number || '') + ' · ' + (booking.departure_time || '') +
             ' · ' + (booking.reference || '') + '</span></span>' +
-            '<span class="delta">' + (booking.cabin || '') + '</span>';
+            '<span class="badge ' + cls + '">' + status + '</span>';
           holder.appendChild(row);
         });
       };
@@ -563,17 +619,50 @@
       try {
         const response = await fetch('/api/me', { credentials: 'same-origin' });
         const data = await response.json();
-        if (!data.authenticated) {
-          location.href = 'enair-signin.html';
-          return;
-        }
-        applyProfile(data.user, data.demo);
+        if (!data.authenticated) { location.href = 'enair-signin.html'; return; }
+        applyProfile(data.user);
+        if (banner) banner.classList.toggle('hidden', !data.demo);
         const bookingsResponse = await fetch('/api/me/bookings', { credentials: 'same-origin' });
         const bookingsData = await bookingsResponse.json();
         renderBookings(bookingsData.bookings || []);
       } catch (error) {
-        applyProfile(DEMO_USER, true);
-        renderBookings(DEMO_BOOKINGS);
+        if (banner) {
+          banner.textContent = 'Could not load your account. Check the connection and refresh.';
+          banner.classList.remove('hidden');
+        }
+        renderBookings([]);
+      }
+
+      if (form) {
+        form.addEventListener('submit', async event => {
+          event.preventDefault();
+          const payload = {
+            first_name: fields.first_name.value.trim(),
+            last_name: fields.last_name.value.trim(),
+            phone: fields.phone.value.trim(),
+            language: fields.language.value
+          };
+          const button = $('#account-save');
+          if (button) button.disabled = true;
+          try {
+            const response = await fetch('/api/me', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              credentials: 'same-origin',
+              body: JSON.stringify(payload)
+            });
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.error || 'Save failed');
+            applyProfile(data.user);
+            if (statusLine) statusLine.textContent = data.demo ? 'Saved in demo mode.' : 'Saved to your account.';
+            toast(data.demo ? 'Saved in demo mode' : 'Profile updated', 'ok');
+          } catch (error) {
+            if (statusLine) statusLine.textContent = error.message || 'Could not save.';
+            toast('Could not save the profile', 'err');
+          } finally {
+            if (button) button.disabled = false;
+          }
+        });
       }
 
       const signout = $('#signout-link');
@@ -633,9 +722,13 @@
       try {
         const response = await fetch('/api/me', { credentials: 'same-origin' });
         const data = await response.json();
-        fill(data.authenticated ? data.user : DEMO_USER, !data.authenticated || data.demo);
+        if (!data.authenticated) { location.href = 'enair-signin.html'; return; }
+        fill(data.user, data.demo);
       } catch (error) {
-        fill(DEMO_USER, true);
+        if (banner) {
+          banner.textContent = 'Could not load the profile. Check the connection and refresh.';
+          banner.classList.remove('hidden');
+        }
       }
 
       form.addEventListener('submit', async event => {

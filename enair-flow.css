@@ -1,6 +1,8 @@
 /* eNAir — flow pages: manage booking, check-in, boarding pass, changes,
    baggage, rewards, account, support, status and mobile screens. */
 
+[hidden]{display:none !important}
+
 .flow-page{max-width:1320px;margin:0 auto;padding:34px 80px 96px}
 .flow-head{margin:0 0 26px}
 .flow-head .eyebrow{margin-bottom:10px}

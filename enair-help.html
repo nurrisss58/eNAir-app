@@ -21,8 +21,8 @@
   <div class="nav-actions">
     <span class="currency">₸ <span>KZT</span> ▾</span>
     <a class="btn btn-ghost btn-sm" href="enair-manage-booking.html">Manage booking</a>
-    <a class="btn btn-ghost btn-sm" href="enair-account.html">My account</a>
-    <a class="btn btn-dark btn-sm" href="enair-signin.html">Sign in</a>
+    <a class="btn btn-ghost btn-sm" data-auth="account" href="enair-account.html" hidden>My account</a>
+    <a class="btn btn-dark btn-sm" data-auth="signin" href="enair-signin.html">Sign in</a>
   </div>
 </header>
 
@@ -109,5 +109,6 @@
 </footer>
   <script src="navigation.js"></script>
   <script src='language.js'></script>
+<script src="auth-nav.js"></script>
 </body>
 </html>

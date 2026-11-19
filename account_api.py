@@ -48,8 +48,8 @@ DEMO_PROFILE = {
     "last_name": "Morgan",
     "phone": "+1 212 555 0148",
     "membership_number": "EN-4829-13",
-    "tier": "Gold",
-    "miles": 48250,
+    "tier": "Member",
+    "miles": 0,
     "language": "en",
     "member_since": "12.03.2024",
     "last_login": "20.11.2026 00:10",
@@ -136,6 +136,9 @@ def ensure_schema(cur):
     for column, definition in user_columns:
         cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS {} {};".format(column, definition))
     cur.execute("CREATE UNIQUE INDEX IF NOT EXISTS users_membership_key ON users (membership_number);")
+    cur.execute("ALTER TABLE users ALTER COLUMN miles SET DEFAULT 0;")
+    cur.execute("ALTER TABLE users ALTER COLUMN tier SET DEFAULT 'Member';")
+    cur.execute("ALTER TABLE users ALTER COLUMN miles SET NOT NULL;")
 
     flight_columns = [
         ("status", "VARCHAR(20) NOT NULL DEFAULT 'on_time'"),
@@ -168,6 +171,8 @@ def ensure_schema(cur):
 
     cur.execute("ALTER TABLE bookings ADD COLUMN IF NOT EXISTS seat VARCHAR(8);")
     cur.execute("ALTER TABLE bookings ADD COLUMN IF NOT EXISTS baggage_summary VARCHAR(120);")
+    cur.execute("ALTER TABLE bookings ADD COLUMN IF NOT EXISTS refund_amount NUMERIC(12,2);")
+    cur.execute("ALTER TABLE bookings ADD COLUMN IF NOT EXISTS cancelled_at TIMESTAMP;")
 
     cur.execute("""
         CREATE TABLE IF NOT EXISTS payment_methods (
@@ -285,6 +290,8 @@ def _booking_payload(row):
         "status": row[8],
         "seat": row[9] if len(row) > 9 else "",
         "baggage_summary": row[10] if len(row) > 10 else "",
+        "refund_amount": float(row[11]) if len(row) > 11 and row[11] is not None else None,
+        "cancelled_at": row[12].strftime("%d.%m.%Y %H:%M") if len(row) > 12 and row[12] else "",
     }
 
 
@@ -348,6 +355,23 @@ def _normalize_number(raw):
 # ---------------------------------------------------------------------------
 # routes
 # ---------------------------------------------------------------------------
+def award_miles(cur, user_id, amount, reason):
+    """Adds miles for a paid booking and keeps the ledger in sync."""
+    if not user_id or amount <= 0:
+        return 0
+    cur.execute("SELECT miles FROM users WHERE id = %s FOR UPDATE;", (user_id,))
+    row = cur.fetchone()
+    if not row:
+        return 0
+    balance = int(row[0] or 0) + int(amount)
+    cur.execute("UPDATE users SET miles = %s WHERE id = %s;", (balance, user_id))
+    cur.execute("""
+        INSERT INTO miles_transactions (user_id, delta, balance_after, reason)
+        VALUES (%s, %s, %s, %s);
+    """, (user_id, int(amount), balance, reason[:120]))
+    return balance
+
+
 def register_routes(app, get_db):
     def db():
         if _db_down():
@@ -453,7 +477,7 @@ def register_routes(app, get_db):
             cur.execute("""
                 SELECT reference, flight_number, departure_city, arrival_city,
                        departure_time, cabin, passengers, total_price, status,
-                       seat, baggage_summary
+                       seat, baggage_summary, refund_amount, cancelled_at
                 FROM bookings WHERE user_id = %s
                 ORDER BY created_at DESC NULLS LAST
                 LIMIT 20;
@@ -954,3 +978,50 @@ def register_routes(app, get_db):
                 "created_at": "just now",
             })
             return jsonify({"ok": True, "balance": balance - amount, "demo": True})
+
+    @app.route("/api/bookings/<reference>/cancel", methods=["POST"])
+    def api_cancel(reference):
+        ref = str(reference or "").strip().upper()[:16]
+        data = request.get_json(silent=True) or {}
+        reason = str(data.get("reason") or "Change of plans").strip()[:200]
+
+        try:
+            conn = db()
+            cur = conn.cursor()
+            cur.execute("""
+                SELECT user_id, total_price, status FROM bookings WHERE reference = %s FOR UPDATE;
+            """, (ref,))
+            row = cur.fetchone()
+            if not row:
+                conn.rollback()
+                cur.close()
+                conn.close()
+                return jsonify({"error": "Бронь не найдена"}), 404
+            user_id, total, status = row[0], float(row[1] or 0), row[2]
+            if status == "cancelled":
+                refund = float(0)
+                cur.execute("SELECT refund_amount FROM bookings WHERE reference = %s;", (ref,))
+                extra = cur.fetchone()
+                if extra and extra[0] is not None:
+                    refund = float(extra[0])
+                cur.close()
+                conn.close()
+                return jsonify({"ok": True, "demo": False, "status": "cancelled", "refund": refund,
+                                "reason": reason, "already": True})
+            fee = round(total * 0.138)
+            refund = round(total - fee)
+            cur.execute("""
+                UPDATE bookings SET status = 'cancelled', refund_amount = %s, cancelled_at = CURRENT_TIMESTAMP
+                WHERE reference = %s;
+            """, (refund, ref))
+            conn.commit()
+            cur.close()
+            conn.close()
+            return jsonify({"ok": True, "demo": False, "status": "cancelled",
+                            "refund": refund, "fee": fee, "reason": reason})
+        except Exception:
+            app.logger.exception("Unable to cancel the booking")
+            total = 604660
+            fee = round(total * 0.138)
+            return jsonify({"ok": True, "demo": True, "status": "cancelled",
+                            "refund": total - fee, "fee": fee, "reason": reason})

@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>My account · eNAir</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="enair-app.css?v=50">
-<link rel="stylesheet" href="enair-flow.css?v=50">
+<link rel="stylesheet" href="enair-app.css?v=52">
+<link rel="stylesheet" href="enair-flow.css?v=52">
 </head>
 <body data-page="account" class="">
 <header class="nav">
@@ -15,8 +15,8 @@
   <div class="nav-actions">
     <span class="currency">₸ <span>KZT</span> ▾</span>
     <a class="btn btn-ghost btn-sm" href="enair-manage-booking.html">Manage booking</a>
-    <a class="btn btn-ghost btn-sm" href="enair-account.html">My account</a>
-    <a class="btn btn-dark btn-sm" href="enair-signin.html">Sign in</a>
+    <a class="btn btn-ghost btn-sm" data-auth="account" href="enair-account.html" hidden>My account</a>
+    <a class="btn btn-dark btn-sm" data-auth="signin" href="enair-signin.html">Sign in</a>
   </div>
 </header>
 
@@ -46,20 +46,50 @@
         <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap">
           <div>
             <span style="font:600 11px 'Geist';letter-spacing:.14em;color:#a5f3fc">eNAIR MEMBERSHIP</span>
-            <p style="font:700 30px 'Outfit';margin:8px 0 2px"><span data-account="tier">Gold</span> member</p>
+            <p style="font:700 30px 'Outfit';margin:8px 0 2px"><span data-account="tier_label">Member</span></p>
             <p style="color:#cbd5e1;font-size:14px" data-account="name">Alex Morgan</p>
           </div>
           <span class="badge" style="background:rgba(255,255,255,.14);color:#fff">Member since <span data-account="member_since">12.03.2024</span></span>
         </div>
         <div class="kv-grid" style="margin-top:24px;grid-template-columns:repeat(3,minmax(0,1fr))">
-          <div class="kv"><span style="color:#94a3b8">Account number</span><b style="color:#fff;letter-spacing:.04em" data-account="membership_number">EN-4829-13</b></div>
-          <div class="kv"><span style="color:#94a3b8">Miles balance</span><b style="color:#fff" data-account="miles">48 250</b></div>
+          <div class="kv"><span style="color:#94a3b8">Account number</span><b style="color:#fff;letter-spacing:.04em" data-account="membership_number">—</b></div>
+          <div class="kv"><span style="color:#94a3b8">Miles balance</span><b style="color:#fff" data-account="miles">0</b></div>
           <div class="kv"><span style="color:#94a3b8">Language</span><b style="color:#fff" data-account="language">English</b></div>
         </div>
       </section>
 
       <section class="panel">
-        <div class="panel-head"><div><h2>Recent bookings</h2><p>Two most recent trips on this account.</p></div>
+        <div class="panel-head"><div><h2>Your details</h2><p>Edit the name, phone and language right here — no extra page.</p></div></div>
+        <form id="account-form" novalidate>
+          <div class="field-grid">
+            <div class="field"><label for="first_name">First name</label>
+              <input class="input" id="first_name" name="first_name" placeholder="First name"></div>
+            <div class="field"><label for="last_name">Last name</label>
+              <input class="input" id="last_name" name="last_name" placeholder="Last name"></div>
+            <div class="field"><label for="phone">Phone</label>
+              <input class="input" id="phone" name="phone" type="tel" placeholder="+1 212 555 0148"></div>
+            <div class="field"><label for="language">Language</label>
+              <select class="input" id="language" name="language">
+                <option value="en">English</option>
+                <option value="ru">Русский</option>
+                <option value="kk">Қазақша</option>
+              </select></div>
+          </div>
+          <div class="field">
+            <label for="email">Email address</label>
+            <input class="input" id="email" name="email" type="email" readonly style="background:#f8fafc">
+            <span class="hint">Email is the sign-in identity.</span>
+          </div>
+          <div class="btn-row">
+            <button class="btn btn-primary" type="submit" id="account-save">Save details</button>
+            <a class="btn btn-ghost" href="enair-settings.html">Notification settings</a>
+          </div>
+          <p class="hint" id="account-status" style="margin-top:10px"></p>
+        </form>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head"><div><h2>Recent bookings</h2><p>Your latest trips on this account.</p></div>
           <a class="btn btn-ghost btn-sm" href="enair-manage-booking.html">All bookings</a></div>
         <div id="account-bookings" class="option-list"></div>
         <p id="account-bookings-empty" class="muted hidden">No bookings yet — your next trip will appear here.</p>
@@ -93,6 +123,7 @@
   </div>
 </footer>
 <div id="toast" class="toast"></div>
-<script src="flow.js?v=50"></script>
+<script src="flow.js?v=52"></script>
+<script src="auth-nav.js"></script>
 </body>
 </html>

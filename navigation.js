@@ -813,7 +813,13 @@
     addExperiencesLink();
     document.querySelectorAll('.nav-links,.nav-links-7').forEach(list=>{
       if(![...list.querySelectorAll('a,div')].some(item=>clean(item.textContent)==='Help')){
-        const link=document.createElement('a');link.href=routes.help;link.textContent='Help';list.append(link);
+        if(list.classList.contains('nav-links-7')){
+          const wrap=document.createElement('div');wrap.className='frame-16';
+          const item=document.createElement('div');item.className='about-enair-17';item.textContent='Help';
+          wrap.append(item);list.append(wrap);clickable(wrap,()=>go(routes.help));
+        } else {
+          const link=document.createElement('a');link.href=routes.help;link.textContent='Help';list.append(link);
+        }
       }
     });
     renderAuthControl();

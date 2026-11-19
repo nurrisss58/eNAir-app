@@ -20,7 +20,7 @@ CORS(app, supports_credentials=True)
 app.secret_key = os.environ.get("SECRET_KEY") or "enair-dev-secret-2026"
 app.config.update(SESSION_COOKIE_HTTPONLY=True, SESSION_COOKIE_SAMESITE="Lax")
 
-from account_api import ensure_schema, load_profile, membership_code, register_routes
+from account_api import award_miles, ensure_schema, load_profile, membership_code, register_routes
 
 # Разрешаем раздавать только файлы сайта. Иначе Flask отдаёт по прямой ссылке
 # app.py, requirements.txt и Procfile — вместе с кодом и паролями.
@@ -406,7 +406,7 @@ def register():
 
         cur.execute("""
             INSERT INTO users (name, email, password_hash, first_name, last_name, tier, miles, language, last_login)
-            VALUES (%s, %s, %s, %s, %s, 'Gold', 48250, 'en', CURRENT_TIMESTAMP)
+            VALUES (%s, %s, %s, %s, %s, 'Member', 0, 'en', CURRENT_TIMESTAMP)
             RETURNING id;
         """, (name or None, email, password_hash, first, last))
         user_id = cur.fetchone()[0]
@@ -617,6 +617,9 @@ def book_flight():
             card_last4 or None,
         ))
         booking_id, created_at = cur.fetchone()
+        earned = int(total_price // 100)
+        if earned:
+            award_miles(cur, user_id, earned, "Flight " + str(flight[0]))
         conn.commit()
 
         return jsonify({
@@ -670,7 +673,8 @@ def booking_receipt(reference):
         cur.execute("""
             SELECT reference, flight_number, departure_city, arrival_city,
                    departure_time, arrival_time, cabin, fare, passengers,
-                   passenger_names, total_price, card_last4, status, created_at
+                   passenger_names, total_price, card_last4, status, created_at,
+                   refund_amount, cancelled_at
             FROM bookings WHERE reference = %s;
         """, (reference,))
         row = cur.fetchone()
@@ -697,6 +701,8 @@ def booking_receipt(reference):
             "card_last4": row[11],
             "status": row[12],
             "created_at": row[13].strftime("%d.%m.%Y %H:%M") if row[13] else "",
+            "refund_amount": float(row[14]) if row[14] is not None else None,
+            "cancelled_at": row[15].strftime("%d.%m.%Y %H:%M") if row[15] else "",
         })
     except Exception:
         app.logger.exception("Unable to read the booking receipt")

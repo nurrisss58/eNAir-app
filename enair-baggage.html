@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Baggage · eNAir</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="enair-app.css?v=50">
-<link rel="stylesheet" href="enair-flow.css?v=50">
+<link rel="stylesheet" href="enair-app.css?v=52">
+<link rel="stylesheet" href="enair-flow.css?v=52">
 </head>
 <body data-page="baggage" class="">
 <header class="nav">
@@ -15,8 +15,8 @@
   <div class="nav-actions">
     <span class="currency">₸ <span>KZT</span> ▾</span>
     <a class="btn btn-ghost btn-sm" href="enair-manage-booking.html">Manage booking</a>
-    <a class="btn btn-ghost btn-sm" href="enair-account.html">My account</a>
-    <a class="btn btn-dark btn-sm" href="enair-signin.html">Sign in</a>
+    <a class="btn btn-ghost btn-sm" data-auth="account" href="enair-account.html" hidden>My account</a>
+    <a class="btn btn-dark btn-sm" data-auth="signin" href="enair-signin.html">Sign in</a>
   </div>
 </header>
 
@@ -87,6 +87,7 @@
   </div>
 </footer>
 <div id="toast" class="toast"></div>
-<script src="flow.js?v=50"></script>
+<script src="flow.js?v=52"></script>
+<script src="auth-nav.js"></script>
 </body>
 </html>
