@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Check-in · eNAir</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="enair-app.css?v=45">
+<link rel="stylesheet" href="enair-flow.css?v=45">
+</head>
+<body data-page="mobileCheckin" class="mobile-view">
+<div class="m-top"><a href="enair-post-booking.html">eNAir</a>
+  <a class="menu" href="enair-post-booking.html">☰</a></div>
+<main class="m-shell">
+  <h1 class="m-title">Check in</h1>
+
+  <div class="m-card" style="display:flex;gap:14px;align-items:center">
+    <span class="avatar" style="width:52px;height:52px;border-radius:100px;background:#eef2ff;color:#6d28d9;display:grid;place-items:center;font:700 16px 'Geist'">AM</span>
+    <div><b style="font:600 16px 'Geist'" data-passenger-name>Alex Morgan</b><p class="muted small">JFK → LHR · 12A</p>
+      <span class="badge badge-violet" style="margin-top:6px">Economy Flex</span></div>
+  </div>
+
+  <form id="checkin-form" class="m-card" novalidate>
+    <div class="field" data-validate="passport">
+      <label for="passport">Passport number</label>
+      <input class="input" id="passport" placeholder="X1234567" value="X1234567">
+      <span class="error">Enter a valid passport number</span>
+    </div>
+    <div class="field" data-validate="date">
+      <label for="dob">Date of birth</label>
+      <input class="input" id="dob" placeholder="12 Aug 1991" value="12 Aug 1991">
+      <span class="error">Enter the date of birth</span>
+    </div>
+    <div class="m-card" style="display:flex;justify-content:space-between;align-items:center;margin:0 0 14px;padding:14px">
+      <b style="font:600 15px 'Geist'">Seat 12A · window</b>
+      <a class="btn btn-ghost btn-sm" href="booking-seats.html">Change</a>
+    </div>
+    <label class="check"><input type="checkbox" id="consent" checked> I confirm the document data</label>
+    <button class="btn btn-primary btn-block" type="submit" style="margin-top:18px">Get boarding pass</button>
+  </form>
+</main>
+<div id="toast" class="toast"></div>
+<script src="flow.js"></script>
+</body>
+</html>

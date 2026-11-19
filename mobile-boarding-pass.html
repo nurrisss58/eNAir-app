@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Boarding pass · eNAir</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="enair-app.css?v=45">
+<link rel="stylesheet" href="enair-flow.css?v=45">
+</head>
+<body data-page="mobilePass" class="mobile-view">
+<div class="m-top"><a href="enair-post-booking.html">eNAir</a>
+  <a class="menu" href="enair-post-booking.html">☰</a></div>
+<main class="m-shell">
+  <h1 class="m-title">Boarding pass</h1>
+
+  <div class="m-pass">
+    <div class="top">
+      <p class="muted" style="font-size:12px"><span data-pass="cabin">Economy Flex</span></p>
+      <p style="font:700 30px 'Outfit';margin:8px 0 2px"><span data-pass="from">JFK</span> → <span data-pass="to">LHR</span></p>
+      <p class="muted" style="font-size:13px"><span data-pass="flight">eN-102</span> · <span data-pass="date">28 Mar 2026</span></p>
+      <div style="display:flex;justify-content:center;margin:16px 0"><div class="qr" data-qr></div></div>
+      <div class="kv-grid" style="grid-template-columns:1fr 1fr;gap:12px">
+        <div class="kv"><span>Passenger</span><b data-pass="passenger">Alex Morgan</b></div>
+        <div class="kv"><span>Seat</span><b data-pass="seat">12A</b></div>
+        <div class="kv"><span>Gate</span><b data-pass="gate">B22</b></div>
+        <div class="kv"><span>Boarding</span><b data-pass="boarding">07:35</b></div>
+      </div>
+    </div>
+    <div class="stub">
+      <div class="barcode" data-barcode style="width:100%"></div>
+      <span class="muted" style="font:600 12px 'Geist';letter-spacing:.1em"><span data-pass="reference">EN482913</span></span>
+    </div>
+  </div>
+
+  <button class="btn btn-dark btn-block" style="margin-top:16px" data-toast="Added to Wallet">Add to Apple Wallet</button>
+  <button class="btn btn-ghost btn-block" style="margin-top:8px" data-toast="Boarding pass downloaded">Download PDF</button>
+</main>
+<div id="toast" class="toast"></div>
+<script src="flow.js"></script>
+</body>
+</html>
