@@ -21,6 +21,7 @@
   <div class="nav-actions">
     <span class="currency">₸ <span>KZT</span> ▾</span>
     <a class="btn btn-ghost btn-sm" href="enair-manage-booking.html">Manage booking</a>
+    <a class="btn btn-ghost btn-sm" href="enair-account.html">My account</a>
     <a class="btn btn-dark btn-sm" href="enair-signin.html">Sign in</a>
   </div>
 </header>
@@ -69,6 +70,7 @@
           <a class="link" href="#" style="font-size:13px">Forgot password?</a>
         </div>
 
+        <p class="error" id="auth-error" style="margin-bottom:10px"></p>
         <button class="btn btn-primary btn-block btn-lg" type="submit">Sign in</button>
 
         <div class="or">or continue with</div>
@@ -85,6 +87,7 @@
       </form>
 
       <p class="auth-foot">New to eNAir? <a class="link" href="enair-signup.html">Create account</a></p>
+      <p class="hint" style="margin-top:10px">Demo account: <b>demo@enair.com</b> · <b>demo1234</b> — works even without the database.</p>
       <div class="note" style="margin-top:26px">
         <span style="font-size:15px">✈</span>
         <span>Your session stays on this device. This is a demonstration membership.</span>
@@ -107,7 +110,28 @@
     const okPass = pass.value.length >= 8;
     document.getElementById('f-email').classList.toggle('has-error', !okEmail);
     document.getElementById('f-pass').classList.toggle('has-error', !okPass);
-    if (okEmail && okPass) location.href = 'enair-profile.html';
+    const errorBox = document.getElementById('auth-error');
+    if (!(okEmail && okPass)) return;
+    const button = document.querySelector('#signin button[type="submit"]');
+    button.disabled = true;
+    errorBox.style.display = 'none';
+    fetch('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'same-origin',
+      body: JSON.stringify({ email: email.value.trim(), password: pass.value })
+    })
+      .then(async response => {
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(data.error || 'Sign-in failed');
+        return data;
+      })
+      .then(() => { location.href = 'enair-account.html'; })
+      .catch(error => {
+        errorBox.textContent = error.message;
+        errorBox.style.display = 'block';
+        button.disabled = false;
+      });
   });
 </script>
   <script src="navigation.js"></script>

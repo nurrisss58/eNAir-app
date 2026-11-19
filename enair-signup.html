@@ -21,6 +21,7 @@
   <div class="nav-actions">
     <span class="currency">₸ <span>KZT</span> ▾</span>
     <a class="btn btn-ghost btn-sm" href="enair-manage-booking.html">Manage booking</a>
+    <a class="btn btn-ghost btn-sm" href="enair-account.html">My account</a>
     <a class="btn btn-dark btn-sm" href="enair-signin.html">Sign in</a>
   </div>
 </header>
@@ -74,6 +75,7 @@
           <span class="error">Accept the terms to continue</span>
         </div>
 
+        <p class="error" id="signup-error" style="margin-bottom:10px"></p>
         <button class="btn btn-primary btn-block btn-lg" type="submit">Create account</button>
       </form>
 
@@ -131,7 +133,28 @@
       document.getElementById(id).classList.toggle('has-error', !ok);
       if (!ok) valid = false;
     });
-    if (valid) location.href = 'enair-profile.html';
+    const errorBox = document.getElementById('signup-error');
+    if (!valid) return;
+    const button = document.querySelector('#signup button[type="submit"]');
+    button.disabled = true;
+    errorBox.style.display = 'none';
+    fetch('/api/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'same-origin',
+      body: JSON.stringify({ name: (first + ' ' + last).trim(), email: email, password: password })
+    })
+      .then(async response => {
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(data.error || 'Registration failed');
+        return data;
+      })
+      .then(() => { location.href = 'enair-account.html'; })
+      .catch(error => {
+        errorBox.textContent = error.message;
+        errorBox.style.display = 'block';
+        button.disabled = false;
+      });
   });
 </script>
   <script src="navigation.js"></script>

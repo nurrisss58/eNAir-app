@@ -53,6 +53,28 @@
     { flight_number: 'eN-88', departure_city: 'London', arrival_city: 'Tokyo', departure_time: '31.03.2026 09:30', arrival_time: '01.04.2026 07:10', price: 812000, seats_available: 16, aircraft: 'Airbus A350-H2' }
   ];
 
+  const DEMO_USER = {
+    email: 'demo@enair.com',
+    first_name: 'Alex',
+    last_name: 'Morgan',
+    name: 'Alex Morgan',
+    phone: '+1 212 555 0148',
+    membership_number: 'EN-4829-13',
+    tier: 'Gold',
+    miles: 48250,
+    language: 'en',
+    member_since: '12.03.2024',
+    last_login: '20.11.2026 00:10',
+    notifications: { updates: true, checkin: true, offers: false }
+  };
+
+  const DEMO_BOOKINGS = [
+    { reference: 'EN482913', flight_number: 'eN-102', departure_city: 'New York', arrival_city: 'London',
+      departure_time: '28.03.2026 08:15', cabin: 'Economy Flex', status: 'confirmed' },
+    { reference: 'EN771204', flight_number: 'eN-88', departure_city: 'London', arrival_city: 'Tokyo',
+      departure_time: '31.03.2026 09:30', cabin: 'Business', status: 'confirmed' }
+  ];
+
   const DEMO_BOOKING = {
     reference: 'EN482913',
     flight_number: 'eN-102',
@@ -236,7 +258,7 @@
       const ref = param('ref', DEMO_BOOKING.reference);
       $$('[data-checkin-ref]').forEach(el => { el.textContent = ref; });
 
-      form.addEventListener('submit', event => {
+      form.addEventListener('submit', async event => {
         event.preventDefault();
         let valid = true;
         $$('.field[data-validate]', form).forEach(field => {
@@ -251,14 +273,33 @@
         if (consent && !consent.checked) { valid = false; toast('Confirm the document data to continue', 'err'); }
         if (!valid) return;
 
-        const passengers = $$('[data-passenger-name]').map(el => el.textContent.trim());
+        const names = $$('[data-passenger-name]').map(el => el.textContent.trim());
+        const passports = $$('.field[data-validate="passport"] input, #passport').map(input => input.value.trim());
+        const dobs = $$('.field[data-validate="date"] input, #dob').map(input => input.value.trim());
+        const seats = ['12A', '12B'];
+        const people = (names.length ? names : ['Alex Morgan']).map((name, index) => ({
+          name,
+          dob: dobs[index] || '',
+          document: passports[index] || '',
+          seat: seats[index] || '12A'
+        }));
+
+        try {
+          await fetch('/api/bookings/' + encodeURIComponent(ref) + '/checkin', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'same-origin',
+            body: JSON.stringify({ passengers: people })
+          });
+        } catch (error) { /* the demo store still lets the flow continue */ }
+
         session.set('enair.pass', Object.assign({}, passData(), {
           reference: ref,
-          passenger: (passengers[0] || 'Alex Morgan') + (passengers[1] ? ' + ' + passengers[1] : ''),
-          seat: $('#seat-value') ? $('#seat-value').textContent.trim() : '12A'
+          passenger: people[0].name + (people[1] ? ' + ' + people[1].name : ''),
+          seat: people[0].seat
         }));
         toast('Check-in complete · boarding pass ready', 'ok');
-        setTimeout(() => { location.href = 'enair-boarding-pass.html'; }, 500);
+        setTimeout(() => { location.href = 'enair-boarding-pass.html'; }, 600);
       });
     },
 
@@ -338,19 +379,31 @@
       });
     },
 
-    baggage() {
-      const state = { extra: 1, sports: 0, oversized: 0 };
-      const prices = { extra: 22050, sports: 36750, oversized: 46550 };
+    async baggage() {
+      const ref = param('ref', DEMO_BOOKING.reference);
+      const state = { extra_bag: 0, sports: 0, oversized: 0 };
+      const prices = { extra_bag: 22050, sports: 36750, oversized: 46550 };
+      const demoBanner = $('#baggage-demo');
+
       const update = () => {
         $$('[data-qty]').forEach(row => {
           const key = row.getAttribute('data-qty');
           $('[data-count]', row).textContent = state[key];
         });
-        const total = state.extra * prices.extra + state.sports * prices.sports + state.oversized * prices.oversized;
+        const total = state.extra_bag * prices.extra_bag + state.sports * prices.sports + state.oversized * prices.oversized;
         $$('[data-bag-total]').forEach(el => { el.textContent = money(total); });
-        $$('[data-bag-extra]').forEach(el => { el.textContent = state.extra + ' × 23 kg'; });
+        $$('[data-bag-extra]').forEach(el => { el.textContent = state.extra_bag + ' × 23 kg'; });
         return total;
       };
+
+      try {
+        const response = await fetch('/api/bookings/' + encodeURIComponent(ref) + '/services', { credentials: 'same-origin' });
+        const data = await response.json();
+        (data.items || []).forEach(item => { state[item.service] = item.quantity; });
+        if (demoBanner) demoBanner.classList.toggle('hidden', !data.demo);
+      } catch (error) {
+        if (demoBanner) demoBanner.classList.remove('hidden');
+      }
 
       $$('[data-qty]').forEach(row => {
         const key = row.getAttribute('data-qty');
@@ -365,18 +418,43 @@
 
       const add = $('#bag-add');
       if (add) {
-        add.addEventListener('click', () => {
-          const total = update();
-          session.set('enair.bags', { count: state.extra + state.sports + state.oversized, total });
-          toast('Baggage added · ' + money(total), 'ok');
+        add.addEventListener('click', async () => {
+          const items = Object.keys(state)
+            .filter(key => state[key] > 0)
+            .map(key => ({ service: key, quantity: state[key] }));
+          try {
+            const response = await fetch('/api/bookings/' + encodeURIComponent(ref) + '/services', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              credentials: 'same-origin',
+              body: JSON.stringify({ items })
+            });
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.error || 'Save failed');
+            (data.items || []).forEach(item => { state[item.service] = item.quantity; });
+            update();
+            toast('Baggage saved · ' + money(data.total || update()), 'ok');
+            if (demoBanner) demoBanner.classList.toggle('hidden', !data.demo);
+          } catch (error) {
+            session.set('enair.bags', { items, total: update() });
+            toast('Saved in the browser only — database unavailable', 'err');
+          }
         });
       }
       update();
     },
 
-    rewards() {
-      const balance = store.get('enair.miles', 48250);
-      $$('[data-miles]').forEach(el => { el.textContent = balance.toLocaleString('en-US') + ' miles'; });
+    async rewards() {
+      const display = balance => {
+        $$('[data-miles]').forEach(el => { el.textContent = Number(balance || 0).toLocaleString('en-US') + ' miles'; });
+      };
+      try {
+        const response = await fetch('/api/me/miles', { credentials: 'same-origin' });
+        const data = await response.json();
+        display(data.balance);
+      } catch (error) {
+        display(store.get('enair.miles', 48250));
+      }
 
       $$('[data-filter]').forEach(button => {
         button.addEventListener('click', () => {
@@ -390,126 +468,329 @@
       });
     },
 
-    redeem() {
-      const balance = store.get('enair.miles', 48250);
+    async redeem() {
       const miles = Number(param('miles', 25000));
       const name = param('name', 'Business upgrade');
       $$('[data-reward-name]').forEach(el => { el.textContent = name; });
       $$('[data-reward-miles]').forEach(el => { el.textContent = miles.toLocaleString('en-US'); });
+
+      let balance = Number(store.get('enair.miles', 48250));
+      try {
+        const response = await fetch('/api/me/miles', { credentials: 'same-origin' });
+        const data = await response.json();
+        balance = Number(data.balance || 0);
+      } catch (error) { /* keep the local balance */ }
+
       $$('[data-balance]').forEach(el => { el.textContent = balance.toLocaleString('en-US'); });
-      $$('[data-after]').forEach(el => { el.textContent = Math.max(0, balance - miles).toLocaleString('en-US') + ' miles'; });
+      $$('[data-after]').forEach(el => {
+        el.textContent = Math.max(0, balance - miles).toLocaleString('en-US') + ' miles';
+      });
 
       const confirm = $('#redeem-confirm');
-      if (confirm) {
-        confirm.addEventListener('click', () => {
-          store.set('enair.miles', Math.max(0, balance - miles));
+      if (!confirm) return;
+      confirm.addEventListener('click', async () => {
+        confirm.disabled = true;
+        try {
+          const response = await fetch('/api/me/miles/redeem', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'same-origin',
+            body: JSON.stringify({ miles, reward: name })
+          });
+          const data = await response.json();
+          if (!response.ok) throw new Error(data.error || 'Redemption failed');
+          store.set('enair.miles', data.balance);
           toast('Redeemed · ' + miles.toLocaleString('en-US') + ' miles', 'ok');
           setTimeout(() => { location.href = 'enair-rewards.html'; }, 700);
+        } catch (error) {
+          store.set('enair.miles', Math.max(0, balance - miles));
+          toast(error.message || 'Database unavailable — redeemed locally', 'err');
+          setTimeout(() => { location.href = 'enair-rewards.html'; }, 900);
+        } finally {
+          confirm.disabled = false;
+        }
+      });
+    },
+
+    async account() {
+      const banner = $('#account-demo');
+      const setText = (key, value) => {
+        $$('[data-account="' + key + '"]').forEach(el => { el.textContent = value; });
+      };
+      const languageName = code => ({ en: 'English', ru: 'Русский', kk: 'Қазақша' }[code] || 'English');
+
+      const applyProfile = (user, demo) => {
+        setText('first_name', user.first_name || 'there');
+        setText('name', user.name || ((user.first_name || '') + ' ' + (user.last_name || '')).trim());
+        setText('tier', user.tier || 'Gold');
+        setText('member_since', user.member_since || '—');
+        setText('membership_number', user.membership_number || '—');
+        setText('miles', Number(user.miles || 0).toLocaleString('en-US'));
+        setText('language', languageName(user.language));
+        setText('email', user.email || '—');
+        setText('phone', user.phone || '—');
+        setText('last_login', user.last_login || '—');
+        const notifications = user.notifications || {};
+        setText('notify_updates', notifications.updates ? 'On' : 'Off');
+        setText('notify_checkin', notifications.checkin ? 'On' : 'Off');
+        setText('notify_offers', notifications.offers ? 'On' : 'Off');
+        if (banner) banner.classList.toggle('hidden', !demo);
+      };
+
+      const renderBookings = list => {
+        const holder = $('#account-bookings');
+        const empty = $('#account-bookings-empty');
+        if (!holder) return;
+        holder.innerHTML = '';
+        if (!list.length) {
+          if (empty) empty.classList.remove('hidden');
+          return;
+        }
+        if (empty) empty.classList.add('hidden');
+        list.slice(0, 2).forEach(booking => {
+          const row = document.createElement('a');
+          row.className = 'option is-static';
+          row.href = 'enair-manage-booking.html?ref=' + encodeURIComponent(booking.reference || '');
+          row.innerHTML = '<span class="radio"></span>' +
+            '<span><b class="times">' + (booking.departure_city || '') + ' → ' + (booking.arrival_city || '') + '</b>' +
+            '<span class="meta">' + (booking.flight_number || '') + ' · ' + (booking.departure_time || '') +
+            ' · ' + (booking.reference || '') + '</span></span>' +
+            '<span class="delta">' + (booking.cabin || '') + '</span>';
+          holder.appendChild(row);
+        });
+      };
+
+      try {
+        const response = await fetch('/api/me', { credentials: 'same-origin' });
+        const data = await response.json();
+        if (!data.authenticated) {
+          location.href = 'enair-signin.html';
+          return;
+        }
+        applyProfile(data.user, data.demo);
+        const bookingsResponse = await fetch('/api/me/bookings', { credentials: 'same-origin' });
+        const bookingsData = await bookingsResponse.json();
+        renderBookings(bookingsData.bookings || []);
+      } catch (error) {
+        applyProfile(DEMO_USER, true);
+        renderBookings(DEMO_BOOKINGS);
+      }
+
+      const signout = $('#signout-link');
+      if (signout) {
+        signout.addEventListener('click', async event => {
+          event.preventDefault();
+          try {
+            await fetch('/api/logout', { method: 'POST', credentials: 'same-origin' });
+          } catch (error) { /* ignore */ }
+          location.href = 'enair-signin.html';
         });
       }
     },
 
-    settings() {
+    async settings() {
       const form = $('#settings-form');
       if (!form) return;
-      const saved = store.get('enair.settings', { name: 'Alex', last: 'Morgan', email: 'alex.morgan@email.com', phone: '+1 212 555 0148' });
-      Object.keys(saved).forEach(key => {
-        const input = $('[name="' + key + '"]', form);
-        if (input && typeof saved[key] === 'string') input.value = saved[key];
-      });
-      const toggles = store.get('enair.toggles', { updates: true, checkin: true, offers: false });
-      Object.keys(toggles).forEach(key => {
-        const input = $('[data-toggle="' + key + '"]', form);
-        if (input) input.checked = Boolean(toggles[key]);
-      });
 
-      form.addEventListener('submit', event => {
+      const banner = $('#settings-demo');
+      const statusLine = $('#settings-status');
+      const fields = {
+        first_name: $('#first_name'),
+        last_name: $('#last_name'),
+        phone: $('#phone'),
+        language: $('#language'),
+        email: $('#email')
+      };
+      const toggles = {
+        updates: $('[data-toggle="updates"]'),
+        checkin: $('[data-toggle="checkin"]'),
+        offers: $('[data-toggle="offers"]')
+      };
+
+      const fill = (user, demo) => {
+        fields.first_name.value = user.first_name || '';
+        fields.last_name.value = user.last_name || '';
+        fields.phone.value = user.phone || '';
+        fields.language.value = user.language || 'en';
+        fields.email.value = user.email || '';
+        const notifications = user.notifications || {};
+        if (toggles.updates) toggles.updates.checked = Boolean(notifications.updates);
+        if (toggles.checkin) toggles.checkin.checked = Boolean(notifications.checkin);
+        if (toggles.offers) toggles.offers.checked = Boolean(notifications.offers);
+        $$('[data-account="name"]').forEach(el => {
+          el.textContent = user.name || ((user.first_name || '') + ' ' + (user.last_name || '')).trim();
+        });
+        $$('[data-account="membership_number"]').forEach(el => { el.textContent = user.membership_number || '—'; });
+        $$('[data-account="tier"]').forEach(el => { el.textContent = user.tier || 'Gold'; });
+        if (statusLine) {
+          statusLine.textContent = demo
+            ? 'Demo data — the database is not connected on this machine.'
+            : 'Profile loaded from the database.';
+        }
+        if (banner) banner.classList.toggle('hidden', !demo);
+      };
+
+      try {
+        const response = await fetch('/api/me', { credentials: 'same-origin' });
+        const data = await response.json();
+        fill(data.authenticated ? data.user : DEMO_USER, !data.authenticated || data.demo);
+      } catch (error) {
+        fill(DEMO_USER, true);
+      }
+
+      form.addEventListener('submit', async event => {
         event.preventDefault();
-        const data = {};
-        $$('input[type="text"], input[type="email"], input[type="tel"]', form).forEach(input => { data[input.name] = input.value; });
-        const flags = {};
-        $$('[data-toggle]', form).forEach(input => { flags[input.getAttribute('data-toggle')] = input.checked; });
-        store.set('enair.settings', data);
-        store.set('enair.toggles', flags);
-        toast('Settings saved', 'ok');
+        const payload = {
+          first_name: fields.first_name.value.trim(),
+          last_name: fields.last_name.value.trim(),
+          phone: fields.phone.value.trim(),
+          language: fields.language.value,
+          updates: toggles.updates ? toggles.updates.checked : true,
+          checkin: toggles.checkin ? toggles.checkin.checked : true,
+          offers: toggles.offers ? toggles.offers.checked : false
+        };
+        const button = $('#settings-save');
+        if (button) button.disabled = true;
+        try {
+          const response = await fetch('/api/me', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'same-origin',
+            body: JSON.stringify(payload)
+          });
+          const data = await response.json();
+          if (!response.ok) throw new Error(data.error || 'Save failed');
+          fill(data.user, data.demo);
+          toast(data.demo ? 'Saved in demo mode' : 'Profile saved to the database', 'ok');
+        } catch (error) {
+          store.set('enair.settings', payload);
+          toast('Database unavailable — saved in the browser', 'err');
+        } finally {
+          if (button) button.disabled = false;
+        }
       });
     },
 
-    payment() {
+    async payment() {
       const list = $('#cards');
       if (!list) return;
-      const defaults = [
-        { brand: 'Visa', number: '4242', exp: '09/29', def: true },
-        { brand: 'Mastercard', number: '8801', exp: '02/27', def: false }
-      ];
-      let cards = store.get('enair.cards', defaults);
+      const form = $('#add-card-form');
+      const openBtn = $('#add-card');
+      const demoBanner = $('#cards-demo');
 
-      const render = () => {
+      const luhn = value => {
+        let sum = 0;
+        let double = false;
+        for (let i = value.length - 1; i >= 0; i -= 1) {
+          let digit = Number(value[i]);
+          if (Number.isNaN(digit)) return false;
+          if (double) { digit *= 2; if (digit > 9) digit -= 9; }
+          sum += digit;
+          double = !double;
+        }
+        return sum % 10 === 0;
+      };
+
+      const render = cards => {
         list.innerHTML = '';
-        cards.forEach((card, index) => {
+        if (!cards.length) {
+          list.innerHTML = '<p class="muted" style="font-size:14px">No saved cards yet.</p>';
+          return;
+        }
+        cards.forEach(card => {
           const row = document.createElement('div');
-          row.className = 'saved-card' + (card.def ? ' is-default' : '');
-          row.innerHTML = '<span class="card-brand ' + card.brand.toLowerCase() + '">' + card.brand.toUpperCase() + '</span>' +
-            '<span class="grow"><b>•••• ' + card.number + '</b><small>Expires ' + card.exp + '</small></span>' +
-            (card.def ? '<span class="badge badge-green">Default</span>' : '<button type="button" class="btn btn-ghost btn-sm" data-default="' + index + '">Make default</button>') +
-            '<button type="button" class="btn btn-ghost btn-sm" data-remove="' + index + '">Remove</button>';
+          row.className = 'saved-card' + (card.default ? ' is-default' : '');
+          row.innerHTML = '<span class="card-brand ' + String(card.brand || 'card').toLowerCase() + '">' +
+            String(card.brand || 'CARD').toUpperCase() + '</span>' +
+            '<span class="grow"><b>•••• ' + card.last4 + '</b><small>Expires ' + card.exp + '</small></span>' +
+            (card.default
+              ? '<span class="badge badge-green">Default</span>'
+              : '<button type="button" class="btn btn-ghost btn-sm" data-default="' + card.id + '">Make default</button>') +
+            '<button type="button" class="btn btn-ghost btn-sm" data-remove="' + card.id + '">Remove</button>';
           list.appendChild(row);
         });
         $$('[data-default]', list).forEach(button => {
-          button.addEventListener('click', () => {
-            const index = Number(button.getAttribute('data-default'));
-            cards = cards.map((card, i) => Object.assign({}, card, { def: i === index }));
-            store.set('enair.cards', cards);
-            render();
-            toast('Default card updated', 'ok');
+          button.addEventListener('click', async () => {
+            await fetch('/api/me/cards/' + button.getAttribute('data-default') + '/default', {
+              method: 'POST', credentials: 'same-origin'
+            });
+            await load();
           });
         });
         $$('[data-remove]', list).forEach(button => {
-          button.addEventListener('click', () => {
-            cards.splice(Number(button.getAttribute('data-remove')), 1);
-            if (cards.length && !cards.some(card => card.def)) cards[0].def = true;
-            store.set('enair.cards', cards);
-            render();
-            toast('Card removed');
+          button.addEventListener('click', async () => {
+            await fetch('/api/me/cards/' + button.getAttribute('data-remove'), {
+              method: 'DELETE', credentials: 'same-origin'
+            });
+            await load();
           });
         });
       };
 
-      const addForm = $('#add-card-form');
-      const openBtn = $('#add-card');
-      if (openBtn) openBtn.addEventListener('click', () => addForm.classList.toggle('hidden'));
+      const load = async () => {
+        try {
+          const response = await fetch('/api/me/cards', { credentials: 'same-origin' });
+          const data = await response.json();
+          if (!data.authenticated) throw new Error('signed out');
+          if (demoBanner) demoBanner.classList.toggle('hidden', !data.demo);
+          render(data.cards || []);
+        } catch (error) {
+          if (demoBanner) demoBanner.classList.remove('hidden');
+          render(store.get('enair.cards', []));
+        }
+      };
 
-      if (addForm) {
-        addForm.addEventListener('submit', event => {
+      if (openBtn && form) openBtn.addEventListener('click', () => form.classList.toggle('hidden'));
+
+      if (form) {
+        form.addEventListener('submit', async event => {
           event.preventDefault();
-          const value = ($('#card-number').value || '').replace(/\s+/g, '');
-          const exp = ($('#card-exp').value || '').trim();
+          const number = ($('#card-number').value || '').replace(/\s+/g, '');
+          const match = /^(\d{2})\s*\/\s*(\d{2})$/.exec(($('#card-exp').value || '').trim());
           const field = $('#f-card-number');
-          const luhn = value => {
-            let sum = 0;
-            let double = false;
-            for (let i = value.length - 1; i >= 0; i -= 1) {
-              let digit = Number(value[i]);
-              if (Number.isNaN(digit)) return false;
-              if (double) { digit *= 2; if (digit > 9) digit -= 9; }
-              sum += digit;
-              double = !double;
-            }
-            return sum % 10 === 0;
-          };
-          const ok = value.length >= 13 && luhn(value) && /^\d{2}\/\d{2}$/.test(exp);
+          const ok = number.length >= 13 && luhn(number) && Boolean(match);
           field.classList.toggle('has-error', !ok);
           if (!ok) return;
-          const brand = value.startsWith('4') ? 'Visa' : value.startsWith('5') ? 'Mastercard' : 'Amex';
-          cards.push({ brand, number: value.slice(-4), exp, def: !cards.length });
-          store.set('enair.cards', cards);
-          addForm.reset();
-          addForm.classList.add('hidden');
-          render();
-          toast('Card added', 'ok');
+
+          const brand = number.startsWith('4') ? 'Visa' : number.startsWith('5') ? 'Mastercard' : 'Amex';
+          const payload = {
+            brand,
+            last4: number.slice(-4),
+            exp_month: Number(match[1]),
+            exp_year: 2000 + Number(match[2]),
+            holder: 'Alex Morgan'
+          };
+          try {
+            const response = await fetch('/api/me/cards', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              credentials: 'same-origin',
+              body: JSON.stringify(payload)
+            });
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.error || 'Save failed');
+            form.reset();
+            form.classList.add('hidden');
+            await load();
+            toast('Card added', 'ok');
+          } catch (error) {
+            const cards = store.get('enair.cards', []);
+            cards.push({
+              id: Date.now(),
+              brand,
+              last4: number.slice(-4),
+              exp: match[1] + '/' + match[2],
+              holder: '',
+              default: !cards.length
+            });
+            store.set('enair.cards', cards);
+            render(cards);
+            toast('Saved in the browser only — database unavailable', 'err');
+          }
         });
       }
-      render();
+
+      await load();
     },
 
     chat() {
@@ -558,29 +839,138 @@
     },
 
     async status() {
+      window.__statusStart = true;
       const form = $('#status-form');
-      if (!form) return;
-      const render = data => {
-        $$('[data-status]').forEach(el => {
-          const key = el.getAttribute('data-status');
-          if (key === 'route') el.textContent = (data.departure_city || '') + ' → ' + (data.arrival_city || '');
-          else if (data[key] !== undefined) el.textContent = data[key];
-        });
-        $('#status-card').classList.remove('hidden');
+      if (!form) { window.__statusNoForm = true; return; }
+
+      const banner = $('#status-demo');
+      const historyBox = $('#status-history');
+      const historyEmpty = $('#status-history-empty');
+      const numberInput = $('#flight-number');
+
+      const ROUTES = {
+        'EN-88': ['London', 'Tokyo'],
+        'EN-101': ['New York', 'London'],
+        'EN-102': ['New York', 'London'],
+        'EN-204': ['New York', 'Paris'],
+        'EN-318': ['London', 'Dubai']
       };
+
+      const setText = (key, value) => {
+        $$('[data-status="' + key + '"]').forEach(el => { el.textContent = value; });
+      };
+
+      const badge = value => {
+        const node = $('.badge[data-status="status_label"]');
+        if (!node) return;
+        node.textContent = value;
+        node.className = 'badge ' + (/delay|cancel|divert/i.test(value) ? 'badge-amber'
+          : /board|depart/i.test(value) ? 'badge-violet'
+          : /land/i.test(value) ? 'badge-slate' : 'badge-green');
+      };
+
+      const renderHistory = list => {
+        if (!historyBox) return;
+        historyBox.innerHTML = '';
+        if (!list.length) {
+          if (historyEmpty) historyEmpty.classList.remove('hidden');
+          return;
+        }
+        if (historyEmpty) historyEmpty.classList.add('hidden');
+        list.forEach(event => {
+          const row = document.createElement('div');
+          row.className = 'option is-static';
+          row.innerHTML = '<span class="radio"></span>' +
+            '<span><b class="times">' + (event.status_label || event.status) + '</b>' +
+            '<span class="meta">' + (event.reason || 'No reason given') + ' · ' + (event.created_at || '') + '</span></span>' +
+            '<span class="delta">' + (event.delay_minutes ? '+' + event.delay_minutes + ' min' : '—') + '</span>';
+          historyBox.appendChild(row);
+        });
+      };
+
+      const render = data => {
+        const route = ROUTES[data.flight_number] || ['Departure', 'Arrival'];
+        setText('flight_number', data.flight_number);
+        setText('route', route[0] + ' → ' + route[1]);
+        setText('from', route[0]);
+        setText('to', route[1]);
+        const label = data.status_label || 'On time';
+        setText('status_label', label);
+        badge(label);
+        setText('delay', (data.delay_minutes || 0) + ' min');
+        setText('gate', (data.gate || '—') + (data.terminal ? ' · T' + data.terminal : ''));
+        setText('reason', data.reason || 'On schedule');
+        setText('updated_at', data.updated_at || '—');
+        renderHistory(data.history || []);
+        if (banner) banner.classList.toggle('hidden', !data.demo);
+        const card = $('#status-card');
+        if (card) card.classList.remove('hidden');
+      };
+
+      const load = async number => {
+        const response = await fetch('/api/flights/' + encodeURIComponent(number) + '/status', { credentials: 'same-origin' });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Lookup failed');
+        render(data);
+        return data;
+      };
+
+      try {
+        await load((numberInput.value || 'EN-101').trim());
+      } catch (error) {
+        toast('Status service is unavailable', 'err');
+      }
 
       form.addEventListener('submit', async event => {
         event.preventDefault();
-        const number = ($('#flight-number').value || '').trim().toLowerCase();
-        const all = await flights();
-        const found = all.find(flight => flight.flight_number.toLowerCase() === number ||
-          flight.flight_number.toLowerCase().replace('en-', '') === number.replace('en-', '')) || all[0];
-        render(found);
-        toast('Status updated · ' + found.flight_number, 'ok');
+        try {
+          await load((numberInput.value || 'EN-101').trim());
+          toast('Status updated', 'ok');
+        } catch (error) {
+          toast(error.message, 'err');
+        }
       });
 
-      const all = await flights();
-      if ($('#status-card') && !$('#status-card').classList.contains('hidden')) render(all[0]);
+      const updateForm = $('#status-update-form');
+      window.__statusWired = Boolean(updateForm);
+      if (updateForm) {
+        updateForm.dataset.wired = '1';
+        updateForm.addEventListener('submit', async event => {
+          event.preventDefault();
+          const number = (numberInput.value || 'EN-101').trim();
+          const payload = {
+            status: $('#new-status').value,
+            delay_minutes: Number($('#new-delay').value || 0),
+            reason: $('#new-reason').value.trim(),
+            gate: $('#new-gate').value.trim(),
+            terminal: $('#new-terminal').value.trim()
+          };
+          const save = $('#status-save');
+          if (save) save.disabled = true;
+          try {
+            const response = await fetch('/api/flights/' + encodeURIComponent(number) + '/status', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              credentials: 'same-origin',
+              body: JSON.stringify(payload)
+            });
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.error || 'Save failed');
+            await load(number);
+            toast(data.demo ? 'Saved in the demo store' : 'Saved to the database', 'ok');
+            const note = $('#status-save-note');
+            if (note) {
+              note.textContent = data.demo
+                ? 'Demo mode: stored in memory because PostgreSQL is unavailable locally.'
+                : 'Saved to flight_events and the flight row.';
+            }
+          } catch (error) {
+            toast(error.message, 'err');
+          } finally {
+            if (save) save.disabled = false;
+          }
+        });
+      }
     },
 
     tokyo() {

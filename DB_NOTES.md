@@ -1,0 +1,171 @@
+# База данных: профиль, личный кабинет и сохранение задержек рейсов
+
+Короткая памятка по тому, что изменилось в схеме и как это проверить.
+
+## Что добавлено
+
+**`users`** — профиль и номер владельца аккаунта:
+
+| Колонка | Что хранит |
+|---|---|
+| `first_name`, `last_name` | имя и фамилия отдельно от `name` |
+| `phone` | телефон для билетов и уведомлений |
+| `membership_number` | постоянный номер аккаунта вида `EN-4829-13` |
+| `tier` | уровень программы (`Gold` по умолчанию) |
+| `miles` | баланс миль |
+| `language` | язык интерфейса |
+| `notify_updates`, `notify_checkin`, `notify_offers` | настройки уведомлений |
+| `last_login`, `updated_at` | когда заходил и когда меняли профиль |
+
+**`flights`** — состояние рейса: `status`, `delay_minutes`, `gate`, `terminal`,
+`status_reason`, `status_updated_at`.
+
+**`flight_events`** — история изменений статуса: номер рейса, статус, задержка, причина,
+гейт, терминал, источник и время. Именно сюда пишет кнопка «Save to database» на странице
+статуса, поэтому задержка не теряется между визитами и видна всем.
+
+## Когда это создаётся
+
+Автоматически при старте приложения: `init_db()` вызывает `ensure_schema()`, а тот выполняет
+`ALTER TABLE ... IF NOT EXISTS` и `CREATE TABLE IF NOT EXISTS`. То есть после деплоя на Render
+достаточно открыть любую страницу — колонки и таблица появятся сами.
+
+Если хочется применить руками или посмотреть SQL — файл [`db/schema_account.sql`](db/schema_account.sql).
+
+## API
+
+| Метод | Путь | Что делает |
+|---|---|---|
+| GET | `/api/me` | профиль текущей сессии (кука), `authenticated` |
+| POST | `/api/me` | сохранить имя, телефон, язык, уведомления |
+| GET | `/api/me/bookings` | брони пользователя |
+| POST | `/api/login`, `/api/register` | вход и регистрация, ставят сессию |
+| POST | `/api/logout` | выход |
+| GET | `/api/flights/<номер>/status` | статус и история изменений |
+| POST | `/api/flights/<номер>/status` | записать статус, задержку, гейт, терминал |
+
+Формат номера: `EN-88`. Если передать `88` или `en88`, номер нормализуется.
+
+## Как проверить, что задержка сохранилась в Neon
+
+1. Открыть `https://<ваш-домен>/enair-flight-status.html`.
+2. В блоке «Report a change» выбрать `Delayed`, задержку 45 минут, гейт `B22`, причину — сохранить.
+3. Обновить страницу: статус и запись в истории остаются.
+4. В Neon SQL Editor выполнить:
+
+```sql
+SELECT flight_number, status, delay_minutes, reason, created_at
+FROM flight_events
+ORDER BY created_at DESC
+LIMIT 5;
+```
+
+Строка должна появиться. Если появляется только в демо-режиме — значит приложение не видит
+`DATABASE_URL`; проверьте переменные окружения сервиса на Render.
+
+## Демо-режим
+
+Локально PostgreSQL нет, поэтому все эндпоинты отвечают данными из памяти с флагом `demo: true`,
+а страницы показывают жёлтую плашку. Это сделано специально: интерфейс можно проверять без базы,
+а на Render тот же код пишет в Neon. Если база упала на минуту, приложение не ждёт таймаут
+каждого запроса — оно минуту отвечает из демо-хранилища.
+
+## Сессии
+
+Вход ставит подписанную куку (`SECRET_KEY` в переменных окружения Render; если не задать —
+используется значение по умолчанию, лучше задать). Кука `HttpOnly`, `SameSite=Lax`.
+
+---
+
+## Что уже применено в Neon (20.11.2026)
+
+Подключение к базе `neondb` (PostgreSQL 18.7) выполнено, схема применена:
+
+* в `users` добавлены 13 колонок профиля, всем существующим аккаунтам присвоены номера:
+  `EN-0001-37`, `EN-0002-74`, `EN-0003-11`;
+* в `flights` добавлены 6 колонок статуса;
+* создана таблица `flight_events` и индекс `flight_events_number_idx`.
+
+Проверочные данные:
+
+| Что | Значение |
+|---|---|
+| Тестовый аккаунт | `qa.agent@enair.test` / `qa-test-2026`, номер `EN-0004-48` |
+| Тестовая бронь | `ENQA2026` · EN-101 · New York → London · Economy Flex · ₸604 660 |
+| Тестовое событие | EN-101, delayed, 45 мин, «Late inbound aircraft», гейт A12, терминал 1 |
+
+Ответы API на живой базе: `demo: false`, вход и `/api/me` отдают профиль, `/api/me/bookings` —
+бронь `ENQA2026`, `/api/flights/EN-101/status` — задержку и историю.
+
+### Как удалить проверочные данные
+
+```sql
+DELETE FROM flight_events WHERE flight_number IN ('EN-101', 'EN101');
+UPDATE flights
+SET status = 'on_time', delay_minutes = 0, gate = NULL, terminal = NULL,
+    status_reason = NULL, status_updated_at = NULL
+WHERE flight_number IN ('EN-101', 'EN101');
+DELETE FROM bookings WHERE reference = 'ENQA2026';
+DELETE FROM users WHERE email = 'qa.agent@enair.test';
+```
+
+### Замечания по данным
+
+* У трёх старых аккаунтов (`sarsenbaynurislam121@gmail.com`, `sarsen@gmail.com`, `bilol@gmail.com`)
+  поле `name` пустое, поэтому в кабинете имя не отображается — номер аккаунта и мили при этом есть.
+  Имена можно проставить вручную: `UPDATE users SET first_name = '...', last_name = '...' WHERE id = ...;`
+* В расписании встречаются номера без дефиса (`EN101`, `EN202`, `EN303`) рядом с `EN-101`.
+  API теперь понимает оба варианта, но расписание стоит однажды нормализовать.
+
+---
+
+## Четыре новые таблицы (вторая итерация)
+
+| Таблица | Что хранит | Кто пишет |
+|---|---|---|
+| `payment_methods` | бренд, последние 4 цифры, срок, владелец, default | страница Payment methods |
+| `booking_passengers` | имя, дата рождения, последние 4 символа документа, место, `checked_in_at` | Check-in |
+| `booking_services` | допуслуга (`extra_bag`, `sports`, `oversized`), количество, цена | Baggage |
+| `miles_transactions` | изменение миль, остаток, причина, награда | Redeem |
+
+Плюс в `bookings` появились `seat` и `baggage_summary`, поэтому карточка брони в кабинете
+показывает место и состав багажа.
+
+Полный паспорт не хранится: только последние четыре символа (`4567`) и дата рождения.
+
+### API
+
+| Метод | Путь | Назначение |
+|---|---|---|
+| GET/POST | `/api/me/cards` | список и добавление карты |
+| POST | `/api/me/cards/<id>/default` | сделать карту основной |
+| DELETE | `/api/me/cards/<id>` | удалить карту |
+| GET | `/api/bookings/<ref>/passengers` | пассажиры брони |
+| POST | `/api/bookings/<ref>/checkin` | сохранить регистрацию |
+| GET/POST | `/api/bookings/<ref>/services` | багаж и допуслуги |
+| GET | `/api/me/miles` | баланс и история операций |
+| POST | `/api/me/miles/redeem` | списать мили |
+
+### Проверено на Neon
+
+* карта `Visa •••• 4242`, срок 09/29 — создана через API, отображается на странице;
+* пассажиры `QA Agent`, `Alex Morgan`, `Sam Reed` — сохранены с местами 12A/12B;
+* багаж `extra_bag ×2` + `sports ×1` = ₸80 850 — записан в `booking_services`, попал в бронь;
+* мили: 48 250 → 47 250 после погашения 1 000, операция в `miles_transactions`;
+* бронь `ENQA2026`: статус `checked_in`, место `12A, 12B`, `baggage_summary` заполнен.
+
+Браузерная проверка страниц: 8 из 8 сценариев (карты, багаж, мили, регистрация, посадочный).
+
+### Удалить тестовые данные
+
+```sql
+DELETE FROM miles_transactions WHERE user_id = 4;
+DELETE FROM booking_services WHERE booking_reference = 'ENQA2026';
+DELETE FROM booking_passengers WHERE booking_reference = 'ENQA2026';
+DELETE FROM payment_methods WHERE user_id = 4;
+DELETE FROM flight_events WHERE flight_number IN ('EN-101', 'EN101');
+UPDATE flights SET status = 'on_time', delay_minutes = 0, gate = NULL, terminal = NULL,
+    status_reason = NULL, status_updated_at = NULL WHERE flight_number IN ('EN-101', 'EN101');
+DELETE FROM bookings WHERE reference = 'ENQA2026';
+DELETE FROM users WHERE email = 'qa.agent@enair.test';
+```

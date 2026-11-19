@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Account settings · eNAir</title>
+<title>Profile settings · eNAir</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="enair-app.css?v=45">
-<link rel="stylesheet" href="enair-flow.css?v=45">
+<link rel="stylesheet" href="enair-app.css?v=50">
+<link rel="stylesheet" href="enair-flow.css?v=50">
 </head>
 <body data-page="settings" class="">
 <header class="nav">
@@ -15,6 +15,7 @@
   <div class="nav-actions">
     <span class="currency">₸ <span>KZT</span> ▾</span>
     <a class="btn btn-ghost btn-sm" href="enair-manage-booking.html">Manage booking</a>
+    <a class="btn btn-ghost btn-sm" href="enair-account.html">My account</a>
     <a class="btn btn-dark btn-sm" href="enair-signin.html">Sign in</a>
   </div>
 </header>
@@ -22,54 +23,60 @@
 <main class="flow-page">
   <div class="flow-head">
     <span class="eyebrow">Account</span>
-    <h1>Account settings</h1>
-    <p>Manage your profile, notifications and language. Changes apply to every device.</p>
+    <h1>Profile &amp; notifications</h1>
+    <p>These details are stored on the account and used for tickets and flight updates.</p>
+  </div>
+
+  <div id="settings-demo" class="alert warn hidden">
+    Database is not connected on this machine — changes are kept in the browser. On Render they are saved to Neon.
   </div>
 
   <div class="account">
     <nav class="account-nav"><a href="enair-settings.html" class="is-active">Profile</a><a href="enair-settings.html">Notifications</a><a href="enair-payment-methods.html">Payment methods</a><a href="enair-manage-booking.html">Manage booking</a><a href="enair-signin.html">Sign out</a></nav>
 
-    <form class="panel" id="settings-form">
-      <div style="display:flex;align-items:center;gap:16px;margin-bottom:22px">
+    <form class="panel" id="settings-form" novalidate>
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:22px;flex-wrap:wrap">
         <span class="avatar" style="width:64px;height:64px;border-radius:100px;background:#eef2ff;color:#6d28d9;display:grid;place-items:center;font:700 20px 'Geist'">AM</span>
-        <div><b style="font:600 15px 'Geist'">Alex Morgan</b><p class="muted small">Gold member · alex.morgan@email.com</p></div>
-        <button class="btn btn-ghost btn-sm" type="button" style="margin-left:auto" data-toast="Photo upload is a demo action">Change photo</button>
+        <div><b style="font:600 15px 'Geist'" data-account="name">Alex Morgan</b>
+          <p class="muted small">Membership <b data-account="membership_number">EN-4829-13</b> · <span data-account="tier">Gold</span></p></div>
+        <span class="badge badge-violet" style="margin-left:auto">Account number is permanent</span>
       </div>
 
       <div class="field-grid">
-        <div class="field" id="f-name">
-  <label for="name">First name</label>
-  <input class="input" id="name" name="name" type="text" placeholder="Alex" value="Alex">
-  <span class="error">Check this field</span>
-</div>
-        <div class="field" id="f-last">
-  <label for="last">Last name</label>
-  <input class="input" id="last" name="last" type="text" placeholder="Morgan" value="Morgan">
-  <span class="error">Check this field</span>
-</div>
-        <div class="field" id="f-email">
-  <label for="email">Email address</label>
-  <input class="input" id="email" name="email" type="email" placeholder="alex.morgan@email.com" value="alex.morgan@email.com">
-  <span class="error">Check this field</span>
-</div>
-        <div class="field" id="f-phone">
-  <label for="phone">Phone</label>
-  <input class="input" id="phone" name="phone" type="tel" placeholder="+1 212 555 0148" value="+1 212 555 0148">
-  <span class="error">Check this field</span>
-</div>
+        <div class="field"><label for="first_name">First name</label>
+          <input class="input" id="first_name" name="first_name" placeholder="Alex"></div>
+        <div class="field"><label for="last_name">Last name</label>
+          <input class="input" id="last_name" name="last_name" placeholder="Morgan"></div>
+        <div class="field"><label for="phone">Phone</label>
+          <input class="input" id="phone" name="phone" type="tel" placeholder="+1 212 555 0148"></div>
+        <div class="field"><label for="language">Language</label>
+          <select class="input" id="language" name="language">
+            <option value="en">English</option>
+            <option value="ru">Русский</option>
+            <option value="kk">Қазақша</option>
+          </select></div>
+      </div>
+
+      <div class="field">
+        <label for="email">Email address</label>
+        <input class="input" id="email" name="email" type="email" readonly style="background:#f8fafc">
+        <span class="hint">Email is the sign-in identity and cannot be changed here.</span>
       </div>
 
       <div class="divider"></div>
       <h2 style="font-size:17px;margin-bottom:6px">Notifications</h2>
       <div class="switch-row"><div><b style="font:600 14px 'Geist'">Flight updates and gate changes</b><p>Email and push notifications</p></div>
-  <label class="switch"><input type="checkbox" data-toggle="updates" checked><span></span></label></div><div class="switch-row"><div><b style="font:600 14px 'Geist'">Check-in reminders</b><p>Email and push notifications</p></div>
-  <label class="switch"><input type="checkbox" data-toggle="checkin" checked><span></span></label></div><div class="switch-row"><div><b style="font:600 14px 'Geist'">Offers and miles promotions</b><p>Email and push notifications</p></div>
-  <label class="switch"><input type="checkbox" data-toggle="offers"><span></span></label></div>
+        <label class="switch"><input type="checkbox" data-toggle="updates"><span></span></label></div>
+      <div class="switch-row"><div><b style="font:600 14px 'Geist'">Check-in reminders</b><p>24 hours before departure</p></div>
+        <label class="switch"><input type="checkbox" data-toggle="checkin"><span></span></label></div>
+      <div class="switch-row"><div><b style="font:600 14px 'Geist'">Offers and miles promotions</b><p>At most twice a month</p></div>
+        <label class="switch"><input type="checkbox" data-toggle="offers"><span></span></label></div>
 
       <div class="btn-row" style="margin-top:20px">
-        <button class="btn btn-primary" type="submit">Save changes</button>
-        <a class="btn btn-ghost" href="enair-manage-booking.html">Cancel</a>
+        <button class="btn btn-primary" type="submit" id="settings-save">Save changes</button>
+        <a class="btn btn-ghost" href="enair-account.html">Cancel</a>
       </div>
+      <p class="hint" style="margin-top:12px" id="settings-status">Signed in as <span data-account="email">demo@enair.com</span></p>
     </form>
   </div>
 </main>
@@ -80,6 +87,6 @@
   </div>
 </footer>
 <div id="toast" class="toast"></div>
-<script src="flow.js"></script>
+<script src="flow.js?v=50"></script>
 </body>
 </html>

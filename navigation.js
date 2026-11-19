@@ -1775,8 +1775,8 @@
         const result=await response.json().catch(()=>({}));
         if(!response.ok)throw new Error(result.error||'Unable to complete this request.');
         if(!result.user)throw new Error('The server did not return an account.');
-        localStorage.setItem(authStorageKey,JSON.stringify({id:result.user.id,email:result.user.email}));
-        go(routes.profile);
+        localStorage.setItem(authStorageKey,JSON.stringify({id:result.user.id,email:result.user.email,membership:result.user.membership_number||''}));
+        go('enair-account.html');
       }catch(error){message.textContent=error.message||'Could not connect to the account service.';}
       finally{if(submit){submit.disabled=false;submit.textContent=submit.dataset.label||'Continue';}}
     },true);

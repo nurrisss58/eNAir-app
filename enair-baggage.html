@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Baggage · eNAir</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="enair-app.css?v=45">
-<link rel="stylesheet" href="enair-flow.css?v=45">
+<link rel="stylesheet" href="enair-app.css?v=50">
+<link rel="stylesheet" href="enair-flow.css?v=50">
 </head>
 <body data-page="baggage" class="">
 <header class="nav">
@@ -15,6 +15,7 @@
   <div class="nav-actions">
     <span class="currency">₸ <span>KZT</span> ▾</span>
     <a class="btn btn-ghost btn-sm" href="enair-manage-booking.html">Manage booking</a>
+    <a class="btn btn-ghost btn-sm" href="enair-account.html">My account</a>
     <a class="btn btn-dark btn-sm" href="enair-signin.html">Sign in</a>
   </div>
 </header>
@@ -26,13 +27,17 @@
     <p>Your fare includes 2 checked bags of 23 kg. Add extra pieces or special equipment.</p>
   </div>
 
+  <div id="baggage-demo" class="alert warn hidden">
+    Database is not connected — the selection stays in this browser only.
+  </div>
+
   <div class="flow-grid">
     <div class="flow-col">
       <div class="alert ok" style="background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46">
         <b>Included in Economy Flex</b><br>2 checked bags · 23 kg each · 1 cabin bag 8 kg
       </div>
       <section class="panel">
-        <div class="bag-row" data-qty="extra">
+        <div class="bag-row" data-qty="extra_bag">
   <div><h3>Extra checked bag</h3><p>23 kg · same size rules</p></div>
   <span class="price">₸22,050</span>
   <span class="qty">
@@ -82,6 +87,6 @@
   </div>
 </footer>
 <div id="toast" class="toast"></div>
-<script src="flow.js"></script>
+<script src="flow.js?v=50"></script>
 </body>
 </html>

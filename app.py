@@ -6,7 +6,7 @@ import urllib.error
 import urllib.request
 from datetime import datetime, timedelta
 
-from flask import Flask, jsonify, request, send_from_directory, abort
+from flask import Flask, jsonify, request, send_from_directory, abort, session
 from flask_cors import CORS
 import psycopg2
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -14,7 +14,13 @@ from werkzeug.security import generate_password_hash, check_password_hash
 # static_folder=None: встроенная раздача файлов из корня отключена,
 # иначе Flask отдаёт по прямой ссылке app.py и Procfile в обход проверок ниже.
 app = Flask(__name__, static_folder=None)
-CORS(app)
+CORS(app, supports_credentials=True)
+
+# Подпись сессионной cookie. На Render задайте SECRET_KEY в переменных окружения.
+app.secret_key = os.environ.get("SECRET_KEY") or "enair-dev-secret-2026"
+app.config.update(SESSION_COOKIE_HTTPONLY=True, SESSION_COOKIE_SAMESITE="Lax")
+
+from account_api import ensure_schema, load_profile, membership_code, register_routes
 
 # Разрешаем раздавать только файлы сайта. Иначе Flask отдаёт по прямой ссылке
 # app.py, requirements.txt и Procfile — вместе с кодом и паролями.
@@ -117,7 +123,7 @@ def get_db():
         password="2726259012",
         host="localhost",
         port="5432",
-        connect_timeout=10
+        connect_timeout=2
     )
 
 
@@ -217,6 +223,9 @@ def init_db():
         for column, definition in booking_columns:
             cur.execute("ALTER TABLE bookings ADD COLUMN IF NOT EXISTS {} {};".format(column, definition))
         cur.execute("CREATE UNIQUE INDEX IF NOT EXISTS bookings_reference_key ON bookings (reference);")
+
+        # Профиль пользователя, статусы рейсов и история изменений статуса.
+        ensure_schema(cur)
 
         # Демо-рейсы. Список вставляется по одному и только если такого рейса ещё
         # нет — ни по seed_key, ни по номеру. Поэтому деплой не плодит копии,
@@ -326,46 +335,65 @@ def send_static(path):
 
 @app.route("/api/flights")
 def flights():
-    conn = get_db()
-    cur = conn.cursor()
-    cur.execute("""
-        SELECT id, flight_number, departure_city, arrival_city,
-               departure_time, arrival_time, price, seats_available, aircraft
-        FROM flights
-        ORDER BY departure_time
-    """)
-    rows = cur.fetchall()
-    cur.close()
-    conn.close()
+    try:
+        conn = get_db()
+        cur = conn.cursor()
+        cur.execute("""
+            SELECT id, flight_number, departure_city, arrival_city,
+                   departure_time, arrival_time, price, seats_available, aircraft,
+                   status, delay_minutes, gate, terminal
+            FROM flights
+            ORDER BY departure_time
+        """)
+        rows = cur.fetchall()
+        cur.close()
+        conn.close()
 
-    result = []
-    for row in rows:
-        result.append({
-            "id": row[0],
-            "flight_number": row[1],
-            "departure_city": row[2],
-            "arrival_city": row[3],
-            "departure_time": row[4].strftime("%d.%m.%Y %H:%M"),
-            "arrival_time": row[5].strftime("%d.%m.%Y %H:%M"),
-            "price": round(_price_kzt(row[6]), 2),
-            "seats_available": row[7],
-            "aircraft": row[8] or "Scheduled flight",
-        })
+        result = []
+        for row in rows:
+            result.append({
+                "id": row[0],
+                "flight_number": row[1],
+                "departure_city": row[2],
+                "arrival_city": row[3],
+                "departure_time": row[4].strftime("%d.%m.%Y %H:%M"),
+                "arrival_time": row[5].strftime("%d.%m.%Y %H:%M"),
+                "price": round(_price_kzt(row[6]), 2),
+                "seats_available": row[7],
+                "aircraft": row[8] or "Scheduled flight",
+                "status": row[9] or "on_time",
+                "delay_minutes": int(row[10] or 0),
+                "gate": row[11] or "",
+                "terminal": row[12] or "",
+            })
 
-    return jsonify(result)
+        return jsonify(result)
+    except Exception:
+        app.logger.exception("Unable to list the flights")
+        return jsonify([]), 200
+
+
+def _split_name(name):
+    parts = (name or "").strip().split()
+    first = parts[0][:80] if parts else None
+    last = " ".join(parts[1:])[:80] or None
+    return first, last
 
 
 @app.route("/api/register", methods=["POST"])
 def register():
     data = request.get_json(silent=True) or {}
     name = (data.get("name") or "").strip()[:255]
-    email = data.get("email")
-    password = data.get("password")
+    email = (data.get("email") or "").strip().lower()
+    password = data.get("password") or ""
 
     if not email or not password:
         return jsonify({"error": "Укажите email и пароль"}), 400
+    if len(password) < 8:
+        return jsonify({"error": "Пароль должен быть не короче 8 символов"}), 400
 
     password_hash = generate_password_hash(password)
+    first, last = _split_name(name)
 
     conn = None
     cur = None
@@ -376,15 +404,25 @@ def register():
         if cur.fetchone():
             return jsonify({"error": "Пользователь с таким email уже существует"}), 400
 
+        cur.execute("""
+            INSERT INTO users (name, email, password_hash, first_name, last_name, tier, miles, language, last_login)
+            VALUES (%s, %s, %s, %s, %s, 'Gold', 48250, 'en', CURRENT_TIMESTAMP)
+            RETURNING id;
+        """, (name or None, email, password_hash, first, last))
+        user_id = cur.fetchone()[0]
         cur.execute(
-            "INSERT INTO users (name, email, password_hash) VALUES (%s, %s, %s) RETURNING id, email;",
-            (name or None, email, password_hash)
+            "UPDATE users SET membership_number = %s WHERE id = %s AND membership_number IS NULL;",
+            (membership_code(user_id), user_id),
         )
-        new_user = cur.fetchone()
         conn.commit()
+
+        session.clear()
+        session["user_id"] = user_id
+        profile = load_profile(cur, user_id)
         return jsonify({
             "message": "Регистрация прошла успешно!",
-            "user": {"id": new_user[0], "email": new_user[1]},
+            "user": profile,
+            "authenticated": True,
         }), 201
     except Exception:
         if conn:
@@ -401,8 +439,8 @@ def register():
 @app.route("/api/login", methods=["POST"])
 def login():
     data = request.get_json(silent=True) or {}
-    email = data.get("email")
-    password = data.get("password")
+    email = (data.get("email") or "").strip().lower()
+    password = data.get("password") or ""
 
     if not email or not password:
         return jsonify({"error": "Укажите email и пароль"}), 400
@@ -418,17 +456,43 @@ def login():
         if not user or not user[2]:
             return jsonify({"error": "Неверный email или пароль"}), 401
 
-        if check_password_hash(user[2], password):
-            return jsonify({
-                "message": "Успешный вход!",
-                "user": {"id": user[0], "email": user[1]},
-            }), 200
+        if not check_password_hash(user[2], password):
+            return jsonify({"error": "Неверный email или пароль"}), 401
 
-        return jsonify({"error": "Неверный email или пароль"}), 401
+        user_id = user[0]
+        cur.execute(
+            "UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = %s;", (user_id,)
+        )
+        cur.execute(
+            "UPDATE users SET membership_number = %s WHERE id = %s AND membership_number IS NULL;",
+            (membership_code(user_id), user_id),
+        )
+        conn.commit()
+
+        session.clear()
+        session["user_id"] = user_id
+        profile = load_profile(cur, user_id)
+        return jsonify({
+            "message": "Успешный вход!",
+            "user": profile,
+            "authenticated": True,
+        }), 200
     except Exception:
         if conn:
             conn.rollback()
         app.logger.exception("User login failed")
+        # Локальный запуск без Neon: демо-вход, чтобы кабинет можно было проверить.
+        if email == "demo@enair.com" and password == "demo1234":
+            session.clear()
+            session["user_id"] = 1
+            session["demo"] = True
+            from account_api import demo_profile
+            return jsonify({
+                "message": "Демо-вход без базы данных",
+                "user": demo_profile(),
+                "authenticated": True,
+                "demo": True,
+            }), 200
         return jsonify({"error": "Сервис авторизации временно недоступен"}), 500
     finally:
         if cur:
@@ -1305,6 +1369,9 @@ def assistant_status():
         "selftest": "/api/assistant/selftest",
     })
 
+
+# Личный кабинет, профиль и статусы рейсов.
+register_routes(app, get_db)
 
 # Важно: инициализация на уровне модуля, чтобы срабатывала и под gunicorn на Render.
 init_db()

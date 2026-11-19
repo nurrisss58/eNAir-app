@@ -72,6 +72,10 @@
 .option .radio{width:22px;height:22px;border-radius:100px;border:1.5px solid #cbd5e1;display:grid;place-items:center}
 .option.is-active .radio{border-color:var(--violet);background:var(--violet)}
 .option.is-active .radio::after{content:"";width:8px;height:8px;border-radius:100px;background:#fff}
+.option.is-static{cursor:default}
+.option.is-static .radio{display:none}
+.option.is-static:hover{border-color:var(--line)}
+.option.is-static .delta{color:#6d28d9}
 
 /* ---------- quantity stepper ---------- */
 .qty{display:inline-flex;align-items:center;gap:2px;height:38px;border-radius:100px;background:var(--soft);padding:3px}

@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Flight status · eNAir</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="enair-app.css?v=45">
-<link rel="stylesheet" href="enair-flow.css?v=45">
+<link rel="stylesheet" href="enair-app.css?v=50">
+<link rel="stylesheet" href="enair-flow.css?v=50">
 </head>
 <body data-page="status" class="">
 <header class="nav">
@@ -15,6 +15,7 @@
   <div class="nav-actions">
     <span class="currency">₸ <span>KZT</span> ▾</span>
     <a class="btn btn-ghost btn-sm" href="enair-manage-booking.html">Manage booking</a>
+    <a class="btn btn-ghost btn-sm" href="enair-account.html">My account</a>
     <a class="btn btn-dark btn-sm" href="enair-signin.html">Sign in</a>
   </div>
 </header>
@@ -23,14 +24,14 @@
   <div class="flow-head">
     <span class="eyebrow">Flight status</span>
     <h1>Track any eNAir flight</h1>
-    <p>Enter a flight number to see gate, terminal and the current estimate.</p>
+    <p>Status changes are stored in the database, so a delay reported once stays visible to every visitor.</p>
   </div>
 
   <form class="panel" id="status-form" style="margin-bottom:22px">
     <div class="field-grid" style="grid-template-columns:2fr 1fr auto;align-items:end">
       <div class="field" style="margin:0">
         <label for="flight-number">Flight number</label>
-        <input class="input" id="flight-number" placeholder="eN-102" value="eN-102">
+        <input class="input" id="flight-number" placeholder="EN-88" value="EN-101">
       </div>
       <div class="field" style="margin:0">
         <label for="flight-date">Date</label>
@@ -38,32 +39,61 @@
       </div>
       <button class="btn btn-primary" type="submit" style="height:52px">Check status</button>
     </div>
-    <p class="hint" style="margin-top:10px">Try eN-102 or eN-88.</p>
+    <p class="hint" style="margin-top:10px">Try EN-101 or EN-906.</p>
   </form>
+
+  <div id="status-demo" class="alert warn hidden">
+    Database is not connected — the status below comes from the demo store and is kept in memory.
+  </div>
 
   <section class="panel" id="status-card">
     <div class="status-hero">
       <div>
-        <p style="font:700 34px 'Outfit'" data-status="route">New York → London</p>
-        <p class="muted" style="font-size:14px"><span data-status="flight_number">eN-102</span> · <span data-status="aircraft">Airbus A350-H2</span> · <span data-status="departure_time">28.03.2026 08:15</span></p>
+        <p style="font:700 34px 'Outfit'" data-status="flight_number">EN-101</p>
+        <p class="muted" style="font-size:14px"><span data-status="route">New York → London</span></p>
       </div>
       <span class="badge badge-green" data-status="status_label">On time</span>
     </div>
     <div class="progress-line"><i style="width:60%"></i><span class="progress-air" style="left:60%">✈</span></div>
-    <div class="route-labels"><span>New York</span><span>London</span></div>
+    <div class="route-labels"><span data-status="from">New York</span><span data-status="to">London</span></div>
     <div class="kv-grid three" style="margin-top:22px">
-      <div class="kv"><span>Departure</span><b data-status="departure_time">08:15 · Terminal 4 · Gate B22</b></div>
-      <div class="kv"><span>Arrival</span><b data-status="arrival_time">20:30 · Terminal 2 · Gate 12</b></div>
-      <div class="kv"><span>Duration</span><b>7 h 15 m · non-stop</b></div>
+      <div class="kv"><span>Status</span><b data-status="status_label">On time</b></div>
+      <div class="kv"><span>Delay</span><b data-status="delay">0 min</b></div>
+      <div class="kv"><span>Gate / terminal</span><b data-status="gate">B22 · T4</b></div>
+    </div>
+    <div class="kv-grid" style="margin-top:16px">
+      <div class="kv"><span>Reason</span><b data-status="reason">On schedule</b></div>
+      <div class="kv"><span>Last update</span><b data-status="updated_at">—</b></div>
     </div>
   </section>
 
-  <section class="panel" style="margin-top:22px">
-    <h2 style="font-size:17px;margin-bottom:10px">Recent searches</h2>
-    <p class="small muted">eN-102 · New York → London · On time</p>
-    <p class="small muted">eN-88 · London → Tokyo · Delayed 25 min</p>
-    <p class="small muted">eN-204 · New York → Paris · Boarding</p>
-  </section>
+  <div class="flow-grid" style="margin-top:22px">
+    <section class="panel">
+      <div class="panel-head"><div><h2>Status history</h2><p>Every change is an event in the database.</p></div></div>
+      <div id="status-history" class="option-list"></div>
+      <p id="status-history-empty" class="muted hidden">No changes yet — the first report will appear here.</p>
+    </section>
+
+    <section class="panel soft">
+      <div class="panel-head"><div><h2>Report a change</h2><p>Operations tool: stores status, delay and gate.</p></div></div>
+      <form id="status-update-form">
+        <div class="field"><label for="new-status">Status</label>
+          <select class="input" id="new-status"><option value="on_time">On time</option><option value="boarding">Boarding</option><option value="departed">Departed</option><option value="landed">Landed</option><option value="delayed">Delayed</option><option value="cancelled">Cancelled</option><option value="diverted">Diverted</option></select></div>
+        <div class="field-grid">
+          <div class="field"><label for="new-delay">Delay, minutes</label>
+            <input class="input" id="new-delay" type="number" min="0" max="2880" value="25"></div>
+          <div class="field"><label for="new-gate">Gate</label>
+            <input class="input" id="new-gate" placeholder="B22"></div>
+          <div class="field"><label for="new-terminal">Terminal</label>
+            <input class="input" id="new-terminal" placeholder="4"></div>
+        </div>
+        <div class="field"><label for="new-reason">Reason</label>
+          <input class="input" id="new-reason" placeholder="Late inbound aircraft"></div>
+        <button class="btn btn-primary btn-block" type="submit" id="status-save">Save to database</button>
+        <p class="hint" style="margin-top:10px" id="status-save-note">Writes to `flight_events` and updates the flight row.</p>
+      </form>
+    </section>
+  </div>
 </main>
 <footer class="footer" style="margin-top:40px">
   <div style="max-width:1320px;margin:0 auto;padding:26px 80px;display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between;color:#64748b;font-size:13px;border-top:1px solid #e2e8f0">
@@ -72,6 +102,6 @@
   </div>
 </footer>
 <div id="toast" class="toast"></div>
-<script src="flow.js"></script>
+<script src="flow.js?v=50"></script>
 </body>
 </html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My account · eNAir</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="enair-app.css?v=50">
+<link rel="stylesheet" href="enair-flow.css?v=50">
+</head>
+<body data-page="account" class="">
+<header class="nav">
+  <a class="brand" href="enair-homepage.html"><span class="brand-badge">eN</span>eNAir</a>
+  <nav class="nav-links"><a href="enair-destinations.html">Destinations</a><a href="enair-booking.html">Book Flights</a><a href="enair-fleet-experience.html">Our Fleet</a><a href="enair-loyalty.html">Loyalty</a><a href="enair-help.html">Help</a></nav>
+  <div class="nav-actions">
+    <span class="currency">₸ <span>KZT</span> ▾</span>
+    <a class="btn btn-ghost btn-sm" href="enair-manage-booking.html">Manage booking</a>
+    <a class="btn btn-ghost btn-sm" href="enair-account.html">My account</a>
+    <a class="btn btn-dark btn-sm" href="enair-signin.html">Sign in</a>
+  </div>
+</header>
+
+<main class="flow-page">
+  <div class="flow-head">
+    <span class="eyebrow">Personal account</span>
+    <h1>Hi, <span data-account="first_name">Alex</span></h1>
+    <p>Your membership, trips and preferences in one place.</p>
+  </div>
+
+  <div id="account-demo" class="alert warn hidden">
+    Database is not connected on this machine, so the account shows demo data. On Render the same screens read Neon.
+  </div>
+
+  <div class="account">
+    <nav class="account-nav">
+      <a href="enair-account.html" class="is-active">Overview</a>
+      <a href="enair-settings.html">Profile &amp; notifications</a>
+      <a href="enair-payment-methods.html">Payment methods</a>
+      <a href="enair-rewards.html">Miles &amp; rewards</a>
+      <a href="enair-manage-booking.html">My bookings</a>
+      <a href="enair-signin.html" id="signout-link">Sign out</a>
+    </nav>
+
+    <div class="flow-col">
+      <section class="panel dark" style="background:linear-gradient(135deg,#0f172a 0%,#1e293b 60%,#312e81 100%)">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap">
+          <div>
+            <span style="font:600 11px 'Geist';letter-spacing:.14em;color:#a5f3fc">eNAIR MEMBERSHIP</span>
+            <p style="font:700 30px 'Outfit';margin:8px 0 2px"><span data-account="tier">Gold</span> member</p>
+            <p style="color:#cbd5e1;font-size:14px" data-account="name">Alex Morgan</p>
+          </div>
+          <span class="badge" style="background:rgba(255,255,255,.14);color:#fff">Member since <span data-account="member_since">12.03.2024</span></span>
+        </div>
+        <div class="kv-grid" style="margin-top:24px;grid-template-columns:repeat(3,minmax(0,1fr))">
+          <div class="kv"><span style="color:#94a3b8">Account number</span><b style="color:#fff;letter-spacing:.04em" data-account="membership_number">EN-4829-13</b></div>
+          <div class="kv"><span style="color:#94a3b8">Miles balance</span><b style="color:#fff" data-account="miles">48 250</b></div>
+          <div class="kv"><span style="color:#94a3b8">Language</span><b style="color:#fff" data-account="language">English</b></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head"><div><h2>Recent bookings</h2><p>Two most recent trips on this account.</p></div>
+          <a class="btn btn-ghost btn-sm" href="enair-manage-booking.html">All bookings</a></div>
+        <div id="account-bookings" class="option-list"></div>
+        <p id="account-bookings-empty" class="muted hidden">No bookings yet — your next trip will appear here.</p>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head"><div><h2>Contact details</h2><p>Used for tickets and flight updates.</p></div>
+          <a class="btn btn-ghost btn-sm" href="enair-settings.html">Edit</a></div>
+        <div class="kv-grid three">
+          <div class="kv"><span>Email</span><b data-account="email">alex.morgan@email.com</b></div>
+          <div class="kv"><span>Phone</span><b data-account="phone">+1 212 555 0148</b></div>
+          <div class="kv"><span>Last sign-in</span><b data-account="last_login">—</b></div>
+        </div>
+      </section>
+
+      <section class="panel soft">
+        <div class="panel-head"><div><h2>Notifications</h2><p>Gate changes, check-in reminders and offers.</p></div></div>
+        <div class="kv-grid three">
+          <div class="kv"><span>Flight updates</span><b data-account="notify_updates">On</b></div>
+          <div class="kv"><span>Check-in reminders</span><b data-account="notify_checkin">On</b></div>
+          <div class="kv"><span>Offers</span><b data-account="notify_offers">Off</b></div>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+<footer class="footer" style="margin-top:40px">
+  <div style="max-width:1320px;margin:0 auto;padding:26px 80px;display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between;color:#64748b;font-size:13px;border-top:1px solid #e2e8f0">
+    <span>eNAir · conceptual airline · design system lab</span>
+    <span><a href="enair-post-booking.html">Post-booking</a> · <a href="enair-help.html">Help</a> · <a href="enair-about-contact.html">Contact</a></span>
+  </div>
+</footer>
+<div id="toast" class="toast"></div>
+<script src="flow.js?v=50"></script>
+</body>
+</html>
