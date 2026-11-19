@@ -68,13 +68,13 @@
   launcher.className = 'enair-ai-launcher';
   launcher.setAttribute('aria-expanded', 'false');
   launcher.setAttribute('aria-controls', 'enair-ai-panel');
-  launcher.innerHTML = '<span class="enair-ai-dot" aria-hidden="true"></span><span>Спросить ассистента</span>';
+  launcher.innerHTML = '<span class="enair-ai-dot" aria-hidden="true"></span><span>Ask the assistant</span>';
 
   const panel = document.createElement('section');
   panel.className = 'enair-ai-panel';
   panel.id = 'enair-ai-panel';
   panel.setAttribute('role', 'dialog');
-  panel.setAttribute('aria-label', 'Ассистент eNAir');
+  panel.setAttribute('aria-label', 'eNAir assistant');
   panel.hidden = true;
 
   const head = document.createElement('div');
@@ -91,7 +91,7 @@
   const closeBtn = document.createElement('button');
   closeBtn.type = 'button';
   closeBtn.className = 'enair-ai-close';
-  closeBtn.setAttribute('aria-label', 'Закрыть ассистента');
+  closeBtn.setAttribute('aria-label', 'Close the assistant');
   closeBtn.textContent = '×';
   head.append(titles, closeBtn);
 
@@ -109,7 +109,7 @@
   input.className = 'enair-ai-input';
   input.type = 'text';
   input.placeholder = 'Ваш вопрос…';
-  input.setAttribute('aria-label', 'Вопрос ассистенту');
+  input.setAttribute('aria-label', 'Question for the assistant');
   input.maxLength = 400;
   const send = document.createElement('button');
   send.type = 'submit';

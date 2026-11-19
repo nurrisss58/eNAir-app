@@ -1,4 +1,4 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
 
 :root{
   --ink:#0f172a; --ink-2:#334155; --muted:#64748b; --line:#e2e8f0;
@@ -10,6 +10,7 @@
   --r-card:24px; --r-btn:14px; --r-input:14px;
 }
 *{margin:0;padding:0;box-sizing:border-box}
+[hidden]{display:none !important}
 html{-webkit-text-size-adjust:100%}
 body{font-family:'Geist',Arial,sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
 img{display:block;max-width:100%}

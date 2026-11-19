@@ -132,6 +132,7 @@ def ensure_schema(cur):
         ("notify_offers", "BOOLEAN NOT NULL DEFAULT FALSE"),
         ("last_login", "TIMESTAMP"),
         ("updated_at", "TIMESTAMP DEFAULT CURRENT_TIMESTAMP"),
+        ("preferred_tier", "VARCHAR(20)"),
     ]
     for column, definition in user_columns:
         cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS {} {};".format(column, definition))
@@ -1025,3 +1026,24 @@ def register_routes(app, get_db):
             fee = round(total * 0.138)
             return jsonify({"ok": True, "demo": True, "status": "cancelled",
                             "refund": total - fee, "fee": fee, "reason": reason})
+
+    @app.route("/api/me/preferences", methods=["POST"])
+    def api_preferences():
+        user_id = session.get("user_id")
+        if not user_id:
+            return jsonify({"error": "Сначала войдите в аккаунт"}), 401
+        data = request.get_json(silent=True) or {}
+        tier = str(data.get("preferred_tier") or "").strip().title()[:20]
+        if tier not in ("Silver", "Gold", "Platinum", "Diamond"):
+            return jsonify({"error": "Неизвестный уровень"}), 400
+        try:
+            conn = db()
+            cur = conn.cursor()
+            cur.execute("UPDATE users SET preferred_tier = %s WHERE id = %s;", (tier, user_id))
+            conn.commit()
+            cur.close()
+            conn.close()
+            return jsonify({"ok": True, "preferred_tier": tier, "demo": False})
+        except Exception:
+            _DEMO["profile"]["preferred_tier"] = tier
+            return jsonify({"ok": True, "preferred_tier": tier, "demo": True})

@@ -132,7 +132,7 @@
     loadLeaflet().then(L=>{
       const map=L.map(mapEl,{zoomControl:false,scrollWheelZoom:false,worldCopyJump:true,zoomSnap:.25}).setView([initial.lat,initial.lon],2.25);
       controller.map=map;
-      const street=L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{maxZoom:19,subdomains:'abcd',attribution:'&copy; OpenStreetMap contributors &copy; CARTO'});
+      const street=L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',{maxZoom:17,subdomains:'abc',attribution:'Map data &copy; OpenStreetMap contributors, relief &copy; OpenTopoMap (CC-BY-SA)'});
       const satellite=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,attribution:'Tiles &copy; Esri'});
       const labels=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,opacity:.9,attribution:'Labels &copy; Esri'});
       street.addTo(map);

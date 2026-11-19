@@ -367,5 +367,48 @@
     </div>
     <script src="navigation.js"></script>
   <script src='language.js'></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const tiers = [
+      ['.silver-35', 'Silver'],
+      ['.gold-58', 'Gold'],
+      ['.platinum-81', 'Platinum']
+    ];
+    const showToast = text => {
+      let box = document.getElementById('loyalty-toast');
+      if (!box) {
+        box = document.createElement('div');
+        box.id = 'loyalty-toast';
+        box.style.cssText = 'position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:#0f172a;color:#fff;padding:12px 20px;border-radius:12px;font:600 14px Geist,sans-serif;z-index:999;opacity:0;transition:.2s';
+        document.body.appendChild(box);
+      }
+      box.textContent = text;
+      box.style.opacity = '1';
+      setTimeout(() => { box.style.opacity = '0'; }, 2600);
+    };
+    tiers.forEach(([selector, tier]) => {
+      const node = document.querySelector(selector);
+      if (!node) return;
+      const card = node.closest('div[class*="card"], article, section') || node.parentElement;
+      card.style.cursor = 'pointer';
+      card.addEventListener('click', async () => {
+        try {
+          const response = await fetch('/api/me/preferences', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'same-origin',
+            body: JSON.stringify({ preferred_tier: tier })
+          });
+          if (response.status === 401) { showToast('Sign in to save your preferred tier'); return; }
+          const data = await response.json();
+          showToast(data.demo ? tier + ' saved in demo mode' : tier + ' saved to your account');
+        } catch (error) {
+          showToast('Could not save the tier');
+        }
+      });
+    });
+  });
+</script>
 </body>
 </html>

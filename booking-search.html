@@ -10,6 +10,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;700;800&family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="booking-search.css">
+<style>
+  .trip-type-41{flex-direction:row!important;align-items:center;gap:4px;height:44px;width:max-content;padding:0 4px;border:1px solid #e2e8f0;border-radius:100px;background:#fff}
+  .trip-type-41>div{height:35px;border-radius:100px;display:flex;align-items:center;justify-content:center;padding:0 18px;background:transparent;cursor:pointer}
+  .trip-type-41>div.is-active{background:#8b5cf6}
+  .trip-type-41>div>div{color:#0f172a;transition:color .15s}
+  .trip-type-41>div.is-active>div{color:#fff}
+  .flight-option-62{border-color:#e2e8f0}
+</style>
 </head>
 <body>
     <div class="booking-search-1">
@@ -178,5 +186,26 @@
     </div>
     <script src="navigation.js"></script>
   <script src='language.js'></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const group = document.querySelector('.trip-type-41');
+    if (!group) return;
+    const options = [...group.children].filter(node => node.className !== 'cabin-46');
+    options.forEach((option, index) => {
+      option.classList.toggle('is-active', index === 0);
+      option.addEventListener('click', () => {
+        options.forEach(node => node.classList.toggle('is-active', node === option));
+      });
+    });
+    document.querySelectorAll('.flight-option-62').forEach(card => {
+      card.style.borderColor = '#e2e8f0';
+    });
+    document.querySelectorAll('*').forEach(node => {
+      if (node.children.length === 0 && /\s{2,}/.test(node.textContent)) {
+        node.textContent = node.textContent.replace(/\s+/g, ' ').trim();
+      }
+    });
+  });
+</script>
 </body>
 </html>

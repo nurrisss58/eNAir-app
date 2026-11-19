@@ -35,10 +35,10 @@
     <button class="btn btn-primary">Search</button>
   </div>
   <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:16px">
-    <span class="chip">Change a booking</span>
-    <span class="chip">Baggage allowance</span>
-    <span class="chip">Check-in</span>
-    <span class="chip">Refunds</span>
+    <a class="chip" href="enair-manage-booking.html">Change a booking</a>
+    <a class="chip" href="enair-baggage.html">Baggage allowance</a>
+    <a class="chip" href="enair-check-in.html">Check-in</a>
+    <a class="chip" href="enair-cancel-refund.html">Refunds</a>
   </div>
 </section>
 
@@ -91,7 +91,7 @@
     <div class="help-cta">
       <h3>Talk to the eNAir assistant</h3>
       <p>Instant answers about your booking, seats and baggage — 24/7, in the app.</p>
-      <button class="btn btn-primary btn-block">Open assistant</button>
+      <a class="btn btn-primary btn-block" href="enair-concierge.html">Open assistant</a>
     </div>
     <div class="card card-pad">
       <h3 style="font-size:17px">Contact us</h3>
@@ -110,5 +110,33 @@
   <script src="navigation.js"></script>
   <script src='language.js'></script>
 <script src="auth-nav.js"></script>
+
+<script>
+  const faqAnswers = {
+    'How do I change the date of my flight?': 'Open Manage booking, find the trip by reference and choose Change flight. Economy Flex moves for free up to 24 hours before departure; other fares show the difference before you confirm.',
+    'What is included in Economy Flex?': 'A checked bag up to 23 kg, a carry-on, seat selection, free date changes up to 24 hours before departure and a bio-meal. Business adds two checked bags and a lie-flat suite.',
+    'Can I add a checked bag after booking?': 'Yes. Open Manage booking, choose Add bags and pick the extra piece. The price is shown before payment and the bag is added to the same booking reference.',
+    'When does online check-in open?': 'Check-in opens 24 hours before departure and closes 60 minutes before it. After check-in the boarding pass is available on the confirmation page and in your account.',
+    'How are eNMiles calculated on partner flights?': 'eNMiles are credited for distance flown and fare class. Partner flights earn at a reduced rate and usually appear in the account within 72 hours.'
+  };
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.article').forEach(article => {
+      const title = article.querySelector('span')?.textContent.trim();
+      const answer = faqAnswers[title];
+      if (!answer) return;
+      const body = document.createElement('p');
+      body.className = 'faq-answer';
+      body.textContent = answer;
+      body.hidden = true;
+      body.style.cssText = 'margin:10px 0 0;color:#334155;font-size:14px;line-height:1.6;max-width:720px';
+      article.append(body);
+      article.style.cursor = 'pointer';
+      article.addEventListener('click', () => {
+        body.hidden = !body.hidden;
+        article.setAttribute('aria-expanded', String(!body.hidden));
+      });
+    });
+  });
+</script>
 </body>
 </html>
