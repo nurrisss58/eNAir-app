@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Redeem miles · eNAir</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="enair-app.css?v=45">
+<link rel="stylesheet" href="enair-flow.css?v=45">
+</head>
+<body data-page="redeem" class="">
+<header class="nav">
+  <a class="brand" href="enair-homepage.html"><span class="brand-badge">eN</span>eNAir</a>
+  <nav class="nav-links"><a href="enair-destinations.html">Destinations</a><a href="enair-booking.html">Book Flights</a><a href="enair-fleet-experience.html">Our Fleet</a><a href="enair-loyalty.html">Loyalty</a><a href="enair-help.html">Help</a></nav>
+  <div class="nav-actions">
+    <span class="currency">₸ <span>KZT</span> ▾</span>
+    <a class="btn btn-ghost btn-sm" href="enair-manage-booking.html">Manage booking</a>
+    <a class="btn btn-dark btn-sm" href="enair-signin.html">Sign in</a>
+  </div>
+</header>
+
+<main class="flow-page">
+  <div class="flow-head">
+    <span class="eyebrow">eNAir Miles</span>
+    <h1>Confirm redemption</h1>
+    <p>Check the details before we take miles from your balance.</p>
+  </div>
+
+  <div class="flow-grid">
+    <div class="flow-col">
+      <section class="panel">
+        <div style="display:flex;gap:20px;flex-wrap:wrap;margin-bottom:20px">
+          <div style="width:220px;height:140px;border-radius:20px;background:linear-gradient(135deg,#06b6d4,#0e7490)"></div>
+          <div style="flex:1;min-width:240px">
+            <h2 style="font-size:26px" data-reward-name>Business upgrade</h2>
+            <p class="muted" style="margin:6px 0 10px">JFK → LHR · one way · 28 Mar 2026</p>
+            <p class="small muted">The upgrade applies to both passengers on this booking and is confirmed instantly.</p>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="kv-grid three">
+          <div class="kv"><span>Quantity</span><b>1</b></div>
+          <div class="kv"><span>Passengers</span><b>Alex Morgan, Sam Reed</b></div>
+          <div class="kv"><span>Departure</span><b>28 Mar 2026 · 08:15</b></div>
+        </div>
+        <label class="check" style="margin-top:20px"><input type="checkbox" checked> I understand miles are non-refundable once redeemed</label>
+      </section>
+    </div>
+
+    <aside class="flow-col">
+      <section class="panel">
+        <h2 style="font-size:18px;margin-bottom:16px">Summary</h2>
+        <div class="kv-grid" style="grid-template-columns:1fr">
+          <div class="kv"><span>Reward</span><b data-reward-name>Business upgrade</b></div>
+          <div class="kv"><span>Miles required</span><b data-reward-miles>25 000</b></div>
+          <div class="kv"><span>Your balance</span><b data-balance>48 250</b></div>
+        </div>
+        <div class="divider"></div>
+        <div class="sum-row"><span>Balance after</span><strong data-after>23 250 miles</strong></div>
+        <button class="btn btn-primary btn-block" id="redeem-confirm" style="margin-top:14px">Redeem miles</button>
+        <a class="btn btn-ghost btn-block" href="enair-rewards.html" style="margin-top:8px">Cancel</a>
+      </section>
+    </aside>
+  </div>
+</main>
+<footer class="footer" style="margin-top:40px">
+  <div style="max-width:1320px;margin:0 auto;padding:26px 80px;display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between;color:#64748b;font-size:13px;border-top:1px solid #e2e8f0">
+    <span>eNAir · conceptual airline · design system lab</span>
+    <span><a href="enair-post-booking.html">Post-booking</a> · <a href="enair-help.html">Help</a> · <a href="enair-about-contact.html">Contact</a></span>
+  </div>
+</footer>
+<div id="toast" class="toast"></div>
+<script src="flow.js"></script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Change flight · eNAir</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="enair-app.css?v=45">
+<link rel="stylesheet" href="enair-flow.css?v=45">
+</head>
+<body data-page="change" class="">
+<header class="nav">
+  <a class="brand" href="enair-homepage.html"><span class="brand-badge">eN</span>eNAir</a>
+  <nav class="nav-links"><a href="enair-destinations.html">Destinations</a><a href="enair-booking.html">Book Flights</a><a href="enair-fleet-experience.html">Our Fleet</a><a href="enair-loyalty.html">Loyalty</a><a href="enair-help.html">Help</a></nav>
+  <div class="nav-actions">
+    <span class="currency">₸ <span>KZT</span> ▾</span>
+    <a class="btn btn-ghost btn-sm" href="enair-manage-booking.html">Manage booking</a>
+    <a class="btn btn-dark btn-sm" href="enair-signin.html">Sign in</a>
+  </div>
+</header>
+
+<main class="flow-page">
+  <div class="flow-head">
+    <span class="eyebrow">Changes</span>
+    <h1>Move your flight</h1>
+    <p>Pick another date on the same route. The fare difference is calculated before you confirm.</p>
+  </div>
+
+  <div class="flow-grid">
+    <div class="flow-col">
+      <section class="panel">
+        <div class="date-strip" data-dates></div>
+        <div class="option-list" data-options></div>
+      </section>
+    </div>
+
+    <aside class="flow-col">
+      <section class="panel">
+        <h2 style="font-size:18px;margin-bottom:16px">Change summary</h2>
+        <div class="kv-grid" style="grid-template-columns:1fr">
+          <div class="kv"><span>Current flight</span><b>28 Mar · eN-102 · JFK → LHR</b></div>
+          <div class="kv"><span>New flight</span><b>28 Mar · eN-102 · 08:15</b></div>
+          <div class="kv"><span>Fare difference</span><b style="color:#10b981">+₸0</b></div>
+          <div class="kv"><span>Change fee</span><b style="color:#f59e0b">₸36,750</b></div>
+        </div>
+        <div class="divider"></div>
+        <div class="sum-row"><span>Total to pay</span><strong>₸36,750</strong></div>
+        <button class="btn btn-primary btn-block" id="change-confirm" style="margin-top:14px">Confirm change</button>
+        <a class="btn btn-ghost btn-block" href="enair-manage-booking.html" style="margin-top:8px">Keep current flight</a>
+      </section>
+    </aside>
+  </div>
+</main>
+<footer class="footer" style="margin-top:40px">
+  <div style="max-width:1320px;margin:0 auto;padding:26px 80px;display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between;color:#64748b;font-size:13px;border-top:1px solid #e2e8f0">
+    <span>eNAir · conceptual airline · design system lab</span>
+    <span><a href="enair-post-booking.html">Post-booking</a> · <a href="enair-help.html">Help</a> · <a href="enair-about-contact.html">Contact</a></span>
+  </div>
+</footer>
+<div id="toast" class="toast"></div>
+<script src="flow.js"></script>
+</body>
+</html>

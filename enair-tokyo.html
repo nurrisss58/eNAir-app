@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tokyo · eNAir</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="enair-app.css?v=45">
+<link rel="stylesheet" href="enair-flow.css?v=45">
+</head>
+<body data-page="tokyo" class="">
+<header class="nav">
+  <a class="brand" href="enair-homepage.html"><span class="brand-badge">eN</span>eNAir</a>
+  <nav class="nav-links"><a href="enair-destinations.html">Destinations</a><a href="enair-booking.html">Book Flights</a><a href="enair-fleet-experience.html">Our Fleet</a><a href="enair-loyalty.html">Loyalty</a><a href="enair-help.html">Help</a></nav>
+  <div class="nav-actions">
+    <span class="currency">₸ <span>KZT</span> ▾</span>
+    <a class="btn btn-ghost btn-sm" href="enair-manage-booking.html">Manage booking</a>
+    <a class="btn btn-dark btn-sm" href="enair-signin.html">Sign in</a>
+  </div>
+</header>
+
+<main class="flow-page">
+  <section style="border-radius:28px;overflow:hidden;background:linear-gradient(135deg,#164e63,#0e7490);color:#fff;padding:56px;margin-bottom:24px">
+    <span class="eyebrow" style="color:#a5f3fc">Destination · Japan</span>
+    <h1 style="font-size:clamp(40px,5vw,88px);margin:12px 0 10px">Tokyo</h1>
+    <p style="max-width:640px;color:#e2e8f0;font-size:17px">Neon nights, quiet gardens and the best bowl of ramen of your life.</p>
+    <div class="btn-row" style="margin-top:22px">
+      <span class="badge" style="background:rgba(255,255,255,.16);color:#fff">11 h from New York</span>
+      <span class="badge" style="background:rgba(255,255,255,.16);color:#fff">From ₸812,000</span>
+      <span class="badge" style="background:rgba(255,255,255,.16);color:#fff">Best Apr — May</span>
+    </div>
+  </section>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:26px"><div class="panel tight"><span style="font:600 11px 'Geist';letter-spacing:.1em;text-transform:uppercase;color:#64748b">Weather</span><p style="font:600 15px 'Geist';margin-top:6px">18°C · cherry blossom</p></div><div class="panel tight"><span style="font:600 11px 'Geist';letter-spacing:.1em;text-transform:uppercase;color:#64748b">Currency</span><p style="font:600 15px 'Geist';margin-top:6px">JPY · cards accepted</p></div><div class="panel tight"><span style="font:600 11px 'Geist';letter-spacing:.1em;text-transform:uppercase;color:#64748b">Airport</span><p style="font:600 15px 'Geist';margin-top:6px">NRT or HND</p></div><div class="panel tight"><span style="font:600 11px 'Geist';letter-spacing:.1em;text-transform:uppercase;color:#64748b">Getting around</span><p style="font:600 15px 'Geist';margin-top:6px">Metro · Suica card</p></div></div>
+
+  <div class="filters">
+    <button class="is-active" data-tab="overview">Overview</button>
+    <button data-tab="experiences">Experiences</button>
+    <button data-tab="practical">Practical</button>
+  </div>
+
+  <section data-panel="overview" class="panel">
+    <h2 style="font-size:22px;margin-bottom:10px">Why Tokyo</h2>
+    <p class="muted" style="max-width:760px">A city of 13 million that still feels quiet at 7 am. Fly non-stop from New York in 11 hours,
+    land at Haneda and be in Shibuya before lunch. Cherry blossom season runs from late March to early April.</p>
+  </section>
+
+  <section data-panel="experiences" class="hidden">
+    <div class="tiles"><article class="tile"><div class="art" style="background:linear-gradient(135deg,#7c3aed,#0f172a)"></div>
+        <div class="body"><h3>Shibuya at night</h3><p>Neon, crossing and rooftops</p><span class="miles">Explore guide →</span></div></article><article class="tile"><div class="art" style="background:linear-gradient(135deg,#06b6d4,#0e7490)"></div>
+        <div class="body"><h3>Old Tokyo walk</h3><p>Asakusa, temples, tea houses</p><span class="miles">Explore guide →</span></div></article><article class="tile"><div class="art" style="background:linear-gradient(135deg,#10b981,#047857)"></div>
+        <div class="body"><h3>Day trip to Hakone</h3><p>Mount Fuji views and onsen</p><span class="miles">Explore guide →</span></div></article></div>
+  </section>
+
+  <section data-panel="practical" class="panel hidden">
+    <div class="panel">
+      <div class="kv-grid">
+        <div class="kv"><span>Visa</span><b>Not required for US passports up to 90 days</b></div>
+        <div class="kv"><span>Transfers</span><b>Narita Express 60 min · Keikyu 20 min</b></div>
+        <div class="kv"><span>Best value</span><b>April and October</b></div>
+        <div class="kv"><span>Currency</span><b>JPY · cards accepted everywhere</b></div>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="footer" style="margin-top:40px">
+  <div style="max-width:1320px;margin:0 auto;padding:26px 80px;display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between;color:#64748b;font-size:13px;border-top:1px solid #e2e8f0">
+    <span>eNAir · conceptual airline · design system lab</span>
+    <span><a href="enair-post-booking.html">Post-booking</a> · <a href="enair-help.html">Help</a> · <a href="enair-about-contact.html">Contact</a></span>
+  </div>
+</footer>
+<div id="toast" class="toast"></div>
+<script src="flow.js"></script>
+</body>
+</html>

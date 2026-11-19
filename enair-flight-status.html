@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flight status · eNAir</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="enair-app.css?v=45">
+<link rel="stylesheet" href="enair-flow.css?v=45">
+</head>
+<body data-page="status" class="">
+<header class="nav">
+  <a class="brand" href="enair-homepage.html"><span class="brand-badge">eN</span>eNAir</a>
+  <nav class="nav-links"><a href="enair-destinations.html">Destinations</a><a href="enair-booking.html">Book Flights</a><a href="enair-fleet-experience.html">Our Fleet</a><a href="enair-loyalty.html">Loyalty</a><a href="enair-help.html">Help</a></nav>
+  <div class="nav-actions">
+    <span class="currency">₸ <span>KZT</span> ▾</span>
+    <a class="btn btn-ghost btn-sm" href="enair-manage-booking.html">Manage booking</a>
+    <a class="btn btn-dark btn-sm" href="enair-signin.html">Sign in</a>
+  </div>
+</header>
+
+<main class="flow-page">
+  <div class="flow-head">
+    <span class="eyebrow">Flight status</span>
+    <h1>Track any eNAir flight</h1>
+    <p>Enter a flight number to see gate, terminal and the current estimate.</p>
+  </div>
+
+  <form class="panel" id="status-form" style="margin-bottom:22px">
+    <div class="field-grid" style="grid-template-columns:2fr 1fr auto;align-items:end">
+      <div class="field" style="margin:0">
+        <label for="flight-number">Flight number</label>
+        <input class="input" id="flight-number" placeholder="eN-102" value="eN-102">
+      </div>
+      <div class="field" style="margin:0">
+        <label for="flight-date">Date</label>
+        <input class="input" id="flight-date" type="date" value="2026-03-28">
+      </div>
+      <button class="btn btn-primary" type="submit" style="height:52px">Check status</button>
+    </div>
+    <p class="hint" style="margin-top:10px">Try eN-102 or eN-88.</p>
+  </form>
+
+  <section class="panel" id="status-card">
+    <div class="status-hero">
+      <div>
+        <p style="font:700 34px 'Outfit'" data-status="route">New York → London</p>
+        <p class="muted" style="font-size:14px"><span data-status="flight_number">eN-102</span> · <span data-status="aircraft">Airbus A350-H2</span> · <span data-status="departure_time">28.03.2026 08:15</span></p>
+      </div>
+      <span class="badge badge-green" data-status="status_label">On time</span>
+    </div>
+    <div class="progress-line"><i style="width:60%"></i><span class="progress-air" style="left:60%">✈</span></div>
+    <div class="route-labels"><span>New York</span><span>London</span></div>
+    <div class="kv-grid three" style="margin-top:22px">
+      <div class="kv"><span>Departure</span><b data-status="departure_time">08:15 · Terminal 4 · Gate B22</b></div>
+      <div class="kv"><span>Arrival</span><b data-status="arrival_time">20:30 · Terminal 2 · Gate 12</b></div>
+      <div class="kv"><span>Duration</span><b>7 h 15 m · non-stop</b></div>
+    </div>
+  </section>
+
+  <section class="panel" style="margin-top:22px">
+    <h2 style="font-size:17px;margin-bottom:10px">Recent searches</h2>
+    <p class="small muted">eN-102 · New York → London · On time</p>
+    <p class="small muted">eN-88 · London → Tokyo · Delayed 25 min</p>
+    <p class="small muted">eN-204 · New York → Paris · Boarding</p>
+  </section>
+</main>
+<footer class="footer" style="margin-top:40px">
+  <div style="max-width:1320px;margin:0 auto;padding:26px 80px;display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between;color:#64748b;font-size:13px;border-top:1px solid #e2e8f0">
+    <span>eNAir · conceptual airline · design system lab</span>
+    <span><a href="enair-post-booking.html">Post-booking</a> · <a href="enair-help.html">Help</a> · <a href="enair-about-contact.html">Contact</a></span>
+  </div>
+</footer>
+<div id="toast" class="toast"></div>
+<script src="flow.js"></script>
+</body>
+</html>

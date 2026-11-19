@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cancel booking · eNAir</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="enair-app.css?v=45">
+<link rel="stylesheet" href="enair-flow.css?v=45">
+</head>
+<body data-page="refund" class="">
+<header class="nav">
+  <a class="brand" href="enair-homepage.html"><span class="brand-badge">eN</span>eNAir</a>
+  <nav class="nav-links"><a href="enair-destinations.html">Destinations</a><a href="enair-booking.html">Book Flights</a><a href="enair-fleet-experience.html">Our Fleet</a><a href="enair-loyalty.html">Loyalty</a><a href="enair-help.html">Help</a></nav>
+  <div class="nav-actions">
+    <span class="currency">₸ <span>KZT</span> ▾</span>
+    <a class="btn btn-ghost btn-sm" href="enair-manage-booking.html">Manage booking</a>
+    <a class="btn btn-dark btn-sm" href="enair-signin.html">Sign in</a>
+  </div>
+</header>
+
+<main class="flow-page">
+  <div class="flow-head">
+    <span class="eyebrow">Refunds</span>
+    <h1>Cancel your booking</h1>
+    <p>Tell us why you are cancelling. The refund is calculated from your fare conditions.</p>
+  </div>
+
+  <div class="flow-grid">
+    <div class="flow-col">
+      <section class="panel" id="refund-form">
+        <h2 style="font-size:18px;margin-bottom:18px">Reason for cancellation</h2>
+        <label class="check-line" style="margin-bottom:14px"><input type="radio" name="reason" checked> Change of plans</label><label class="check-line" style="margin-bottom:14px"><input type="radio" name="reason"> Found a cheaper flight</label><label class="check-line" style="margin-bottom:14px"><input type="radio" name="reason"> Booked by mistake</label><label class="check-line" style="margin-bottom:14px"><input type="radio" name="reason"> Medical reasons</label><label class="check-line" style="margin-bottom:14px"><input type="radio" name="reason"> Other</label>
+        <div class="divider"></div>
+        <div class="field" id="f-note">
+  <label for="note">Note for the refund team (optional)</label>
+  <input class="input" id="note" name="note" type="text" placeholder="Anything we should know?" value="">
+  <span class="error">Check this field</span>
+</div>
+      </section>
+
+      <section class="panel hidden" id="refund-done">
+        <div class="alert ok">Refund issued. The money will arrive in 5–7 business days to the original card.</div>
+        <div class="kv-grid three">
+          <div class="kv"><span>Refund</span><b data-refund-done>₸617,090</b></div>
+          <div class="kv"><span>Status</span><b>Processing</b></div>
+          <div class="kv"><span>Reference</span><b>EN482913</b></div>
+        </div>
+        <a class="btn btn-ghost" href="enair-manage-booking.html" style="margin-top:18px">Back to my trips</a>
+      </section>
+    </div>
+
+    <aside class="flow-col">
+      <section class="panel">
+        <h2 style="font-size:18px;margin-bottom:16px">Refund summary</h2>
+        <div class="kv-grid" style="grid-template-columns:1fr">
+          <div class="kv"><span>Fare paid</span><b data-paid>₸604,660</b></div>
+          <div class="kv"><span>Taxes and fees</span><b>₸96,000</b></div>
+          <div class="kv"><span>Cancellation fee</span><b data-fee style="color:#ef4444">−₸83,570</b></div>
+        </div>
+        <div class="divider"></div>
+        <div class="sum-row"><span>Refund to original card</span><strong data-refund>₸617,090</strong></div>
+        <p class="hint" style="margin:10px 0 14px">Miles used for this booking are returned instantly.</p>
+        <button class="btn btn-danger btn-block" id="refund-confirm">Cancel booking</button>
+        <a class="btn btn-ghost btn-block" href="enair-manage-booking.html" style="margin-top:8px">Keep my booking</a>
+      </section>
+    </aside>
+  </div>
+</main>
+<footer class="footer" style="margin-top:40px">
+  <div style="max-width:1320px;margin:0 auto;padding:26px 80px;display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between;color:#64748b;font-size:13px;border-top:1px solid #e2e8f0">
+    <span>eNAir · conceptual airline · design system lab</span>
+    <span><a href="enair-post-booking.html">Post-booking</a> · <a href="enair-help.html">Help</a> · <a href="enair-about-contact.html">Contact</a></span>
+  </div>
+</footer>
+<div id="toast" class="toast"></div>
+<script src="flow.js"></script>
+</body>
+</html>

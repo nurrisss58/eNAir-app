@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rewards · eNAir</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="enair-app.css?v=45">
+<link rel="stylesheet" href="enair-flow.css?v=45">
+</head>
+<body data-page="rewards" class="">
+<header class="nav">
+  <a class="brand" href="enair-homepage.html"><span class="brand-badge">eN</span>eNAir</a>
+  <nav class="nav-links"><a href="enair-destinations.html">Destinations</a><a href="enair-booking.html">Book Flights</a><a href="enair-fleet-experience.html">Our Fleet</a><a href="enair-loyalty.html">Loyalty</a><a href="enair-help.html">Help</a></nav>
+  <div class="nav-actions">
+    <span class="currency">₸ <span>KZT</span> ▾</span>
+    <a class="btn btn-ghost btn-sm" href="enair-manage-booking.html">Manage booking</a>
+    <a class="btn btn-dark btn-sm" href="enair-signin.html">Sign in</a>
+  </div>
+</header>
+
+<main class="flow-page">
+  <div class="flow-head">
+    <span class="eyebrow">eNAir Miles</span>
+    <h1>Redeem your miles</h1>
+    <p>Upgrade a cabin, open the lounge or pay for baggage with miles instead of cash.</p>
+  </div>
+
+  <div class="flow-grid">
+    <div class="flow-col">
+      <div class="filters">
+        <button class="is-active" data-filter="all">All rewards</button>
+        <button data-filter="upgrade">Upgrades</button>
+        <button data-filter="lounge">Lounge</button>
+        <button data-filter="bag">Baggage</button>
+        <button data-filter="fast">Security</button>
+      </div>
+      <div class="tiles"><article class="tile" data-kind="upgrade">
+  <div class="art" style="background:linear-gradient(135deg,#06b6d4,#0e7490)"></div>
+  <div class="body">
+    <h3>Business upgrade</h3>
+    <p>JFK → LHR · one way</p>
+    <div class="foot"><span class="miles">25 000 miles</span>
+      <a class="btn btn-ghost btn-sm" href="enair-redeem.html?reward=upgrade&miles=25000&name=Business%20upgrade">Redeem</a>
+    </div>
+  </div>
+</article><article class="tile" data-kind="lounge">
+  <div class="art" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9)"></div>
+  <div class="body">
+    <h3>Lounge access</h3>
+    <p>Terminal 4 · 3 hours</p>
+    <div class="foot"><span class="miles">8 500 miles</span>
+      <a class="btn btn-ghost btn-sm" href="enair-redeem.html?reward=lounge&miles=8500&name=Lounge%20access">Redeem</a>
+    </div>
+  </div>
+</article><article class="tile" data-kind="bag">
+  <div class="art" style="background:linear-gradient(135deg,#f59e0b,#b45309)"></div>
+  <div class="body">
+    <h3>Extra bag</h3>
+    <p>23 kg on this booking</p>
+    <div class="foot"><span class="miles">6 000 miles</span>
+      <a class="btn btn-ghost btn-sm" href="enair-redeem.html?reward=bag&miles=6000&name=Extra%20bag">Redeem</a>
+    </div>
+  </div>
+</article><article class="tile" data-kind="seat">
+  <div class="art" style="background:linear-gradient(135deg,#10b981,#047857)"></div>
+  <div class="body">
+    <h3>Seat with extra legroom</h3>
+    <p>Exit row, subject to availability</p>
+    <div class="foot"><span class="miles">4 200 miles</span>
+      <a class="btn btn-ghost btn-sm" href="enair-redeem.html?reward=seat&miles=4200&name=Seat%20with%20extra%20legroom">Redeem</a>
+    </div>
+  </div>
+</article><article class="tile" data-kind="fast">
+  <div class="art" style="background:linear-gradient(135deg,#0ea5e9,#0369a1)"></div>
+  <div class="body">
+    <h3>Fast track security</h3>
+    <p>Terminal 4 priority lane</p>
+    <div class="foot"><span class="miles">2 800 miles</span>
+      <a class="btn btn-ghost btn-sm" href="enair-redeem.html?reward=fast&miles=2800&name=Fast%20track%20security">Redeem</a>
+    </div>
+  </div>
+</article><article class="tile" data-kind="carbon">
+  <div class="art" style="background:linear-gradient(135deg,#64748b,#334155)"></div>
+  <div class="body">
+    <h3>Carbon offset</h3>
+    <p>Offset 1.2 t of CO₂ for this trip</p>
+    <div class="foot"><span class="miles">3 400 miles</span>
+      <a class="btn btn-ghost btn-sm" href="enair-redeem.html?reward=carbon&miles=3400&name=Carbon%20offset">Redeem</a>
+    </div>
+  </div>
+</article></div>
+    </div>
+
+    <aside class="flow-col">
+      <section class="panel dark">
+        <span style="font:600 11px 'Geist';letter-spacing:.12em;color:#a5f3fc">YOUR BALANCE</span>
+        <p style="font:700 30px 'Outfit';margin-top:8px" data-miles>48,250 miles</p>
+        <p style="color:#cbd5e1;font-size:13px;margin-top:6px">Gold member · 3 750 miles until Platinum</p>
+      </section>
+      <section class="panel soft">
+        <h2 style="font-size:17px;margin-bottom:8px">How redemption works</h2>
+        <p class="muted" style="font-size:14px">Miles are deducted instantly. Taxes on award tickets are paid by card at checkout.</p>
+      </section>
+    </aside>
+  </div>
+</main>
+<footer class="footer" style="margin-top:40px">
+  <div style="max-width:1320px;margin:0 auto;padding:26px 80px;display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between;color:#64748b;font-size:13px;border-top:1px solid #e2e8f0">
+    <span>eNAir · conceptual airline · design system lab</span>
+    <span><a href="enair-post-booking.html">Post-booking</a> · <a href="enair-help.html">Help</a> · <a href="enair-about-contact.html">Contact</a></span>
+  </div>
+</footer>
+<div id="toast" class="toast"></div>
+<script src="flow.js"></script>
+</body>
+</html>

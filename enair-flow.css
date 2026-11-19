@@ -1,0 +1,234 @@
+/* eNAir — flow pages: manage booking, check-in, boarding pass, changes,
+   baggage, rewards, account, support, status and mobile screens. */
+
+.flow-page{max-width:1320px;margin:0 auto;padding:34px 80px 96px}
+.flow-head{margin:0 0 26px}
+.flow-head .eyebrow{margin-bottom:10px}
+.flow-head h1{font-size:clamp(30px,3.4vw,46px);margin-bottom:10px}
+.flow-head p{max-width:720px;color:var(--muted);font:400 16px/1.6 'Geist'}
+
+.flow-grid{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:26px;align-items:start}
+.flow-grid.wide{grid-template-columns:minmax(0,1fr)}
+.flow-grid.center{grid-template-columns:minmax(0,1fr);justify-items:center}
+.flow-col{display:flex;flex-direction:column;gap:22px;min-width:0}
+
+.panel{background:#fff;border:1px solid var(--line);border-radius:24px;padding:28px}
+.panel.tight{padding:20px}
+.panel.dark{background:#0f172a;border-color:#0f172a;color:#fff}
+.panel.soft{background:#f8fafc}
+.panel.shadow{box-shadow:var(--shadow)}
+.panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:20px}
+.panel-head h2{font-size:20px}
+.panel-head p{color:var(--muted);font-size:14px;margin-top:4px}
+
+.kv{display:flex;flex-direction:column;gap:4px}
+.kv b{font:600 15px 'Geist';color:var(--ink)}
+.kv span{font:600 11px 'Geist';letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.kv-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:18px}
+.kv-grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+
+.divider{height:1px;background:var(--line);margin:20px 0}
+
+.field-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px}
+.field.inline{margin:0}
+.field .hint{margin-top:6px}
+
+.check-line{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--ink-2);cursor:pointer}
+.check-line input{width:18px;height:18px;accent-color:var(--violet);margin-top:2px}
+.check-line a{color:#6d28d9;font-weight:600}
+
+.btn-danger{background:#ef4444;color:#fff}
+.btn-danger:hover{filter:brightness(1.04)}
+.btn-soft{background:var(--violet-soft);color:#6d28d9}
+.btn-row{display:flex;flex-wrap:wrap;gap:10px}
+
+/* ---------- stepper ---------- */
+.flow-stepper{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:26px}
+.flow-step{display:flex;align-items:center;gap:10px;font:600 13px 'Geist';color:var(--muted)}
+.flow-step i{width:32px;height:32px;border-radius:100px;background:#e2e8f0;color:#64748b;display:grid;place-items:center;font:700 12px 'Geist';font-style:normal}
+.flow-step.done i{background:var(--violet);color:#fff}
+.flow-step.now i{background:var(--ink);color:#fff}
+.flow-step.now{color:var(--ink)}
+.flow-step span.line{width:54px;height:2px;background:#e2e8f0;border-radius:2px}
+
+/* ---------- date strip & options ---------- */
+.date-strip{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px;margin-bottom:22px}
+.date-card{border:1px solid var(--line);border-radius:18px;background:#fff;padding:14px 12px;text-align:left;transition:.16s}
+.date-card:hover{border-color:#c4b5fd;transform:translateY(-1px)}
+.date-card.is-active{background:var(--ink);border-color:var(--ink);color:#fff}
+.date-card em{display:block;font:600 11px 'Geist';letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-style:normal}
+.date-card.is-active em{color:#a5f3fc}
+.date-card b{display:block;font:700 18px 'Outfit';margin:4px 0}
+.date-card small{font-size:12px;color:var(--muted)}
+.date-card.is-active small{color:#cbd5e1}
+
+.option-list{display:flex;flex-direction:column;gap:10px}
+.option{display:grid;grid-template-columns:auto 1fr auto auto;gap:16px;align-items:center;border:1px solid var(--line);border-radius:18px;background:#fff;padding:16px 18px;cursor:pointer;transition:.16s}
+.option:hover{border-color:#c4b5fd}
+.option.is-active{background:#f5f3ff;border-color:#ddd6fe}
+.option .times{font:700 18px 'Outfit'}
+.option .meta{font-size:13px;color:var(--muted)}
+.option .delta{font:600 15px 'Geist';color:#6d28d9}
+.option .radio{width:22px;height:22px;border-radius:100px;border:1.5px solid #cbd5e1;display:grid;place-items:center}
+.option.is-active .radio{border-color:var(--violet);background:var(--violet)}
+.option.is-active .radio::after{content:"";width:8px;height:8px;border-radius:100px;background:#fff}
+
+/* ---------- quantity stepper ---------- */
+.qty{display:inline-flex;align-items:center;gap:2px;height:38px;border-radius:100px;background:var(--soft);padding:3px}
+.qty button{width:30px;height:32px;border:0;border-radius:100px;background:transparent;color:var(--ink);font:600 16px 'Geist'}
+.qty button:hover{background:#fff}
+.qty span{min-width:26px;text-align:center;font:600 14px 'Geist'}
+
+.bag-row{display:flex;align-items:center;justify-content:space-between;gap:18px;border:1px solid var(--line);border-radius:18px;padding:18px 20px;background:#fff;margin-bottom:10px}
+.bag-row h3{font-size:17px;margin-bottom:4px}
+.bag-row p{color:var(--muted);font-size:13px}
+.bag-row .price{font:600 15px 'Geist';white-space:nowrap}
+
+/* ---------- timeline ---------- */
+.timeline{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:8px 4px 0}
+.timeline::before{content:"";position:absolute;left:6%;right:6%;top:22px;height:2px;background:#e2e8f0}
+.timeline .progress{position:absolute;left:6%;top:22px;height:2px;background:var(--violet);border-radius:2px}
+.tl-step{position:relative;z-index:1;text-align:left}
+.tl-step i{display:grid;place-items:center;width:28px;height:28px;border-radius:100px;background:#e2e8f0;color:#64748b;font:700 11px 'Geist';font-style:normal;margin-bottom:12px}
+.tl-step.done i{background:var(--violet);color:#fff}
+.tl-step b{display:block;font:600 14px 'Geist'}
+.tl-step span{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+
+/* ---------- boarding pass ---------- */
+.pass{display:grid;grid-template-columns:minmax(0,1fr) 260px;background:#fff;border:1px solid var(--line);border-radius:28px;overflow:hidden;box-shadow:var(--shadow-lg)}
+.pass-main{padding:32px 36px}
+.pass-stub{padding:32px 24px;border-left:1px dashed #cbd5e1;display:flex;flex-direction:column;align-items:center;gap:16px;background:#fbfdff}
+.pass-route{font:700 44px 'Outfit';letter-spacing:-.02em;margin:6px 0 4px}
+.pass-sub{color:var(--muted);font-size:14px;margin-bottom:22px}
+.qr{display:grid;grid-template-columns:repeat(21,1fr);grid-auto-rows:1fr;width:150px;height:150px;background:#fff;padding:8px;border:1px solid var(--line);border-radius:10px}
+.qr i{display:block;background:#0f172a}
+.qr i.off{background:transparent}
+.barcode{display:flex;align-items:flex-end;gap:3px;height:64px}
+.barcode i{display:block;width:2px;background:#0f172a}
+.barcode i.w{width:4px}
+.pass-seat{font:700 40px 'Outfit';letter-spacing:-.02em}
+
+/* ---------- chat ---------- */
+.chat{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:24px;overflow:hidden;box-shadow:var(--shadow)}
+.chat-head{display:flex;align-items:center;gap:12px;padding:16px 22px;background:#0f172a;color:#fff}
+.chat-head .avatar{width:40px;height:40px;border-radius:100px;background:var(--grad);display:grid;place-items:center;font:700 13px 'Geist'}
+.chat-head b{display:block;font:600 15px 'Geist'}
+.chat-head small{color:#10b981;font-size:12px}
+.chat-body{display:flex;flex-direction:column;gap:12px;padding:22px;height:420px;overflow:auto;background:#fbfdff}
+.bubble{max-width:76%;padding:14px 16px;border-radius:18px;font:400 14px/1.5 'Geist'}
+.bubble.bot{background:var(--soft);color:var(--ink-2);border-bottom-left-radius:6px}
+.bubble.me{align-self:flex-end;background:var(--ink);color:#fff;border-bottom-right-radius:6px}
+.chat-quick{display:flex;flex-wrap:wrap;gap:8px;padding:0 22px 12px}
+.chat-quick button{border:1px solid var(--line);background:#fff;border-radius:100px;padding:8px 14px;font:600 12px 'Geist';color:var(--ink-2)}
+.chat-quick button:hover{border-color:#c4b5fd;color:#6d28d9}
+.chat-form{display:flex;gap:10px;padding:14px 18px;border-top:1px solid var(--line)}
+.chat-form input{flex:1;height:46px;border:1px solid var(--line);border-radius:100px;padding:0 18px;font:400 14px 'Geist'}
+.chat-form input:focus{outline:none;border-color:#c4b5fd}
+
+/* ---------- tiles ---------- */
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.tile{border:1px solid var(--line);border-radius:22px;background:#fff;overflow:hidden;display:flex;flex-direction:column}
+.tile .art{height:110px;background:var(--grad)}
+.tile .body{padding:18px 20px 20px;display:flex;flex-direction:column;gap:8px;flex:1}
+.tile h3{font-size:17px}
+.tile p{color:var(--muted);font-size:13px;flex:1}
+.tile .foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:4px}
+.tile .miles{font:600 14px 'Geist';color:#6d28d9}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.filters button{border:1px solid var(--line);background:#fff;border-radius:100px;padding:9px 16px;font:600 13px 'Geist';color:var(--ink-2)}
+.filters button.is-active{background:var(--ink);border-color:var(--ink);color:#fff}
+
+/* ---------- side nav (account) ---------- */
+.account{display:grid;grid-template-columns:280px minmax(0,1fr);gap:24px;align-items:start}
+.account-nav{background:#fff;border:1px solid var(--line);border-radius:24px;padding:18px}
+.account-nav a{display:block;padding:11px 14px;border-radius:12px;font:500 14px 'Geist';color:var(--ink-2)}
+.account-nav a:hover{background:var(--soft)}
+.account-nav a.is-active{background:var(--violet-soft);color:#6d28d9;font-weight:600}
+.switch-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0;border-bottom:1px solid var(--line)}
+.switch-row:last-child{border-bottom:0}
+.switch-row p{font-size:13px;color:var(--muted);margin-top:2px}
+.switch{position:relative;width:44px;height:24px;flex:none}
+.switch input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.switch span{position:absolute;inset:0;border-radius:100px;background:#cbd5e1;transition:.18s}
+.switch span::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:100px;background:#fff;transition:.18s}
+.switch input:checked + span{background:var(--violet)}
+.switch input:checked + span::after{transform:translateX(20px)}
+
+/* ---------- saved cards ---------- */
+.saved-card{display:flex;align-items:center;gap:16px;border:1px solid var(--line);border-radius:18px;padding:16px 18px;background:#fff;margin-bottom:10px}
+.saved-card.is-default{background:#f8fafc}
+.card-brand{width:64px;height:40px;border-radius:8px;display:grid;place-items:center;color:#fff;font:700 11px 'Geist';letter-spacing:.04em}
+.card-brand.visa{background:#1e3a8a}
+.card-brand.mastercard{background:#b45309}
+.card-brand.amex{background:#0e7490}
+.saved-card b{font:600 15px 'Geist'}
+.saved-card small{display:block;color:var(--muted);font-size:12px}
+.saved-card .grow{flex:1}
+.add-card{display:flex;align-items:center;gap:10px;border:1px dashed #c4b5fd;border-radius:18px;padding:16px 18px;background:#fbfaff;color:#6d28d9;font:600 14px 'Geist';width:100%;text-align:left}
+
+/* ---------- status ---------- */
+.status-hero{display:flex;flex-wrap:wrap;align-items:center;gap:18px;justify-content:space-between}
+.progress-line{position:relative;height:6px;border-radius:100px;background:#e2e8f0;margin:26px 0 10px}
+.progress-line i{position:absolute;left:0;top:0;bottom:0;border-radius:100px;background:var(--violet)}
+.progress-air{position:absolute;top:-9px;transform:translateX(-50%);background:var(--violet);color:#fff;width:26px;height:26px;border-radius:100px;display:grid;place-items:center;font-size:12px}
+.route-labels{display:flex;justify-content:space-between;font-size:12px;color:var(--muted)}
+
+/* ---------- feedback ---------- */
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,16px);background:#0f172a;color:#fff;padding:14px 22px;border-radius:14px;font:600 14px 'Geist';opacity:0;pointer-events:none;transition:.22s;z-index:200;max-width:min(90vw,560px)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast.ok{background:#065f46}
+.toast.err{background:#991b1b}
+.alert{border-radius:16px;padding:14px 18px;font:500 14px 'Geist';margin-bottom:16px}
+.alert.err{background:#fef2f2;border:1px solid #fecaca;color:#991b1b}
+.alert.ok{background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46}
+.alert.warn{background:#fffbeb;border:1px solid #fde68a;color:#92400e}
+.hidden{display:none !important}
+
+/* ---------- mobile screens ---------- */
+.m-shell{max-width:430px;margin:0 auto;padding:20px 20px 120px}
+.m-head{display:flex;align-items:center;justify-content:space-between;padding:14px 0 18px}
+.m-head b{font:700 17px 'Outfit'}
+.m-title{font:700 28px 'Outfit';margin-bottom:16px}
+.m-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px;margin-bottom:14px}
+.m-bottom{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.94);backdrop-filter:blur(12px);border-top:1px solid var(--line);padding:12px 20px}
+.m-bottom .btn{width:100%}
+.m-pass{border-radius:24px;overflow:hidden;border:1px solid var(--line);background:#fff}
+.m-pass .top{padding:24px 20px}
+.m-pass .stub{padding:20px;border-top:1px dashed #cbd5e1;display:flex;flex-direction:column;align-items:center;gap:14px;background:#fbfdff}
+
+@media (max-width:1100px){
+  .flow-page{padding:26px 28px 80px}
+  .flow-grid{grid-template-columns:minmax(0,1fr)}
+  .account{grid-template-columns:minmax(0,1fr)}
+  .date-strip{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .pass{grid-template-columns:minmax(0,1fr)}
+  .pass-stub{border-left:0;border-top:1px dashed #cbd5e1}
+  .timeline{grid-template-columns:repeat(2,1fr);gap:18px}
+  .timeline::before,.timeline .progress{display:none}
+}
+@media (max-width:640px){
+  .flow-page{padding:20px 18px 72px}
+  .panel{padding:20px}
+  .date-strip{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .kv-grid.three{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .chat-body{height:360px}
+  .tiles{grid-template-columns:minmax(0,1fr)}
+}
+
+
+/* ---------- mobile-only screens ---------- */
+.mobile-view{background:#f8fafc;overflow-x:hidden;width:100%;max-width:430px;margin:0 auto}
+html:has(body.mobile-view){overflow-x:hidden}
+.mobile-view .m-shell{width:100%}
+.mobile-view .field-grid{grid-template-columns:1fr}
+.mobile-view .kv-grid{grid-template-columns:1fr 1fr}
+.mobile-view .m-card .sum-row strong{font-size:18px}
+.mobile-view .m-top{display:flex;align-items:center;justify-content:space-between;max-width:430px;margin:0 auto;padding:14px 20px 4px}
+.mobile-view .m-top a{font:700 17px 'Outfit';color:var(--ink)}
+.mobile-view .m-top .menu{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);background:#fff;display:grid;place-items:center;font-size:16px}
+@media (max-width:900px){
+  .nav{padding:0 18px;gap:12px}
+  .nav-links{display:none}
+  .nav-actions .currency{display:none}
+  .flow-page{padding:22px 18px 80px}
+}

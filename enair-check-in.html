@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Check-in · eNAir</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="enair-app.css?v=45">
+<link rel="stylesheet" href="enair-flow.css?v=45">
+</head>
+<body data-page="checkin" class="">
+<header class="nav">
+  <a class="brand" href="enair-homepage.html"><span class="brand-badge">eN</span>eNAir</a>
+  <nav class="nav-links"><a href="enair-destinations.html">Destinations</a><a href="enair-booking.html">Book Flights</a><a href="enair-fleet-experience.html">Our Fleet</a><a href="enair-loyalty.html">Loyalty</a><a href="enair-help.html">Help</a></nav>
+  <div class="nav-actions">
+    <span class="currency">₸ <span>KZT</span> ▾</span>
+    <a class="btn btn-ghost btn-sm" href="enair-manage-booking.html">Manage booking</a>
+    <a class="btn btn-dark btn-sm" href="enair-signin.html">Sign in</a>
+  </div>
+</header>
+
+<main class="flow-page">
+  <div class="flow-head">
+    <span class="eyebrow">Check-in</span>
+    <h1>Passenger details</h1>
+    <p>Confirm travel documents for both passengers. Names must match the passport.</p>
+  </div>
+  <div class="flow-stepper">
+  <span class="flow-step done"><i>01</i>Booking</span><span class="line"></span>
+  <span class="flow-step done"><i>02</i>Seats</span><span class="line"></span>
+  <span class="flow-step now"><i>03</i>Passengers</span><span class="line"></span>
+  <span class="flow-step"><i>04</i>Boarding pass</span>
+</div>
+
+  <div class="flow-grid">
+    <form class="flow-col" id="checkin-form" novalidate>
+      <section class="panel">
+        <div class="panel-head">
+          <div style="display:flex;align-items:center;gap:14px">
+            <span class="avatar" style="width:52px;height:52px;background:#eef2ff;color:#6d28d9;display:grid;place-items:center;font:700 16px 'Geist';border-radius:100px">AM</span>
+            <div><h2 data-passenger-name>Alex Morgan</h2><p>Adult · Seat 12A</p></div>
+          </div>
+        </div>
+        <div class="field-grid">
+          <div class="field" id="f-passport1" data-validate="passport">
+  <label for="passport1">Passport number</label>
+  <input class="input" id="passport1" name="passport1" type="text" placeholder="X1234567" value="X1234567">
+  <span class="error">Check this field</span>
+</div>
+          <div class="field" id="f-dob1" data-validate="date">
+  <label for="dob1">Date of birth</label>
+  <input class="input" id="dob1" name="dob1" type="text" placeholder="12 Aug 1991" value="12 Aug 1991">
+  <span class="error">Check this field</span>
+</div>
+          <div class="field" id="f-nat1">
+  <label for="nat1">Nationality</label>
+  <input class="input" id="nat1" name="nat1" type="text" placeholder="United States" value="United States">
+  <span class="error">Check this field</span>
+</div>
+        </div>
+        <label class="check"><input type="checkbox" id="consent" checked> I confirm the document data and accept the conditions of carriage</label>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div style="display:flex;align-items:center;gap:14px">
+            <span class="avatar" style="width:52px;height:52px;background:#eef2ff;color:#6d28d9;display:grid;place-items:center;font:700 16px 'Geist';border-radius:100px">SR</span>
+            <div><h2 data-passenger-name>Sam Reed</h2><p>Adult · Seat 12B</p></div>
+          </div>
+        </div>
+        <div class="field-grid">
+          <div class="field" id="f-passport2" data-validate="passport">
+  <label for="passport2">Passport number</label>
+  <input class="input" id="passport2" name="passport2" type="text" placeholder="X7654321" value="X7654321">
+  <span class="error">Check this field</span>
+</div>
+          <div class="field" id="f-dob2" data-validate="date">
+  <label for="dob2">Date of birth</label>
+  <input class="input" id="dob2" name="dob2" type="text" placeholder="03 Feb 1994" value="03 Feb 1994">
+  <span class="error">Check this field</span>
+</div>
+          <div class="field" id="f-nat2">
+  <label for="nat2">Nationality</label>
+  <input class="input" id="nat2" name="nat2" type="text" placeholder="United States" value="United States">
+  <span class="error">Check this field</span>
+</div>
+        </div>
+      </section>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" type="submit">Continue to boarding pass</button>
+        <a class="btn btn-ghost" href="enair-manage-booking.html">Back to booking</a>
+      </div>
+    </form>
+
+    <aside class="flow-col">
+      <section class="panel">
+        <h2 style="font-size:18px;margin-bottom:16px">Your flight</h2>
+        <p style="font:700 26px 'Outfit';margin-bottom:4px">JFK → LHR</p>
+        <p class="muted" style="font-size:13px;margin-bottom:18px">Reference <b data-checkin-ref>EN482913</b></p>
+        <div class="kv-grid" style="grid-template-columns:1fr 1fr">
+          <div class="kv"><span>Date</span><b>28 Mar 2026</b></div>
+          <div class="kv"><span>Departure</span><b>08:15</b></div>
+          <div class="kv"><span>Gate</span><b>B22</b></div>
+          <div class="kv"><span>Boarding</span><b>07:35</b></div>
+        </div>
+        <div class="divider"></div>
+        <p class="badge badge-amber">Check-in closes in 3 h 12 m</p>
+        <ul class="muted" style="margin:16px 0 0 18px;font-size:14px;line-height:1.9">
+          <li>2 passengers</li>
+          <li>Seats <span id="seat-value">12A · 12B</span></li>
+          <li>2 bags included</li>
+        </ul>
+        <p class="hint" style="margin-top:14px">Bags can still be added after check-in.</p>
+      </section>
+    </aside>
+  </div>
+</main>
+<footer class="footer" style="margin-top:40px">
+  <div style="max-width:1320px;margin:0 auto;padding:26px 80px;display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between;color:#64748b;font-size:13px;border-top:1px solid #e2e8f0">
+    <span>eNAir · conceptual airline · design system lab</span>
+    <span><a href="enair-post-booking.html">Post-booking</a> · <a href="enair-help.html">Help</a> · <a href="enair-about-contact.html">Contact</a></span>
+  </div>
+</footer>
+<div id="toast" class="toast"></div>
+<script src="flow.js"></script>
+</body>
+</html>

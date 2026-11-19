@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Boarding pass · eNAir</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="enair-app.css?v=45">
+<link rel="stylesheet" href="enair-flow.css?v=45">
+</head>
+<body data-page="pass" class="">
+<header class="nav">
+  <a class="brand" href="enair-homepage.html"><span class="brand-badge">eN</span>eNAir</a>
+  <nav class="nav-links"><a href="enair-destinations.html">Destinations</a><a href="enair-booking.html">Book Flights</a><a href="enair-fleet-experience.html">Our Fleet</a><a href="enair-loyalty.html">Loyalty</a><a href="enair-help.html">Help</a></nav>
+  <div class="nav-actions">
+    <span class="currency">₸ <span>KZT</span> ▾</span>
+    <a class="btn btn-ghost btn-sm" href="enair-manage-booking.html">Manage booking</a>
+    <a class="btn btn-dark btn-sm" href="enair-signin.html">Sign in</a>
+  </div>
+</header>
+
+<main class="flow-page">
+  <div class="flow-head">
+    <span class="eyebrow">Boarding pass</span>
+    <h1>You are checked in</h1>
+    <p>Show this pass at security and at the gate. A screenshot is accepted.</p>
+  </div>
+
+  <div class="pass">
+    <div class="pass-main">
+      <p class="eyebrow" style="margin-bottom:10px">eNAir · <span data-pass="cabin">Economy Flex</span></p>
+      <p class="pass-route"><span data-pass="from">JFK</span> → <span data-pass="to">LHR</span></p>
+      <p class="pass-sub"><span data-pass="date">28 Mar 2026</span> · Flight <span data-pass="flight">eN-102</span></p>
+
+      <div class="kv-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:20px">
+        <div class="kv"><span>Passenger</span><b data-pass="passenger">Alex Morgan</b></div>
+        <div class="kv"><span>Seat</span><b data-pass="seat">12A</b></div>
+        <div class="kv"><span>Gate</span><b data-pass="gate">B22</b></div>
+        <div class="kv"><span>Boarding</span><b data-pass="boarding">07:35</b></div>
+      </div>
+      <div class="kv-grid" style="grid-template-columns:repeat(4,1fr)">
+        <div class="kv"><span>Departure</span><b data-pass="departure">08:15</b></div>
+        <div class="kv"><span>Terminal</span><b data-pass="terminal">4</b></div>
+        <div class="kv"><span>Class</span><b data-pass="cabin">Economy Flex</b></div>
+        <div class="kv"><span>Bags</span><b data-pass="bags">2 × 23 kg</b></div>
+      </div>
+    </div>
+    <div class="pass-stub">
+      <div class="qr" data-qr></div>
+      <span class="muted" style="font:600 12px 'Geist';letter-spacing:.1em"><span data-pass="reference">EN482913</span></span>
+      <div class="barcode" data-barcode></div>
+      <span class="pass-seat"><span data-pass="gateSeat">12A</span></span>
+    </div>
+  </div>
+
+  <div class="btn-row" style="margin-top:24px">
+    <button class="btn btn-dark" data-toast="Added to Wallet">Add to Apple Wallet</button>
+    <button class="btn btn-ghost" data-toast="Boarding pass downloaded as PDF">Download PDF</button>
+    <button class="btn btn-ghost" data-toast="Sent to the printer">Print</button>
+    <a class="btn btn-ghost" href="enair-manage-booking.html">Manage booking</a>
+  </div>
+  <p class="hint" style="margin-top:14px">Gate closes 15 minutes before departure.</p>
+</main>
+<footer class="footer" style="margin-top:40px">
+  <div style="max-width:1320px;margin:0 auto;padding:26px 80px;display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between;color:#64748b;font-size:13px;border-top:1px solid #e2e8f0">
+    <span>eNAir · conceptual airline · design system lab</span>
+    <span><a href="enair-post-booking.html">Post-booking</a> · <a href="enair-help.html">Help</a> · <a href="enair-about-contact.html">Contact</a></span>
+  </div>
+</footer>
+<div id="toast" class="toast"></div>
+<script src="flow.js"></script>
+</body>
+</html>

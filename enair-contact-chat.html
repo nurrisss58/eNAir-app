@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Talk to a human · eNAir</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="enair-app.css?v=45">
+<link rel="stylesheet" href="enair-flow.css?v=45">
+</head>
+<body data-page="chat" class="">
+<header class="nav">
+  <a class="brand" href="enair-homepage.html"><span class="brand-badge">eN</span>eNAir</a>
+  <nav class="nav-links"><a href="enair-destinations.html">Destinations</a><a href="enair-booking.html">Book Flights</a><a href="enair-fleet-experience.html">Our Fleet</a><a href="enair-loyalty.html">Loyalty</a><a href="enair-help.html">Help</a></nav>
+  <div class="nav-actions">
+    <span class="currency">₸ <span>KZT</span> ▾</span>
+    <a class="btn btn-ghost btn-sm" href="enair-manage-booking.html">Manage booking</a>
+    <a class="btn btn-dark btn-sm" href="enair-signin.html">Sign in</a>
+  </div>
+</header>
+
+<main class="flow-page">
+  <div class="flow-head">
+    <span class="eyebrow">Support</span>
+    <h1>Talk to a human</h1>
+    <p>Average reply time is under two minutes. Chat works before and after booking.</p>
+  </div>
+
+  <div class="flow-grid">
+    <div class="flow-col">
+      <section class="chat">
+        <div class="chat-head">
+          <span class="avatar">eN</span>
+          <div><b>Mira · eNAir support</b><small>Online</small></div>
+        </div>
+        <div class="chat-body" id="chat-body">
+          <div class="bubble bot">Hi Alex, I can see your booking EN482913. How can I help today?</div>
+          <div class="bubble me">Can I move my flight to the day after tomorrow?</div>
+          <div class="bubble bot">Yes. 30 March has seats in Economy Flex. The fare difference is ₸12,400 — shall I hold it?</div>
+        </div>
+        <div class="chat-quick"><button type="button" data-quick="I need to change my flight">I need to change my flight</button><button type="button" data-quick="Where is my baggage?">Where is my baggage?</button><button type="button" data-quick="Refund status">Refund status</button></div>
+        <form class="chat-form" id="chat-form">
+          <input id="chat-input" placeholder="Write a message…" autocomplete="off">
+          <button class="btn btn-primary" type="submit">Send</button>
+        </form>
+      </section>
+    </div>
+
+    <aside class="flow-col">
+      <section class="panel">
+        <h2 style="font-size:17px;margin-bottom:10px">Talk to a human</h2>
+        <p class="muted" style="font-size:14px">Average reply time under two minutes, 24/7.</p>
+        <div class="divider"></div>
+        <p class="small"><b>Email</b><br>support@enair.com · reply in 4 h</p>
+        <p class="small" style="margin-top:12px"><b>Phone</b><br>+1 800 555 0199 · daily 07:00–23:00</p>
+      </section></aside>
+  </div>
+</main>
+<footer class="footer" style="margin-top:40px">
+  <div style="max-width:1320px;margin:0 auto;padding:26px 80px;display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between;color:#64748b;font-size:13px;border-top:1px solid #e2e8f0">
+    <span>eNAir · conceptual airline · design system lab</span>
+    <span><a href="enair-post-booking.html">Post-booking</a> · <a href="enair-help.html">Help</a> · <a href="enair-about-contact.html">Contact</a></span>
+  </div>
+</footer>
+<div id="toast" class="toast"></div>
+<script src="flow.js"></script>
+</body>
+</html>

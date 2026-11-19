@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Baggage · eNAir</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="enair-app.css?v=45">
+<link rel="stylesheet" href="enair-flow.css?v=45">
+</head>
+<body data-page="baggage" class="">
+<header class="nav">
+  <a class="brand" href="enair-homepage.html"><span class="brand-badge">eN</span>eNAir</a>
+  <nav class="nav-links"><a href="enair-destinations.html">Destinations</a><a href="enair-booking.html">Book Flights</a><a href="enair-fleet-experience.html">Our Fleet</a><a href="enair-loyalty.html">Loyalty</a><a href="enair-help.html">Help</a></nav>
+  <div class="nav-actions">
+    <span class="currency">₸ <span>KZT</span> ▾</span>
+    <a class="btn btn-ghost btn-sm" href="enair-manage-booking.html">Manage booking</a>
+    <a class="btn btn-dark btn-sm" href="enair-signin.html">Sign in</a>
+  </div>
+</header>
+
+<main class="flow-page">
+  <div class="flow-head">
+    <span class="eyebrow">Baggage</span>
+    <h1>Add more baggage</h1>
+    <p>Your fare includes 2 checked bags of 23 kg. Add extra pieces or special equipment.</p>
+  </div>
+
+  <div class="flow-grid">
+    <div class="flow-col">
+      <div class="alert ok" style="background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46">
+        <b>Included in Economy Flex</b><br>2 checked bags · 23 kg each · 1 cabin bag 8 kg
+      </div>
+      <section class="panel">
+        <div class="bag-row" data-qty="extra">
+  <div><h3>Extra checked bag</h3><p>23 kg · same size rules</p></div>
+  <span class="price">₸22,050</span>
+  <span class="qty">
+    <button type="button" data-step="minus" aria-label="Remove">−</button>
+    <span data-count>1</span>
+    <button type="button" data-step="plus" aria-label="Add">+</button>
+  </span>
+</div><div class="bag-row" data-qty="sports">
+  <div><h3>Sports equipment</h3><p>Skis, golf or bike up to 32 kg</p></div>
+  <span class="price">₸36,750</span>
+  <span class="qty">
+    <button type="button" data-step="minus" aria-label="Remove">−</button>
+    <span data-count>0</span>
+    <button type="button" data-step="plus" aria-label="Add">+</button>
+  </span>
+</div><div class="bag-row" data-qty="oversized">
+  <div><h3>Oversized item</h3><p>Up to 45 kg, subject to approval</p></div>
+  <span class="price">₸46,550</span>
+  <span class="qty">
+    <button type="button" data-step="minus" aria-label="Remove">−</button>
+    <span data-count>0</span>
+    <button type="button" data-step="plus" aria-label="Add">+</button>
+  </span>
+</div>
+      </section>
+    </div>
+
+    <aside class="flow-col">
+      <section class="panel">
+        <h2 style="font-size:18px;margin-bottom:16px">Order summary</h2>
+        <div class="kv-grid" style="grid-template-columns:1fr">
+          <div class="kv"><span>Current bags</span><b>2 × 23 kg</b></div>
+          <div class="kv"><span>Extra bags</span><b data-bag-extra>1 × 23 kg</b></div>
+        </div>
+        <div class="divider"></div>
+        <div class="sum-row"><span>To pay</span><strong data-bag-total>₸22,050</strong></div>
+        <button class="btn btn-primary btn-block" id="bag-add" style="margin-top:14px">Add to booking</button>
+        <p class="hint" style="margin-top:10px">Bags can be added until 3 hours before departure.</p>
+      </section>
+    </aside>
+  </div>
+</main>
+<footer class="footer" style="margin-top:40px">
+  <div style="max-width:1320px;margin:0 auto;padding:26px 80px;display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between;color:#64748b;font-size:13px;border-top:1px solid #e2e8f0">
+    <span>eNAir · conceptual airline · design system lab</span>
+    <span><a href="enair-post-booking.html">Post-booking</a> · <a href="enair-help.html">Help</a> · <a href="enair-about-contact.html">Contact</a></span>
+  </div>
+</footer>
+<div id="toast" class="toast"></div>
+<script src="flow.js"></script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Baggage tracking · eNAir</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="enair-app.css?v=45">
+<link rel="stylesheet" href="enair-flow.css?v=45">
+</head>
+<body data-page="" class="">
+<header class="nav">
+  <a class="brand" href="enair-homepage.html"><span class="brand-badge">eN</span>eNAir</a>
+  <nav class="nav-links"><a href="enair-destinations.html">Destinations</a><a href="enair-booking.html">Book Flights</a><a href="enair-fleet-experience.html">Our Fleet</a><a href="enair-loyalty.html">Loyalty</a><a href="enair-help.html">Help</a></nav>
+  <div class="nav-actions">
+    <span class="currency">₸ <span>KZT</span> ▾</span>
+    <a class="btn btn-ghost btn-sm" href="enair-manage-booking.html">Manage booking</a>
+    <a class="btn btn-dark btn-sm" href="enair-signin.html">Sign in</a>
+  </div>
+</header>
+
+<main class="flow-page">
+  <div class="flow-head">
+    <span class="eyebrow">Post-booking</span>
+    <h1>Where are my bags?</h1>
+    <p>Live status for both checked bags on flight eN-102, New York to London.</p>
+  </div>
+
+  <section class="panel">
+    <div class="timeline">
+      <span class="progress" style="width:55%"></span>
+      <div class="tl-step done"><i>1</i><b>Checked in</b><span>JFK · 06:20</span></div>
+      <div class="tl-step done"><i>2</i><b>Loaded on aircraft</b><span>JFK · 07:42</span></div>
+      <div class="tl-step done"><i>3</i><b>In transit</b><span>Over the Atlantic</span></div>
+      <div class="tl-step"><i>4</i><b>Arrives at LHR</b><span>Expected 20:30</span></div>
+    </div>
+  </section>
+
+  <div class="flow-grid" style="margin-top:22px">
+    <div class="flow-col">
+      <section class="panel">
+        <div class="bag-row">
+          <div><h3>Bag 1 · 23 kg</h3><p>Checked in at JFK desk 4 · tag EN482913-01</p></div>
+          <span class="badge badge-green">In transit</span>
+        </div>
+        <div class="bag-row" style="margin-bottom:0">
+          <div><h3>Bag 2 · 23 kg</h3><p>Checked in at JFK desk 4 · tag EN482913-02</p></div>
+          <span class="badge badge-green">In transit</span>
+        </div>
+      </section>
+    </div>
+    <aside class="flow-col">
+      <section class="panel dark">
+        <h2 style="font-size:20px;margin-bottom:10px">Bag delayed?</h2>
+        <p style="color:#cbd5e1;font-size:14px;margin-bottom:16px">Report it once you land and we deliver the bag to your address within 24 hours.</p>
+        <button class="btn btn-primary" data-toast="Delayed bag report opened (demo)">Report a bag</button>
+      </section>
+      <section class="panel soft">
+        <h2 style="font-size:17px;margin-bottom:8px">Need the receipt?</h2>
+        <p class="muted" style="font-size:14px">Bag tags are printed on the boarding pass and the e-ticket.</p>
+        <a class="btn btn-ghost btn-sm" href="enair-boarding-pass.html" style="margin-top:12px">Open boarding pass</a>
+      </section>
+    </aside>
+  </div>
+</main>
+<footer class="footer" style="margin-top:40px">
+  <div style="max-width:1320px;margin:0 auto;padding:26px 80px;display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between;color:#64748b;font-size:13px;border-top:1px solid #e2e8f0">
+    <span>eNAir · conceptual airline · design system lab</span>
+    <span><a href="enair-post-booking.html">Post-booking</a> · <a href="enair-help.html">Help</a> · <a href="enair-about-contact.html">Contact</a></span>
+  </div>
+</footer>
+<div id="toast" class="toast"></div>
+<script src="flow.js"></script>
+</body>
+</html>
