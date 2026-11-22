@@ -210,6 +210,7 @@
     return `${activeCurrency === 'USD' ? '$' : '₸'}${rounded.toLocaleString('en-US')}`;
   }
   function updateCurrencyPrices(root = document) {
+    if (window.enairLocalizationEnabled && window.enairLocalization) { window.enairLocalization.applyPrices(root); return; }
     root.querySelectorAll('[data-price-kzt]').forEach(element => {
       const formatted = formatPriceKzt(element.dataset.priceKzt);
       if (!formatted) {
@@ -507,6 +508,7 @@
   }
 
   function renderCurrencyControl() {
+    if (window.enairLocalizationEnabled) return;
     document.querySelectorAll('.sticky-navigation-2,.navigation-2,.nav').forEach(navigation=>{
       navigation.querySelectorAll('.currency').forEach(oldControl=>oldControl.remove());
       let controls=navigation.querySelector('.enair-header-controls');
@@ -528,6 +530,7 @@
     });
   }
   function renderLanguageControl() {
+    if (window.enairLocalizationEnabled) return;
     document.querySelectorAll('.sticky-navigation-2,.navigation-2,.nav').forEach(navigation=>{
       let controls=navigation.querySelector('.enair-header-controls');
       if(!controls){controls=document.createElement('div');controls.className='enair-header-controls';(navigation.querySelector('.nav-actions')||navigation).append(controls);}

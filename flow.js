@@ -6,7 +6,17 @@
 
   const $ = (sel, root) => (root || document).querySelector(sel);
   const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
-  const money = value => '₸' + Math.round(Number(value) || 0).toLocaleString('en-US');
+  const money = value => {
+    const localization = window.enairLocalization;
+    const amount = Number(value) || 0;
+    if (localization) {
+      const rates = { KZT: 1, USD: 1 / 490, EUR: 1 / 535 };
+      const symbols = { KZT: '₸', USD: '$', EUR: '€' };
+      const code = localization.currency();
+      return symbols[code] + Math.round(amount * rates[code]).toLocaleString('en-US');
+    }
+    return '₸' + Math.round(amount).toLocaleString('en-US');
+  };
   const store = {
     get(key, fallback) {
       try {
