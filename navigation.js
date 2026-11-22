@@ -96,19 +96,46 @@
   function loadLeaflet() {
     if (window.L) return Promise.resolve(window.L);
     if (!leafletLoader) {
+      const cssSources = [
+        'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
+        'https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css'
+      ];
+      const jsSources = [
+        'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
+        'https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js'
+      ];
+      cssSources.forEach(href => {
+        if (document.querySelector('link[href="' + href + '"]')) return;
+        const css = document.createElement('link');
+        css.rel = 'stylesheet';
+        css.href = href;
+        document.head.append(css);
+      });
       leafletLoader = new Promise((resolve, reject) => {
-        if (!document.querySelector('link[data-leaflet-css]')) {
-          const css = document.createElement('link');
-          css.rel = 'stylesheet';
-          css.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
-          css.dataset.leafletCss = 'true';
-          document.head.append(css);
-        }
-        const script = document.createElement('script');
-        script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
-        script.onload = () => resolve(window.L);
-        script.onerror = () => reject(new Error('Map library could not be loaded'));
-        document.head.append(script);
+        let index = 0;
+        const attempt = () => {
+          if (window.L) { resolve(window.L); return; }
+          if (index >= jsSources.length) { reject(new Error('Map library could not be loaded')); return; }
+          const script = document.createElement('script');
+          script.src = jsSources[index++];
+          script.async = true;
+          let settled = false;
+          const next = () => {
+            if (settled) return;
+            settled = true;
+            window.clearTimeout(timer);
+            script.remove();
+            attempt();
+          };
+          const timer = window.setTimeout(next, 6000);
+          script.onload = () => {
+            if (window.L) { settled = true; window.clearTimeout(timer); resolve(window.L); }
+            else next();
+          };
+          script.onerror = next;
+          document.head.append(script);
+        };
+        attempt();
       });
     }
     return leafletLoader;
@@ -132,7 +159,7 @@
     loadLeaflet().then(L=>{
       const map=L.map(mapEl,{zoomControl:false,scrollWheelZoom:false,worldCopyJump:true,zoomSnap:.25}).setView([initial.lat,initial.lon],2.25);
       controller.map=map;
-      const street=L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',{maxZoom:17,subdomains:'abc',attribution:'Map data &copy; OpenStreetMap contributors, relief &copy; OpenTopoMap (CC-BY-SA)'});
+      const street=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap contributors'});
       const satellite=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,attribution:'Tiles &copy; Esri'});
       const labels=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,opacity:.9,attribution:'Labels &copy; Esri'});
       street.addTo(map);
@@ -154,7 +181,17 @@
         controller.markers[city.code]=marker;
       });
       if(controller.pending!==initial)controller.flyTo(controller.pending);
-      requestAnimationFrame(()=>map.invalidateSize());
+      const refresh = () => map.invalidateSize();
+      requestAnimationFrame(refresh);
+      window.setTimeout(refresh, 400);
+      window.setTimeout(refresh, 1500);
+      window.addEventListener('resize', refresh);
+      if('IntersectionObserver' in window){
+        const observer=new IntersectionObserver(entries=>{
+          entries.forEach(entry=>{if(entry.isIntersecting){refresh();}});
+        },{threshold:0.05});
+        observer.observe(mapEl);
+      }
     }).catch(error=>{
       console.error('Unable to load the interactive map.',error);
       mapEl.innerHTML='<div class="enair-map-error">The map could not load. Check your internet connection and refresh.</div>';
@@ -970,9 +1007,9 @@
   }
 
   function homePage(){
-    addPopularDestinationCards();
-    homeMap();
-    bindPopularDestinationCarousel();
+    try { homeMap(); } catch (error) { console.error('Unable to start the map.', error); }
+    try { addPopularDestinationCards(); } catch (error) { console.error(error); }
+    try { bindPopularDestinationCarousel(); } catch (error) { console.error(error); }
     const from=find('New York (JFK)'); const to=find('London (LHR)');
     const pax=find('2 Adults, Economy')||find('2 Adults · Economy')||find('2 Adults · Economy Flex')||find('2 Adults');
     clickable(from,()=>airportPicker('from')); clickable(to,()=>airportPicker('to')); clickable(pax,passengerPicker);

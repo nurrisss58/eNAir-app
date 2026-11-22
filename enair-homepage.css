@@ -400,3 +400,10 @@ img,svg{display:block}
   .experience-title-303{font-size:clamp(26px,7vw,32px);line-height:1.15}
   .experience-quote-308,.experience-quote-316{font-size:15px;line-height:25px}
 }
+
+/* Added: the injected Help item needs room next to Book Now. */
+.sticky-navigation-2{gap:24px}
+.nav-links-7{width:auto!important;gap:26px!important;flex-shrink:1!important;min-width:0}
+.nav-links-7 .frame-8,.nav-links-7 .frame-10,.nav-links-7 .frame-12,.nav-links-7 .frame-14,.nav-links-7 .frame-16{flex-shrink:0}
+.book-now-cta-18{margin-left:8px}
+@media (max-width:1180px){.nav-links-7{gap:18px!important}.sticky-navigation-2{gap:14px}}
