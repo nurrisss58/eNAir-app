@@ -54,7 +54,7 @@
     '.enair-ai-input:focus{outline:2px solid rgba(6,182,212,.3);border-color:#06b6d4}',
     '.enair-ai-send{border:0;border-radius:11px;padding:0 16px;background:#0f172a;color:#fff;font:600 13px "Geist",sans-serif;cursor:pointer}',
     '.enair-ai-send:disabled{opacity:.5;cursor:default}',
-    '@media(max-width:480px){.enair-ai{right:12px;left:12px;bottom:12px}.enair-ai-panel{right:0;left:0;width:auto}}'
+    '@media(max-width:480px){.enair-ai{right:12px;bottom:12px}.enair-ai-launcher{padding:11px 14px;font-size:13px;gap:7px}.enair-ai-panel{right:0;left:auto;width:auto;min-width:min(348px,calc(100vw - 24px))}}'
   ].join('');
 
   document.head.appendChild(style);

@@ -1908,7 +1908,7 @@
       menu.setAttribute('aria-label','Open navigation menu');
       clickable(menu,()=>{
         const choices=document.createElement('div');choices.className='enair-grid';
-        [['Destinations',routes.destinations],['Book Flights',routes.booking],['Our Fleet',routes.fleet],['Loyalty',routes.loyalty],['Help',routes.help],['About eNAir',routes.about]]
+        [['Destinations',routes.destinations],['Book Flights',routes.booking],['Our Fleet',routes.fleet],['Loyalty',routes.loyalty],['Manage Booking','enair-manage-booking.html'],['Help',routes.help],['About eNAir',routes.about],['Sign in',routes.signin]]
           .forEach(([label,url])=>{const button=document.createElement('button');button.className='enair-choice';button.textContent=label;button.onclick=()=>go(url);choices.append(button)});
         modal('Explore eNAir','Choose a page',choices);
       });

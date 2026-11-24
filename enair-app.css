@@ -99,6 +99,8 @@ h1,h2,h3,h4{font-family:'Outfit',Arial,sans-serif;letter-spacing:-.02em;line-hei
 .card{background:#fff;border:1px solid var(--line);border-radius:var(--r-card);box-shadow:var(--shadow)}
 .wrap{max-width:1440px;margin:0 auto;padding:0 80px}
 .section{padding:56px 80px}
+/* Верхний блок страницы (был инлайновым padding:34px 80px 10px — см. booking-seats). */
+.page-shell{max-width:1440px;margin:0 auto;padding:34px 80px 10px}
 .divider{height:1px;background:var(--line);border:0;margin:22px 0}
 .or{display:flex;align-items:center;gap:14px;color:var(--muted);font-size:12px;margin:18px 0}
 .or::before,.or::after{content:"";height:1px;background:var(--line);flex:1}
@@ -323,3 +325,58 @@ h1,h2,h3,h4{font-family:'Outfit',Arial,sans-serif;letter-spacing:-.02em;line-hei
 
 .field label.check{font:400 13px 'Geist';letter-spacing:0;text-transform:none;color:var(--muted)}
 .field label.check a{text-transform:none}
+
+/* ============================================================
+   Мобильная шапка и степпер (замеры на 390px).
+   На узком экране в шапку не влезали «Manage booking», валюта,
+   вход и кнопка меню сразу — правый край уезжал за экран.
+   ============================================================ */
+@media (max-width: 900px) {
+  .nav{height:auto;min-height:64px;padding:10px 16px;gap:10px;flex-wrap:nowrap}
+  .brand{flex:0 0 auto;font-size:19px;gap:9px}
+  .brand-badge{width:36px;height:36px;border-radius:11px;font-size:16px}
+  .page-shell{padding:26px 32px 10px}
+
+  /* Второстепенные кнопки уходят в меню, в шапке остаются вход и меню. */
+  .nav-actions .currency{display:none}
+  .nav-actions [href*="manage-booking"]{display:none}
+  .nav-actions>a.btn-ghost{display:none}
+  .nav-actions{gap:6px;margin-left:auto;min-width:0;flex:0 0 auto}
+  .nav-actions .btn{height:36px;padding:0 12px;font-size:12px;border-radius:10px}
+  .nav-actions .enair-switch-group{padding:3px;gap:2px}
+  .nav-actions .enair-switch-group button{padding:7px 8px;font-size:11px}
+  .nav-actions .enair-auth-trigger,.nav-actions .enair-auth-logout{padding:8px 10px;font-size:12px}
+
+  /* iOS Safari зумит страницу, если у поля ввода шрифт меньше 16px. */
+  input:not([type="checkbox"]):not([type="radio"]),select,textarea{font-size:16px}
+
+  /* Внутренние обёртки подвала приходят с инлайновым padding 26px 80px —
+     на телефоне это оставляло тексту 230px из 390. */
+  .footer > div,.footer > [style*="padding"]{padding-left:0!important;padding-right:0!important}
+
+  /* Степпер бронирования переносится на вторую строку вместо ухода за край. */
+  .stepper{width:100%;flex-wrap:wrap;align-items:center;gap:8px 14px;margin:4px 0 22px}
+  .step{font-size:11px;gap:7px}
+  .step .n{width:24px;height:24px;font-size:10px}
+  .step-line{display:none}
+}
+
+@media (max-width: 560px) {
+  .wrap,.section{padding-left:16px;padding-right:16px}
+  .page-shell{padding:20px 16px 10px}
+  .nav{padding:9px 14px;gap:8px}
+  .flow-head h1{font-size:clamp(26px,7.6vw,34px)}
+  .flow-head p{font-size:15px}
+
+  /* Билет: колонки были 316px в коробке 312px и обрезались по краю. */
+  .ticket,.ticket-main,.ticket-stub{width:100%!important;min-width:0;box-sizing:border-box}
+  .ticket-grid{gap:14px 18px}
+}
+
+/* На совсем узких экранах оставляем от логотипа только значок «eN». */
+@media (max-width: 380px) {
+  .brand{font-size:0}
+  .brand .brand-badge{font-size:15px}
+  .nav-actions .enair-switch-group button{padding:6px 7px;font-size:10px}
+  .menu-mobile{padding:8px 11px!important;font-size:12px!important}
+}

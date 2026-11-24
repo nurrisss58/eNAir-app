@@ -11,6 +11,13 @@
     overflow-x: hidden;
   }
 
+  /* iOS Safari автоматически зумит страницу, если шрифт поля меньше 16px. */
+  input:not([type="checkbox"]):not([type="radio"]),
+  select,
+  textarea {
+    font-size: 16px;
+  }
+
   /* ---------- шапка ---------- */
 
   /* «Book Now» в шапке уступает место валюте и входу */
@@ -407,5 +414,482 @@
   .booking-search-1 .flight-option-62,
   .booking-payment-1 .trip-summary-39 {
     border-radius: 16px;
+  }
+}
+
+/* ============================================================
+   Второй проход по мобильной вёрстке (замеры на 360–430px).
+   Правила ниже добавлены после аудита: они убирают наложения
+   текста, обрезанные заголовки и «сжатые» сетки, которые
+   Figma-экспорт оставил с фиксированной высотой и шириной.
+   ============================================================ */
+
+/* ---------- подвал: общий блок для всех Figma-страниц ----------
+   Колонки футера были фиксированной высоты (177px), текст в них
+   не помещался и «User Personas» печаталось поверх «SUPPORT». */
+
+@media (max-width: 900px) {
+  [class*="footer-content-"] {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    gap: 28px 20px !important;
+    width: 100% !important;
+  }
+
+  [class*="footer-content-"] > * {
+    width: auto !important;
+    height: auto !important;
+    flex: 1 1 40% !important;
+    min-width: 0 !important;
+  }
+
+  [class*="footer-brand-col-"] {
+    flex: 1 1 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Внутри колонок высота тоже должна расти под текст. */
+  [class*="footer-content-"] [class*="frame-"] {
+    width: auto !important;
+    height: auto !important;
+    max-width: 100% !important;
+  }
+
+  [class*="footer-content-"] [class*="frame-"] > * {
+    height: auto !important;
+  }
+
+  [class*="footer-"] {
+    height: auto !important;
+  }
+
+  [class*="footer-bottom-"] {
+    width: 100% !important;
+    height: auto !important;
+    flex-wrap: wrap !important;
+    gap: 14px 24px !important;
+  }
+
+  [class*="footer-"] [class*="frame-"] {
+    max-width: 100% !important;
+  }
+}
+
+/* ---------- главная: карточки направлений ----------
+   На 390px в ряд влезали две карточки по 163px, из-за чего цена
+   и «Explore» печатались друг на друге, а текст обрезался. */
+
+@media (max-width: 700px) {
+  .popular-destinations-117 > .frame-129 {
+    gap: 14px !important;
+    padding: 4px 0 8px !important;
+  }
+
+  .popular-destinations-117 > .frame-129 > * {
+    flex: 0 0 min(88%, 330px) !important;
+    height: auto !important;
+    scroll-snap-align: start;
+  }
+
+  /* Все внутренние обёртки карточки растут под содержимое. */
+  .popular-destinations-117 > .frame-129 [class^="frame-"] {
+    height: auto !important;
+  }
+
+  .popular-destinations-117 > .frame-129 [class^="rectangle-"] {
+    height: 190px !important;
+    flex: 0 0 190px !important;
+  }
+
+  .popular-destinations-117 > .frame-129 .home-destination-image {
+    height: 190px !important;
+    flex: 0 0 190px !important;
+  }
+
+  .popular-destinations-117 > .frame-129 .home-destination-details {
+    height: auto !important;
+    padding: 18px !important;
+    gap: 14px !important;
+  }
+
+  .popular-destinations-117 > .frame-129 .home-destination-bottom {
+    flex-wrap: wrap !important;
+    gap: 8px 14px !important;
+  }
+
+  .popular-destinations-117 > .frame-129 [class^="fares-from-"],
+  .popular-destinations-117 > .frame-129 [class^="explore-"],
+  .popular-destinations-117 > .frame-129 [class^="paris-"],
+  .popular-destinations-117 > .frame-129 [class^="bali-"],
+  .popular-destinations-117 > .frame-129 [class^="reykjavik-"],
+  .popular-destinations-117 > .frame-129 [class^="cape-town-"] {
+    white-space: normal !important;
+  }
+
+  .popular-destinations-117 .frame-129 [class^="frame-13"] > * {
+    max-width: 100%;
+  }
+}
+
+/* ---------- Fleet & Experience ----------
+   Заголовки, описания и карточки классов обслуживания держались
+   на фиксированной высоте — текст вылезал на соседние блоки. */
+
+@media (max-width: 900px) {
+  .enair-fleet-experience-1 .hero-copy-22,
+  .enair-fleet-experience-1 .frame-28,
+  .enair-fleet-experience-1 .frame-32,
+  .enair-fleet-experience-1 .frame-34,
+  .enair-fleet-experience-1 .frame-49,
+  .enair-fleet-experience-1 .frame-51,
+  .enair-fleet-experience-1 .frame-84,
+  .enair-fleet-experience-1 .frame-91,
+  .enair-fleet-experience-1 .frame-109,
+  .enair-fleet-experience-1 .frame-127,
+  .enair-fleet-experience-1 .frame-145,
+  .enair-fleet-experience-1 .frame-162,
+  .enair-fleet-experience-1 .frame-181,
+  .enair-fleet-experience-1 .frame-184,
+  .enair-fleet-experience-1 .frame-186,
+  .enair-fleet-experience-1 .frame-188,
+  .enair-fleet-experience-1 .frame-197,
+  .enair-fleet-experience-1 .frame-205 {
+    height: auto !important;
+    max-width: 100%;
+  }
+
+  /* Карточки классов: обёртка, шапка и текст рвутся по содержимому. */
+  .enair-fleet-experience-1 .frame-88,
+  .enair-fleet-experience-1 .frame-106,
+  .enair-fleet-experience-1 .frame-124,
+  .enair-fleet-experience-1 .frame-142,
+  .enair-fleet-experience-1 .frame-87,
+  .enair-fleet-experience-1 .cabin-classes-83 {
+    height: auto !important;
+  }
+
+  .enair-fleet-experience-1 .frame-87 > * {
+    height: auto !important;
+  }
+
+  .enair-fleet-experience-1 .frame-92,
+  .enair-fleet-experience-1 .frame-110,
+  .enair-fleet-experience-1 .frame-128,
+  .enair-fleet-experience-1 .frame-146,
+  .enair-fleet-experience-1 .frame-97,
+  .enair-fleet-experience-1 .frame-115,
+  .enair-fleet-experience-1 .frame-133,
+  .enair-fleet-experience-1 .frame-151 {
+    height: auto !important;
+  }
+
+  /* Чипы услуг внутри карточки — в столбик, им тесно в строке. */
+  .enair-fleet-experience-1 .frame-97,
+  .enair-fleet-experience-1 .frame-115,
+  .enair-fleet-experience-1 .frame-133,
+  .enair-fleet-experience-1 .frame-151 {
+    gap: 8px !important;
+  }
+
+  .enair-fleet-experience-1 [class^="an-isolated-"],
+  .enair-fleet-experience-1 [class^="sleek-biometric-"],
+  .enair-fleet-experience-1 [class^="generous-legroom-"],
+  .enair-fleet-experience-1 [class^="redesigning-the-"] {
+    height: auto !important;
+    white-space: normal !important;
+    max-width: 100%;
+  }
+
+  /* Названия классов обслуживания не влезали в строку и обрезались. */
+  .enair-fleet-experience-1 [class^="first-class-sanctuary-"],
+  .enair-fleet-experience-1 [class^="business-sanctuary-pods-"],
+  .enair-fleet-experience-1 [class^="premium-space-economy-"],
+  .enair-fleet-experience-1 [class^="comfort-economy-"] {
+    height: auto !important;
+    white-space: normal !important;
+    font-size: clamp(21px, 6.4vw, 26px) !important;
+    line-height: 1.18 !important;
+    max-width: 100%;
+  }
+}
+
+/* ---------- About & Contact ----------
+   Блок «The Pillars of eNAir» шёл четырьмя колонками по 64px,
+   а заголовки/абзацы обрезались фиксированной высотой. */
+
+@media (max-width: 900px) {
+  .enair-about-contact-1 .hero-copy-3,
+  .enair-about-contact-1 .frame-9,
+  .enair-about-contact-1 .frame-15,
+  .enair-about-contact-1 .our-values-57,
+  .enair-about-contact-1 .frame-58,
+  .enair-about-contact-1 .frame-61,
+  .enair-about-contact-1 .frame-62,
+  .enair-about-contact-1 .frame-65,
+  .enair-about-contact-1 .frame-68,
+  .enair-about-contact-1 .frame-71,
+  .enair-about-contact-1 .frame-74,
+  .enair-about-contact-1 .frame-77,
+  .enair-about-contact-1 .frame-80,
+  .enair-about-contact-1 .frame-83 {
+    height: auto !important;
+    max-width: 100%;
+  }
+
+  .enair-about-contact-1 .frame-58 {
+    width: 100% !important;
+  }
+
+  /* Секция «The Pillars of eNAir» держала десктопные отступы 100px —
+     на 390px под текст оставалось всего 190px ширины. */
+  .enair-about-contact-1 .our-values-57,
+  .enair-about-contact-1 .contact-section-86 {
+    padding: 56px 20px !important;
+  }
+
+  /* Четыре «столпа» — в один столбец, а не по 64px. */
+  .enair-about-contact-1 .frame-61 {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    gap: 16px !important;
+  }
+
+  .enair-about-contact-1 .frame-61 > * {
+    width: 100% !important;
+    flex: 0 0 auto !important;
+  }
+
+  .enair-about-contact-1 .frame-87,
+  .enair-about-contact-1 .frame-88 {
+    width: 100% !important;
+    height: auto !important;
+    max-width: 100% !important;
+  }
+
+  .enair-about-contact-1 .we-are-here-to-assist-90 {
+    width: auto !important;
+    max-width: 100% !important;
+    height: auto !important;
+    font-size: clamp(26px, 8vw, 38px) !important;
+    line-height: 1.15 !important;
+    white-space: normal !important;
+  }
+}
+
+/* ---------- Loyalty ----------
+   Подзаголовок «Sleek Cards. Ascending Privileges.» был выше своей
+   коробки в 80px и наезжал на карточки уровней ниже. */
+
+@media (max-width: 900px) {
+  .enair-loyalty-1 .hero-copy-22,
+  .enair-loyalty-1 .frame-28,
+  .enair-loyalty-1 .frame-125,
+  .enair-loyalty-1 .frame-145,
+  .enair-loyalty-1 .frame-150,
+  .enair-loyalty-1 .frame-151,
+  .enair-loyalty-1 .frame-155,
+  .enair-loyalty-1 .frame-159,
+  .enair-loyalty-1 .frame-160,
+  .enair-loyalty-1 .frame-164,
+  .enair-loyalty-1 .frame-181 {
+    height: auto !important;
+    max-width: 100%;
+  }
+}
+
+/* ---------- шапка и степпер страниц бронирования ----------
+   Одна и та же разметка (header-15 / title-17 / booking-progress-18)
+   на четырёх страницах. Заголовок шёл nowrap на 46px и уезжал за
+   экран, а подписи шагов печатались друг на друге. */
+
+@media (max-width: 900px) {
+  .booking-search-1 .header-15,
+  .booking-payment-1 .header-15,
+  .booking-passengers-1 .header-15,
+  .booking-select-fare-1 .header-15 {
+    height: auto !important;
+    padding: 26px 16px 20px !important;
+    gap: 16px !important;
+    overflow: visible !important;
+  }
+
+  .booking-search-1 .title-17,
+  .booking-payment-1 .title-17,
+  .booking-passengers-1 .title-17,
+  .booking-select-fare-1 .title-17 {
+    width: 100% !important;
+    max-width: 100% !important;
+    font-size: clamp(26px, 8vw, 34px) !important;
+    line-height: 1.12 !important;
+    white-space: normal !important;
+  }
+
+  /* Шаги переносятся и показывают подписи целиком. */
+  .booking-search-1 .booking-progress-18,
+  .booking-payment-1 .booking-progress-18,
+  .booking-passengers-1 .booking-progress-18,
+  .booking-select-fare-1 .booking-progress-18 {
+    width: 100% !important;
+    height: auto !important;
+    flex-wrap: wrap !important;
+    overflow: visible !important;
+    gap: 8px 16px !important;
+  }
+
+  .booking-search-1 .booking-progress-18 > [class^="step-"],
+  .booking-payment-1 .booking-progress-18 > [class^="step-"],
+  .booking-passengers-1 .booking-progress-18 > [class^="step-"],
+  .booking-select-fare-1 .booking-progress-18 > [class^="step-"] {
+    flex: 0 0 auto !important;
+    overflow: visible !important;
+    gap: 8px !important;
+  }
+
+  .booking-search-1 .booking-progress-18 [class^="label-"],
+  .booking-payment-1 .booking-progress-18 [class^="label-"],
+  .booking-passengers-1 .booking-progress-18 [class^="label-"],
+  .booking-select-fare-1 .booking-progress-18 [class^="label-"] {
+    display: block !important;
+    font-size: 12px !important;
+    white-space: nowrap !important;
+  }
+
+  .booking-search-1 .booking-progress-18 [class^="connector-"],
+  .booking-payment-1 .booking-progress-18 [class^="connector-"],
+  .booking-passengers-1 .booking-progress-18 [class^="connector-"],
+  .booking-select-fare-1 .booking-progress-18 [class^="connector-"] {
+    display: none !important;
+  }
+
+  /* Сводка маршрута и боковые карточки растягиваются по экрану. */
+  .booking-passengers-1 .content-38,
+  .booking-select-fare-1 .content-38 {
+    height: auto !important;
+    padding: 20px 16px 48px !important;
+  }
+
+  .booking-passengers-1 .trip-summary-39,
+  .booking-select-fare-1 .trip-summary-39 {
+    height: auto !important;
+    padding: 18px !important;
+    gap: 14px !important;
+  }
+
+  .booking-passengers-1 .trip-summary-39 *,
+  .booking-select-fare-1 .trip-summary-39 * {
+    white-space: normal !important;
+    height: auto !important;
+  }
+
+  .booking-passengers-1 .extras-92,
+  .booking-passengers-1 .card-93,
+  .booking-passengers-1 .passenger-layout-46,
+  .booking-passengers-1 .passengers-45 {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  /* Поля формы оплаты держали высоту 70px и обрезали длинный адрес. */
+  .booking-payment-1 [class^="field-"] {
+    height: auto !important;
+    min-height: 62px;
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+  }
+}
+
+/* ---------- User personas ----------
+   В шапку не влезали «Research workspace» и кнопка входа, а заголовки
+   «Goals» / «Pain points» обрезались фиксированной шириной 64px. */
+
+@media (max-width: 900px) {
+  .nair-high-user-personas-1 .navigation-2 {
+    height: auto !important;
+    min-height: 64px;
+    padding: 10px 16px !important;
+    gap: 10px !important;
+    overflow: visible !important;
+  }
+
+  /* Контекстная плашка — украшение, на телефоне её место занимает меню. */
+  .nair-high-user-personas-1 .context-7 {
+    display: none !important;
+  }
+
+  .nair-high-user-personas-1 .logo-group-3 .wordmark-6 {
+    font-size: 18px !important;
+  }
+
+  .nair-high-user-personas-1 [class^="section-title-"] {
+    width: auto !important;
+    max-width: 100% !important;
+    overflow: visible !important;
+  }
+
+  .nair-high-user-personas-1 [class^="goals-"],
+  .nair-high-user-personas-1 [class^="pain-points-"],
+  .nair-high-user-personas-1 [class^="goal-list-"] {
+    height: auto !important;
+    overflow: visible !important;
+  }
+}
+
+/* ---------- mobile-homepage / mobile-booking ----------
+   Текстовые блоки были фиксированной высоты и обрезали последнюю строку. */
+
+@media (max-width: 900px) {
+  .mobile-homepage-1 .hero-copy-10,
+  .mobile-homepage-1 .card-48,
+  .mobile-homepage-1 .benefits-32 .card-48,
+  .mobile-booking-1 .header-9 {
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  /* Иконка меню стояла посередине шапки: слева логотип, справа вход.
+     Прижимаем вход и меню к правому краю (mobile-homepage и mobile-booking). */
+  .mobile-homepage-1 .navigation-2,
+  .mobile-booking-1 .navigation-2 {
+    justify-content: flex-start !important;
+  }
+
+  .mobile-homepage-1 .navigation-2 .enair-header-controls,
+  .mobile-booking-1 .navigation-2 .enair-header-controls {
+    margin-left: auto !important;
+  }
+
+  /* Иконка меню — самая правая в шапке. */
+  .mobile-homepage-1 .navigation-2 .menu-7,
+  .mobile-booking-1 .navigation-2 .menu-7 {
+    order: 3;
+  }
+}
+
+/* ---------- карты ----------
+   На узкой карте подписи всех хабов наезжали друг на друга;
+   оставляем подпись только у выбранной/наведённой точки. */
+
+@media (max-width: 700px) {
+  .enair-map-canvas .enair-map-pin b {
+    display: none;
+  }
+
+  .enair-map-canvas .leaflet-marker-icon:hover .enair-map-pin b,
+  .enair-map-canvas .leaflet-marker-icon:focus-within .enair-map-pin b {
+    display: block;
+  }
+
+  /* Масштабированная карта не должна раскрывать все подписи сразу. */
+  .enair-map-hub .hub-label {
+    opacity: 0 !important;
+  }
+
+  .enair-map-hub:hover .hub-label,
+  .enair-map-hub[data-active="true"] .hub-label {
+    opacity: 1 !important;
   }
 }

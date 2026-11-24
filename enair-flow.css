@@ -219,6 +219,19 @@
   .kv-grid.three{grid-template-columns:repeat(2,minmax(0,1fr))}
   .chat-body{height:360px}
   .tiles{grid-template-columns:minmax(0,1fr)}
+
+  /* Чат: шапка и сообщения не должны вылезать за карточку. */
+  .chat{min-width:0}
+  .chat-head{padding:14px 16px;gap:10px;min-width:0}
+  .chat-head>div{min-width:0}
+  .chat-head b,.chat-head small{overflow-wrap:anywhere}
+  .chat-body{padding:16px}
+  .bubble{max-width:88%}
+  .chat-quick{padding:0 16px 12px}
+  .chat-form{padding:12px 14px;gap:8px}
+  /* Поле ввода с внутренними отступами не давало себя сжать — «Send» уезжал. */
+  .chat-form input{min-width:0;padding:0 14px}
+  .chat-form .btn{flex:0 0 auto;padding:0 16px}
 }
 
 
@@ -237,4 +250,16 @@ html:has(body.mobile-view){overflow-x:hidden}
   .nav-links{display:none}
   .nav-actions .currency{display:none}
   .flow-page{padding:22px 18px 80px}
+
+  /* На страницах без navigation.js (у них есть body[data-page]) меню-кнопки нет —
+     поэтому обычные ссылки не прячем, а выносим во вторую строку шапки. */
+  body[data-page] .nav{flex-wrap:wrap;height:auto;padding:9px 16px;row-gap:4px}
+  body[data-page] .nav-actions{order:2;margin-left:auto}
+  body[data-page] .nav-links{
+    display:flex!important;order:3;width:100%;
+    gap:18px;font-size:13px;padding:2px 0 6px;
+    overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;
+  }
+  body[data-page] .nav-links::-webkit-scrollbar{display:none}
+  body[data-page] .nav-links a{white-space:nowrap;padding:4px 0}
 }

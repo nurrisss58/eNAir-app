@@ -1,4 +1,4 @@
-﻿/* Lab 7 — redesign mockups (before/after) */
+/* Lab 7 — redesign mockups (before/after) */
 
 .lab-main{max-width:1440px;margin:0 auto;padding:28px 80px 70px}
 .backlink{display:inline-flex;align-items:center;gap:8px;font:600 13px 'Geist';color:var(--muted);margin-bottom:18px}
@@ -65,3 +65,29 @@
 .sum-total{display:flex;justify-content:space-between;align-items:flex-end;padding-top:14px;border-top:1px solid var(--line);margin-top:10px}
 .sum-total span{font-size:12px;color:var(--muted)}
 .sum-total b{font:800 26px 'Outfit'}
+
+/* Мобильная раскладка: макеты Lab 7 были только под десктоп,
+   на телефоне строки рейсов вылезали за экран и наезжали друг на друга. */
+@media (max-width: 900px) {
+  .lab-main{padding:20px 16px 56px}
+  .page-head{flex-direction:column;align-items:flex-start;gap:10px}
+  .page-head h1{font-size:clamp(26px,8vw,34px)}
+
+  .search-panel{padding:16px}
+  .search-grid{grid-template-columns:1fr 1fr}
+  .search-grid>.field,.search-grid>.btn{grid-column:span 2}
+  .search-grid>.field:first-child,.search-grid>.field:nth-child(2){grid-column:span 1}
+
+  .flight-row{grid-template-columns:minmax(0,1fr);gap:14px;padding:16px}
+  .flight-times{gap:10px}
+  .flight-times b{font-size:22px}
+  /* Подпись длительности висела над линией и печаталась поверх цены. */
+  .flight-times .line span{display:none}
+  .flight-price{text-align:left}
+
+  .pay-grid{grid-template-columns:minmax(0,1fr)}
+  .pay-form{padding:20px 18px}
+  .pay-row{grid-template-columns:1fr}
+  .summary-card{position:static}
+}
+
