@@ -249,6 +249,7 @@
   function updateCurrencyPrices(root = document) {
     if (window.enairLocalizationEnabled && window.enairLocalization) { window.enairLocalization.applyPrices(root); return; }
     root.querySelectorAll('[data-price-kzt]').forEach(element => {
+      if (element.dataset.priceIncluded === 'true') { element.textContent = 'Included'; return; }
       const formatted = formatPriceKzt(element.dataset.priceKzt);
       if (!formatted) {
         console.error('Skipping a price element with invalid data-price-kzt.', element);
@@ -478,6 +479,21 @@
     }, 9000);
   }
 
+  // The Flask API is Russian-first; the interface is English-first, so the
+  // visible message is mapped here instead of leaking the raw server text.
+  const SERVER_MESSAGES = {
+    'Укажите email и пароль':'Enter your email and password.',
+    'Пароль должен быть не короче 8 символов':'The password must be at least 8 characters long.',
+    'Пользователь с таким email уже существует':'An account with this email already exists.',
+    'Неверный email или пароль':'Incorrect email or password.',
+    'Сервис регистрации временно недоступен':'Registration is temporarily unavailable.',
+    'Сервис авторизации временно недоступен':'Sign-in is temporarily unavailable.',
+    'Доступ запрещен. Пожалуйста, войдите в систему.':'Please sign in to continue.',
+    'Сервис бронирования временно недоступен':'Booking is temporarily unavailable.',
+    'Бронь с таким номером не найдена':'No booking was found with that reference.',
+    'Пустой запрос':'The request was empty.'
+  };
+  const serverMessage = text => SERVER_MESSAGES[text] || text;
   function toast(msg) { const old = document.querySelector('.enair-toast'); if(old) old.remove(); const t=document.createElement('div'); t.className='enair-toast'; t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),2200); }
   function clickable(el, handler) {
     if(!el || el.dataset.enairBound) return; el.dataset.enairBound='1'; el.classList.add('enair-clickable');
@@ -501,7 +517,23 @@
     const back=document.createElement('div'); back.className='enair-modal-backdrop';
     back.innerHTML=`<div class="enair-modal"><button class="enair-modal-close">×</button><h3>${title}</h3><p>${subtitle||''}</p><div class="enair-modal-body"></div></div>`;
     back.querySelector('.enair-modal-body').append(body); document.body.append(back);
-    const close=()=>back.remove();     back.querySelector('.enair-modal-close').addEventListener('click',close); back.addEventListener('click',e=>{if(e.target===back)close()}); return back;
+    const previous=document.activeElement;
+    const dialog=back.querySelector('.enair-modal');
+    dialog.setAttribute('role','dialog');dialog.setAttribute('aria-modal','true');dialog.setAttribute('aria-label',title);
+    const close=()=>{back.remove();previous?.focus();};
+    back.querySelector('.enair-modal-close').setAttribute('aria-label','Close');
+    back.querySelector('.enair-modal-close').addEventListener('click',close);
+    back.addEventListener('click',e=>{if(e.target===back)close()});
+    back.addEventListener('keydown',e=>{
+      if(e.key==='Escape'){e.preventDefault();close();}
+      if(e.key==='Tab'){
+        const items=[...dialog.querySelectorAll('button:not(:disabled),input:not(:disabled),select,a[href],[tabindex="0"]')].filter(el=>el.getClientRects().length);
+        const first=items[0],last=items[items.length-1];
+        if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus();}
+        else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus();}
+      }
+    });
+    back.querySelector('input,select,button')?.focus();return back;
   }
 
   function renderAuthControl() {
@@ -523,19 +555,19 @@
         const logout = document.createElement('button');
         logout.type = 'button';
         logout.className = 'enair-auth-logout';
-        logout.textContent = 'Выйти';
+        logout.textContent = 'Sign out';
         logout.addEventListener('click', () => {
           localStorage.removeItem(authStorageKey);
           activeUser = null;
           renderAuthControl();
-          toast('Вы вышли из аккаунта');
+          toast('Signed out');
         });
         actions.append(email, logout);
       } else {
         const login = document.createElement('button');
         login.type = 'button';
         login.className = 'enair-auth-trigger';
-        login.setAttribute('aria-label', 'Войти или зарегистрироваться');
+        login.setAttribute('aria-label', 'Sign in or register');
         login.addEventListener('click', () => openAuthModal());
         actions.append(login);
       }
@@ -612,7 +644,7 @@
     const close = document.createElement('button');
     close.type = 'button';
     close.className = 'enair-auth-close';
-    close.setAttribute('aria-label', 'Закрыть окно');
+    close.setAttribute('aria-label', 'Close dialog');
     close.textContent = '×';
     const title = document.createElement('h2');
     title.id = 'enair-auth-title';
@@ -624,12 +656,12 @@
     const loginTab = document.createElement('button');
     loginTab.type = 'button';
     loginTab.className = 'enair-auth-tab';
-    loginTab.textContent = 'Войти';
+    loginTab.textContent = 'Sign in';
     loginTab.setAttribute('role', 'tab');
     const registerTab = document.createElement('button');
     registerTab.type = 'button';
     registerTab.className = 'enair-auth-tab';
-    registerTab.textContent = 'Регистрация';
+    registerTab.textContent = 'Register';
     registerTab.setAttribute('role', 'tab');
     tabs.append(loginTab, registerTab);
     const form = document.createElement('form');
@@ -646,12 +678,27 @@
     emailLabel.append(emailInput);
     const passwordLabel = document.createElement('label');
     passwordLabel.className = 'enair-auth-field';
-    passwordLabel.append(document.createTextNode('Пароль'));
+    passwordLabel.append(document.createTextNode('Password'));
     const passwordInput = document.createElement('input');
     passwordInput.type = 'password';
     passwordInput.name = 'password';
     passwordInput.required = true;
-    passwordLabel.append(passwordInput);
+    const passwordWrap = document.createElement('div');
+    passwordWrap.className = 'experience-password';
+    const passwordToggle = document.createElement('button');
+    passwordToggle.type = 'button';
+    passwordToggle.textContent = 'Show';
+    passwordToggle.setAttribute('aria-pressed', 'false');
+    passwordToggle.setAttribute('aria-label', 'Show password');
+    passwordToggle.addEventListener('click', () => {
+      const show = passwordInput.type === 'password';
+      passwordInput.type = show ? 'text' : 'password';
+      passwordToggle.textContent = show ? 'Hide' : 'Show';
+      passwordToggle.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+      passwordToggle.setAttribute('aria-pressed', String(show));
+    });
+    passwordWrap.append(passwordInput, passwordToggle);
+    passwordLabel.append(passwordWrap);
     const message = document.createElement('p');
     message.className = 'enair-auth-message';
     message.setAttribute('role', 'status');
@@ -674,14 +721,14 @@
     };
     const setMode = nextMode => {
       mode = nextMode;
-      title.textContent = mode === 'login' ? 'С возвращением' : 'Создать аккаунт';
+      title.textContent = mode === 'login' ? 'Welcome back' : 'Create an account';
       description.textContent = mode === 'login'
-        ? 'Войдите, чтобы продолжить бронирование.'
-        : 'Зарегистрируйтесь, чтобы бронировать рейсы.';
+        ? 'Sign in to continue your booking.'
+        : 'Register to book flights.';
       loginTab.setAttribute('aria-selected', String(mode === 'login'));
       registerTab.setAttribute('aria-selected', String(mode === 'register'));
       passwordInput.autocomplete = mode === 'login' ? 'current-password' : 'new-password';
-      submit.textContent = mode === 'login' ? 'Войти' : 'Создать аккаунт';
+      submit.textContent = mode === 'login' ? 'Sign in' : 'Create account';
       message.textContent = '';
     };
     close.addEventListener('click', closeModal);
@@ -710,20 +757,20 @@
           result = await response.json();
         } catch (error) {
           console.error('The eNAir authentication endpoint returned invalid JSON.', error);
-          message.textContent = 'Сервер вернул некорректный ответ. Попробуйте позже.';
+          message.textContent = 'The server returned an invalid response. Please try again later.';
           return;
         }
         if (!response.ok) {
           if (response.status >= 500) {
             console.error('eNAir authentication request failed.', result && result.error ? result.error : response.status);
-            message.textContent = 'Сервис авторизации временно недоступен. Попробуйте позже.';
+            message.textContent = 'The sign-in service is temporarily unavailable. Please try again later.';
           } else {
-            message.textContent = result && result.error ? result.error : `Не удалось выполнить запрос (${response.status}).`;
+            message.textContent = result && result.error ? serverMessage(result.error) : `Request failed (${response.status}).`;
           }
           return;
         }
         if (!result || !result.user || typeof result.user.email !== 'string') {
-          message.textContent = 'Сервер не вернул данные пользователя. Попробуйте позже.';
+          message.textContent = 'The server did not return the user details. Please try again later.';
           return;
         }
         activeUser = {id: result.user.id, email: result.user.email};
@@ -731,17 +778,17 @@
           localStorage.setItem(authStorageKey, JSON.stringify(activeUser));
         } catch (error) {
           console.error('Unable to persist the eNAir user session.', error);
-          toast('Вход выполнен, но сохранить сессию не удалось');
+          toast('Signed in, but the session could not be saved.');
         }
         closeModal(true);
         renderAuthControl();
-        toast(requestMode === 'login' ? 'Вход выполнен' : 'Регистрация завершена');
+        toast(requestMode === 'login' ? 'Signed in' : 'Account created');
         const action = pendingAuthAction;
         pendingAuthAction = null;
         if (action) action();
       } catch (error) {
         console.error('Could not reach the eNAir authentication API.', error);
-        message.textContent = 'Не удалось подключиться к серверу. Проверьте, что Flask запущен.';
+        message.textContent = 'Could not reach the server. Check that the app is running.';
       } finally {
         submit.disabled = false;
         loginTab.disabled = false;
@@ -797,7 +844,7 @@
   window.enairSelectDatabaseFlight = flight => {
     const price = flight && Number(flight.price);
     if (!flight || flight.price == null || flight.price === '' || !Number.isFinite(price)) {
-      toast('Информация о рейсе некорректна');
+      toast('The flight information is invalid.');
       return;
     }
     requireAuthentication(() => {
@@ -1309,13 +1356,14 @@
     if (arrival) arrival.textContent = offer.arr;
     const duration = row.querySelector('[class^="time-"]');
     const seats = Number(offer.seats);
-    if (duration) {
-      duration.textContent = seats <= 0
-        ? `${offer.duration} · NON-STOP · SOLD OUT`
-        : `${offer.duration} · NON-STOP · ${seats} seat${seats === 1 ? '' : 's'} left`;
-    }
+    if (duration) duration.textContent = `${offer.duration} · NON-STOP`;
     const price = row.querySelector('[class^="price-"]');
-    if (price) price.dataset.priceKzt = String(Math.round(Number(offer.price) || 0));
+    if (price) {
+      price.dataset.priceKzt = String(Math.round(Number(offer.price) || 0));
+      price.dataset.priceHint = seats <= 0
+        ? 'Sold out'
+        : `${seats} seat${seats === 1 ? '' : 's'} left`;
+    }
     row.classList.toggle('enair-flight-soldout', seats <= 0);
     row.setAttribute('aria-disabled', String(seats <= 0));
     updateCurrencyPrices(row);
@@ -1329,6 +1377,16 @@
     const alternatives=document.createElement('div');
     alternatives.className='enair-grid';
     results.replaceChildren(results.firstElementChild,status,alternatives);
+    const meta=document.createElement('p');meta.className='experience-results-meta';results.firstElementChild.after(meta);
+    const toolbar=document.createElement('label');toolbar.className='experience-sort';
+    toolbar.append('Sort flights');
+    const sort=document.createElement('select');sort.setAttribute('aria-label','Sort flights');
+    [['departure','Departure time'],['price','Lowest price'],['seats','Most available seats']].forEach(([value,label])=>{const option=document.createElement('option');option.value=value;option.textContent=label;sort.append(option);});
+    toolbar.append(sort);results.insertBefore(toolbar,status);
+    sort.addEventListener('change',()=>renderSearch());
+    const skeleton=document.createElement('div');skeleton.setAttribute('aria-hidden','true');
+    skeleton.innerHTML='<div class="experience-skeleton"></div><div class="experience-skeleton"></div><div class="experience-skeleton"></div>';
+    results.append(skeleton);results.setAttribute('aria-busy','true');
     const origin=document.querySelector('.value-50');
     const destination=document.querySelector('.value-53');
     const cabin=document.querySelector('.cabin-46');
@@ -1352,7 +1410,15 @@
       if(!schedule)return;
       const matching=schedule.filter(matchesRoute);
       const offers=matching.filter(flight=>departureDay(flight)===state.departureDate);
+      offers.sort((a,b)=>sort.value==='price'?Number(a.price)-Number(b.price):sort.value==='seats'?Number(b.seats_available)-Number(a.seats_available):String(a.departure_time).localeCompare(String(b.departure_time)));
       status.textContent=offers.length ? '' : 'No flights for this route on the selected departure date.';
+      status.classList.toggle('experience-empty',!offers.length);
+      const count=document.createElement('strong');
+      count.textContent=offers.length?`${offers.length} flight${offers.length===1?'':'s'}`:'No flights';
+      const where=document.createElement('span');where.textContent=` · ${state.fromName} → ${state.toName}`;
+      const note=document.createElement('span');note.className='experience-meta-note';note.textContent='Prices per traveller, taxes included';note.hidden=offers.length===0;
+      meta.replaceChildren(count,where,note);
+      toolbar.hidden=offers.length<2;
       if(!offers.length){
         upcomingFlightDays(matching).forEach(date=>{
           const button=document.createElement('button');
@@ -1366,6 +1432,17 @@
         const row=templates[index%templates.length].cloneNode(true);
         row.classList.add('enair-card-hover');
         paintFlightRow(row,offer);
+        const info=document.createElement('button');info.type='button';info.className='experience-flight-info';info.textContent='Flight details';
+        info.addEventListener('keydown',event=>event.stopPropagation());
+        info.addEventListener('click',event=>{
+          event.stopPropagation();
+          const body=document.createElement('div');
+          [[`${offer.from} → ${offer.to}`,`${offer.dep} — ${offer.arr}`],['Aircraft',offer.aircraft],['Duration',offer.duration],['Available seats',String(offer.seats)]].forEach(([label,value])=>{
+            const line=document.createElement('p');const heading=document.createElement('strong');heading.textContent=label;line.append(heading,document.createElement('br'),document.createTextNode(value));body.append(line);
+          });
+          modal(offer.no,'Flight details',body);
+        });
+        row.querySelector('[class^="duration-"]')?.append(info);
         if(offer.id&&offer.seats>0){
           clickable(row,()=>requireAuthentication(()=>{
             state.flight=offer;state.seats=[];save();go(routes.fare);
@@ -1389,10 +1466,13 @@
     status.textContent='Loading flights…';
     renderSearch();
     fetchFlightsFromApi().then(list=>{
+      skeleton.remove();results.setAttribute('aria-busy','false');
       schedule=list;
       renderSearch();
     }).catch(()=>{
-      status.textContent='Flight availability could not be loaded. Reload the page to try again.';
+      skeleton.remove();results.setAttribute('aria-busy','false');
+      status.textContent='Flight availability could not be loaded. Reload the page to try again.';status.classList.add('experience-empty');
+      const retry=document.createElement('button');retry.type='button';retry.className='enair-choice';retry.textContent='Try again';retry.onclick=()=>location.reload();alternatives.append(retry);
     });
   }
 
@@ -1460,7 +1540,7 @@
     status.textContent='Loading flights…';
     render();
     fetchFlightsFromApi().then(flights=>{schedule=flights;render();}).catch(()=>{
-      status.textContent='Flight availability could not be loaded. Reload the page to try again.';
+      status.textContent='Flight availability could not be loaded. Reload the page to try again.';status.classList.add('experience-empty');
     });
   }
 
@@ -1471,24 +1551,61 @@
     const details=document.querySelector('.details-42');
     const fareSummary=document.querySelector('.tier-44');
     const priceSummary=document.querySelector('.price-45');
-    if(route)route.textContent=`${flight.from} ${flight.dep.replace(/ (AM|PM)$/, '')} → ${flight.to} ${flight.arr.replace(/ (AM|PM)$/, '')}`;
+    if(route)route.textContent=`${flight.from} ${flight.dep} → ${flight.to} ${flight.arr}`;
     if(details)details.textContent=`${flight.no} · ${flight.aircraft} · ${flight.duration} · Non-stop`;
     if(fareSummary)fareSummary.textContent=`${state.cabin} ${state.fare} · ${state.adults} adult${state.adults===1?'':'s'}`;
     if(priceSummary)priceSummary.dataset.priceKzt=String(currentTotal());
     updateCurrencyPrices();
-    ['Select Lite','Select Flex','Select Business'].forEach(t=>bindText(t,()=>{state.fare=t.replace('Select ','');save();go(routes.passengers)}));
-    findAll('Choose fare').forEach(el=>clickable(el,()=>go(routes.passengers)));
-    // Make the entire fare card selectable.
-    document.querySelectorAll('[class^="card-"]').forEach(card=>{const txt=clean(card.textContent);const tier=['Lite','Flex','Business'].find(x=>txt.includes(x));if(tier){card.classList.add('enair-card-hover');clickable(card,()=>{state.fare=tier;save();go(routes.passengers)})}});
+    document.body.classList.add('experience-fare');
+    const cards=[...document.querySelectorAll('.fare-tiers-46 > div')];
+    const tiers=['Lite','Flex','Business'];
+    cards.forEach(card=>{const caption=document.createElement('small');caption.className='experience-per-person';caption.textContent='Per passenger · before taxes';card.querySelector('[class^="price-"]').after(caption);});
+    let chosen=state.fareChosen?state.fare:null;
+    const actions=document.createElement('div');actions.className='experience-fare-actions';
+    const note=document.createElement('span');note.textContent='Compare your options. Total includes all passengers and taxes.';
+    const next=document.createElement('button');next.type='button';next.className='enair-fare-continue';next.textContent='Continue to passengers';
+    next.onclick=()=>{if(chosen)go(routes.passengers);};actions.append(note,next);document.querySelector('.fare-tiers-46').after(actions);
+    function update(){
+      cards.forEach((card,i)=>{
+        const active=chosen===tiers[i];card.setAttribute('aria-pressed',String(active));
+        card.querySelector('[class^="button-"] > div').textContent=active?'Selected':'Choose fare';
+        const price=card.querySelector('[class^="price-"]');
+        price.dataset.priceKzt=String(Math.round(Number(flight.price)+[0,70,260][i]*KZT_PER_USD));
+      });
+      next.disabled=!chosen;
+      fareSummary.textContent=chosen?`${state.cabin} ${chosen} · ${state.adults} passengers`:'Choose your fare';
+      priceSummary.hidden=!chosen;
+      priceSummary.dataset.priceKzt=String(currentTotal());updateCurrencyPrices();
+      priceSummary.classList.remove('experience-total-flash');void priceSummary.offsetWidth;priceSummary.classList.add('experience-total-flash');
+    }
+    cards.forEach((card,i)=>{card.classList.add('enair-card-hover');card.setAttribute('aria-label',tiers[i]+' fare');clickable(card,()=>{chosen=state.fare=tiers[i];state.fareChosen=true;save();update();});});
+    update();
   }
 
   function makeEditableValues(){
-    document.querySelectorAll('[class^="value-"]').forEach(el=>{if(clean(el.textContent) && !el.querySelector('svg') && !el.dataset.enairEditable){el.dataset.enairEditable='1';el.classList.add('enair-editable');el.title='Click to edit';el.addEventListener('click',()=>{el.contentEditable='true';el.focus()});el.addEventListener('blur',()=>{el.contentEditable='false';});}});
+    document.querySelectorAll('[class^="field-"] > [class^="value-"]').forEach((el,index)=>{
+      if(el.querySelector('input'))return;
+      const label=el.parentElement.querySelector('[class^="label-"]');
+      if(!label)return;
+      const caption=clean(label.textContent);el.parentElement.dataset.fieldLabel=caption.toLowerCase();
+      // Seats and meal are chosen elsewhere; they stay informational.
+      if(/^(seats|meal)$/i.test(caption.trim()))return;
+      const input=document.createElement('input');input.className='enair-value-input';input.value=clean(el.textContent);input.setAttribute('aria-label',caption);
+      if(/email/i.test(caption)){input.type='email';input.autocomplete='email';}
+      else if(/phone/i.test(caption)){input.type='tel';input.autocomplete='tel';}
+      else if(/first name/i.test(caption))input.autocomplete='given-name';
+      else if(/last name/i.test(caption))input.autocomplete='family-name';
+      if(is('booking-passengers.html')){
+        const saved=state.passengerFields||{};if(Object.hasOwn(saved,index))input.value=saved[index];
+        input.addEventListener('input',()=>{state.passengerFields={...state.passengerFields,[index]:input.value};save();input.removeAttribute('aria-invalid');el.parentElement.querySelector('.experience-field-error')?.remove();});
+      }
+      el.replaceChildren(input);el.style.cssText='width:100%;height:auto;white-space:normal';el.parentElement.style.height='auto';
+    });
   }
   function currentPriceBreakdown(){
     const storedPrice=Number(state.flight&&state.flight.price);
     const base=Number.isFinite(storedPrice)&&storedPrice>0?storedPrice:244510;
-    const passengers=Math.max(1,Number(state.adults)||1);
+    const passengers=Math.max(1,(Number(state.adults)||1)+(Number(state.children)||0));
     const fareSurchargeUsd={Lite:0,Flex:70,Business:260,First:520}[state.fare] ?? 70;
     const flights=Math.round(base*passengers);
     const seatSelection=Math.max(0,(state.seats||[]).length)*12250;
@@ -1510,9 +1627,17 @@
     const payButton=document.querySelector('.label-85');
     if(summaryPrice)summaryPrice.dataset.priceKzt=String(breakdown.total);
     if(flightPrice)flightPrice.dataset.priceKzt=String(breakdown.flights);
-    if(fareLabel)fareLabel.textContent=state.fare==='Lite'?`${state.cabin} Lite fare`:`${state.cabin} ${state.fare} upgrade`;
-    if(farePrice)farePrice.dataset.priceKzt=String(breakdown.fare);
+    if(fareLabel)fareLabel.textContent=state.fare==='Lite'?`${state.cabin} Lite fare`:`${state.cabin} ${state.fare} fare`;
+    if(farePrice){
+      if(breakdown.fare===0){farePrice.dataset.priceIncluded='true';farePrice.dataset.priceKzt='0';}
+      else{delete farePrice.dataset.priceIncluded;farePrice.dataset.priceKzt=String(breakdown.fare);}
+    }
     if(taxesPrice)taxesPrice.dataset.priceKzt=String(breakdown.taxes);
+    if(totalPrice){
+      let seatLine=document.querySelector('.experience-seat-line');
+      if(!seatLine){seatLine=document.createElement('div');seatLine.className='experience-seat-line';seatLine.style.cssText='display:flex;justify-content:space-between;gap:12px;width:100%;font:14px Geist,sans-serif';const label=document.createElement('span');label.textContent='Seat selection';const value=document.createElement('strong');seatLine.append(label,value);document.querySelector('.divider-80')?.before(seatLine);}
+      seatLine.lastElementChild.dataset.priceKzt=String(breakdown.seatSelection);
+    }
     [totalPrice,payButton].forEach(element=>{if(element)element.dataset.priceKzt=String(breakdown.total)});
     updateCurrencyPrices();
   }
@@ -1522,10 +1647,10 @@
     const blocks = [...root.querySelectorAll('[class^="field-"]')];
     const block = blocks.find(node => {
       const caption = node.querySelector('[class^="label-"]');
-      return caption && clean(caption.textContent).toLowerCase() === label;
+      return node.dataset.fieldLabel === label || caption && clean(caption.textContent).toLowerCase() === label;
     });
     const value = block && block.querySelector('[class^="value-"]');
-    return value ? clean(value.textContent) : '';
+    return value ? clean(value.querySelector('input')?.value ?? value.textContent) : '';
   }
 
   // Имена пассажиров со страницы «Who's travelling?» — они нужны в чеке.
@@ -1533,7 +1658,7 @@
     const names = [];
     document.querySelectorAll('[class^="card-"]').forEach(card => {
       const title = card.querySelector('[class^="title-"]');
-      if (!title || !/^Passenger\s+\d+/i.test(clean(title.textContent))) return;
+      if (!title || !card.querySelector('[data-field-label="first name"]')) return;
       const name = [fieldValueByLabel(card, 'first name'), fieldValueByLabel(card, 'last name')]
         .filter(Boolean).join(' ');
       if (name) names.push(name);
@@ -1542,6 +1667,14 @@
   }
 
   function passengersPage(){
+    const forms=document.querySelector('.passenger-forms-47');
+    if(forms){
+      const template=forms.firstElementChild.cloneNode(true);
+      const count=Math.max(1,(Number(state.adults)||1)+(Number(state.children)||0));
+      while(forms.children.length>count)forms.lastElementChild.remove();
+      while(forms.children.length<count)forms.append(template.cloneNode(true));
+      [...forms.children].forEach((card,i)=>{card.querySelector('[class^="title-"]').textContent=`Passenger ${i+1}`;});
+    }
     makeEditableValues();
     const names=collectPassengers();
     if(names.length){state.passengers=names;save();}
@@ -1551,10 +1684,19 @@
     // Имена перечитываем в момент перехода: поля на странице редактируемые,
     // и правки должны попасть в чек.
     bindText('Continue to payment',()=>{
+      const required=[...document.querySelectorAll('[data-field-label="first name"] input,[data-field-label="last name"] input')];
+      let firstInvalid=null;
+      required.forEach(input=>{
+        const invalid=!input.value.trim();input.setAttribute('aria-invalid',String(invalid));
+        input.parentElement.parentElement.querySelector('.experience-field-error')?.remove();
+        if(invalid){const error=document.createElement('div');error.className='experience-field-error';error.textContent='Please enter the passenger name';input.parentElement.after(error);firstInvalid ||= input;}
+      });
+      if(firstInvalid){firstInvalid.focus();return;}
       const edited=collectPassengers();
       if(edited.length)state.passengers=edited;
       save();go(routes.seats);
     });
+    const nextLabel=document.querySelector('.label-105');if(nextLabel)nextLabel.textContent='Continue to seats';
   }
 
   function paymentPage(){
@@ -1572,6 +1714,7 @@
     const payButton=document.querySelector('.button-84');
     if(payButton)clickable(payButton,completeBooking);
     findAll('Pay by card').forEach(el=>clickable(el,()=>toast('Card payment mode selected')));
+    const paymentNote=document.querySelector('.security-51');if(paymentNote)paymentNote.textContent='Demo checkout · no charge';
   }
   // --- Чек и оформление брони ---------------------------------------------
   let bookingInFlight = false;
@@ -1705,15 +1848,15 @@
     if(bookingInFlight)return;
     if(!activeUser){requireAuthentication(completeBooking);return;}
     const flight=state.flight;
-    if(!flight){toast('Сначала выберите рейс');go(routes.search);return;}
+    if(!flight){toast('Choose a flight first.');go(routes.search);return;}
     if(!flight.id){
-      toast('Это демо-рейс без связи с базой — выберите рейс на странице Book Flights');
+      toast('This demo flight is not linked to the schedule — choose a flight on the Book Flights page.');
       return;
     }
     const passengers=Math.max(1,(Number(state.adults)||1)+(Number(state.children)||0));
-    if(Number(flight.seats)===0){toast('Этот рейс распродан');return;}
+    if(Number(flight.seats)===0){toast('This flight is sold out.');return;}
     if(Number.isFinite(Number(flight.seats))&&Number(flight.seats)<passengers){
-      toast(`Свободных мест осталось только ${flight.seats}`);
+      toast(`Only ${flight.seats} seats are left on this flight.`);
       return;
     }
 
@@ -1751,9 +1894,9 @@
       go(routes.confirmation);
     }catch(error){
       console.error('Booking failed:',error.message);
-      if(error.status===409)toast(error.message);
-      else if(error.status===401){toast('Сессия истекла — войдите заново');requireAuthentication(()=>{});}
-      else toast(error.message||'Не удалось оформить бронь');
+      if(error.status===409)toast(serverMessage(error.message));
+      else if(error.status===401){toast('Your session has expired — please sign in again.');requireAuthentication(()=>{});}
+      else toast(serverMessage(error.message)||'The booking could not be completed.');
     }finally{
       bookingInFlight=false;
       if(payButton)payButton.classList.remove('enair-issuing');
@@ -1909,17 +2052,43 @@
     const booking=receipt.booking||{};
     const ref=booking.reference||state.confirmation||'';
     const set=(selector,value)=>{const el=document.querySelector(selector);if(el&&value)el.textContent=value;};
+    const flight=state.flight||{};
+    document.querySelectorAll('.ticket-flight .time').forEach((el,i)=>{el.textContent=(i?flight.arr:flight.dep)||'—';});
+    document.querySelectorAll('.ticket-flight .ap').forEach((el,i)=>{el.textContent=(i?flight.to:flight.from)||'—';});
+    document.querySelectorAll('.ticket-flight .small').forEach((el,i)=>{el.textContent=i?(state.departureDate?displayDate(state.departureDate):''):(flight.duration||'');});
+    set('.confirm > p.muted','Your booking is saved. You can print your e-ticket or manage your trip below.');
+    set('.ticket-main > div:first-child .small',flight.aircraft);
     set('.ref span:last-child',ref);
     set('.ticket-stub div div:nth-child(2)',ref);
-    set('.confirm > p strong',booking.email);
+    set('.confirm > p strong',booking.email||(activeUser&&activeUser.email));
     const origin=state.fromName||booking.departure_city||'';
     const destination=state.toName||booking.arrival_city||'';
     const airports=[...document.querySelectorAll('.ticket-flight .ap')];
     if(airports[0])airports[0].textContent=`${state.from||''} · ${origin}`.trim();
     if(airports[1])airports[1].textContent=`${state.to||''} · ${destination}`.trim();
-    const values=[booking.flight_number,booking.terminal_gate||'—',booking.passengers?`${booking.passengers} passengers`:null,(state.seats||[]).join(' · ')||'Assigned at check-in',[booking.cabin,booking.fare].filter(Boolean).join(' '),booking.boarding_time||'—',booking.baggage||'—',formatPriceKzt(receipt.breakdown?.total)];
+    const baggageByFare={Lite:'1 × 8 kg cabin bag',Flex:'1 × 23 kg checked bag',Business:'2 × 32 kg checked bags',First:'2 × 32 kg checked bags'};
+    const boardingTime=dep=>{
+      const match=String(dep||'').match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+      if(!match)return '45 min before departure';
+      let hours=Number(match[1])%12+(/pm/i.test(match[3])?12:0);
+      let minutes=hours*60+Number(match[2])-45;
+      if(minutes<0)minutes+=1440;
+      const suffix=Math.floor(minutes/60)%24>=12?'PM':'AM';
+      const hour12=Math.floor(minutes/60)%12||12;
+      return `${String(hour12).padStart(2,'0')}:${String(minutes%60).padStart(2,'0')} ${suffix}`;
+    };
+    const values=[booking.flight_number,booking.terminal_gate||'At check-in',booking.passengers?`${booking.passengers} passengers`:null,(state.seats||[]).join(' · ')||'Assigned at check-in',[booking.cabin,booking.fare].filter(Boolean).join(' '),booking.boarding_time||boardingTime(flight.dep),booking.baggage||baggageByFare[state.fare]||'Per fare rules',formatPriceKzt(receipt.breakdown?.total)];
     const cells=[...document.querySelectorAll('.ticket-grid > div strong')];
     values.forEach((value,index)=>{if(value&&cells[index])cells[index].textContent=value;});
+    // The stub repeats the fare and seats; keep it in sync with the booking.
+    const fareText=[booking.cabin,booking.fare].filter(Boolean).join(' ')||state.fare||'';
+    const seatText=(state.seats||[]).join(' · ')||'Assigned at check-in';
+    document.querySelectorAll('.ticket-stub > div').forEach(row=>{
+      const label=row.querySelector('span.muted');const value=row.querySelector('strong');
+      if(!label||!value)return;
+      if(/fare/i.test(label.textContent)&&fareText)value.textContent=fareText;
+      if(/seats/i.test(label.textContent))value.textContent=seatText;
+    });
     const qr=document.querySelector('.barcode');
     if(qr&&ref){
       qr.setAttribute('aria-label',`QR code for booking ${ref}`);
@@ -1952,7 +2121,7 @@
       try{
         const response=await fetch(`${API_BASE}/api/${signup?'register':'login'}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:`${first} ${last}`.trim(),email,password})});
         const result=await response.json().catch(()=>({}));
-        if(!response.ok)throw new Error(result.error||'Unable to complete this request.');
+        if(!response.ok)throw new Error(serverMessage(result.error)||'Unable to complete this request.');
         if(!result.user)throw new Error('The server did not return an account.');
         localStorage.setItem(authStorageKey,JSON.stringify({id:result.user.id,email:result.user.email,membership:result.user.membership_number||''}));
         go('enair-account.html');
@@ -2072,7 +2241,18 @@
   mobileMenu();
   globalFallbacks(); informationalFallbacks();
   updateDisplayedRoute();
+  if(is('booking-passengers.html')||is('booking-payment.html')){
+    const flight=state.flight;
+    if(flight){
+      const route=document.querySelector('.flight-41');const details=document.querySelector('.details-42');const tier=document.querySelector('.tier-44');
+      if(route)route.textContent=`${flight.from} ${flight.dep} → ${flight.to} ${flight.arr}`;
+      if(details)details.textContent=`${flight.no} · ${flight.aircraft} · ${displayDate(state.departureDate)} · ${flight.duration}`;
+      if(tier){const pax=Math.max(1,(Number(state.adults)||1)+(Number(state.children)||0));tier.textContent=`${state.cabin} ${state.fare} · ${pax} passenger${pax===1?'':'s'}`;}
+    }
+  }
   injectReveal();
+  if(!document.querySelector('link[href="experience.css"]')){const experienceStyle=document.createElement('link');experienceStyle.rel='stylesheet';experienceStyle.href='experience.css';document.head.append(experienceStyle);}
+  const experienceScript=document.createElement('script');experienceScript.src='experience.js';document.body.append(experienceScript);
 
   // Виджет ассистента подключается отдельным файлом, чтобы не раздувать navigation.js.
   function loadAssistant() {

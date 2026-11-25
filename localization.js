@@ -1,4 +1,4 @@
-/* eNAir localization: interface language (EN / RU / KK) and display currency.
+﻿/* eNAir localization: interface language (EN / RU / KK) and display currency.
    Replaces the Google Translate widget: translations come from a local dictionary,
    prices are converted from the KZT base stored in data-price-kzt. */
 (function () {
@@ -21,6 +21,18 @@
     'Book Now': 'Забронировать',
     'Sign in / Register': 'Войти / Регистрация',
     'Sign in': 'Войти',
+    'Register': 'Регистрация',
+    'Password': 'Пароль',
+    'Show': 'Показать',
+    'Hide': 'Скрыть',
+    'Show password': 'Показать пароль',
+    'Hide password': 'Скрыть пароль',
+    'Welcome back': 'С возвращением',
+    'Create an account': 'Создать аккаунт',
+    'Create account': 'Создать аккаунт',
+    'Included': 'Включено',
+    'Sign in to continue your booking.': 'Войдите, чтобы продолжить бронирование.',
+    'Register to book flights.': 'Зарегистрируйтесь, чтобы бронировать рейсы.',
     'Manage booking': 'Мои брони',
     'My account': 'Личный кабинет',
     'Search': 'Найти',
@@ -51,6 +63,10 @@
     'Send message': 'Отправить сообщение',
     'Save changes': 'Сохранить',
     'Sign out': 'Выйти',
+    'eNAir assistant': 'Ассистент eNAir',
+    'Flights, fares, baggage, check-in': 'Рейсы, тарифы, багаж, регистрация',
+    'Type your question…': 'Ваш вопрос…',
+    'Typing…': 'Печатает…',
     'Company': 'Компания',
     'Support': 'Поддержка',
     'Connect': 'Связь',
@@ -142,6 +158,18 @@
     'Book Now': 'Брондау',
     'Sign in / Register': 'Кіру / Тіркелу',
     'Sign in': 'Кіру',
+    'Register': 'Тіркелу',
+    'Password': 'Құпия сөз',
+    'Show': 'Көрсету',
+    'Hide': 'Жасыру',
+    'Show password': 'Құпия сөзді көрсету',
+    'Hide password': 'Құпия сөзді жасыру',
+    'Welcome back': 'Қайта қош келдіңіз',
+    'Create an account': 'Аккаунт жасау',
+    'Create account': 'Аккаунт жасау',
+    'Included': 'Кіреді',
+    'Sign in to continue your booking.': 'Брондауды жалғастыру үшін кіріңіз.',
+    'Register to book flights.': 'Рейстерді брондау үшін тіркеліңіз.',
     'Manage booking': 'Менің брондарым',
     'My account': 'Жеке кабинет',
     'Search': 'Іздеу',
@@ -159,9 +187,31 @@
     'Personas': 'Персоналар',
     'Continue': 'Жалғастыру',
     'Select': 'Таңдау',
-    'Sign out': 'Шығу'
+    'Sign out': 'Шығу',
+    'eNAir assistant': 'eNAir ассистенті',
+    'Flights, fares, baggage, check-in': 'Рейстер, тарифтер, багаж, тіркелу',
+    'Type your question…': 'Сұрағыңыз…',
+    'Typing…': 'Жазып жатыр…'
   };
 
+  Object.assign(RU, {
+    'Flight details':'Подробнее о рейсе','Per passenger · before taxes':'За пассажира · без сборов',
+    'Sort flights':'Сортировка рейсов','Departure time':'По времени вылета','Lowest price':'Сначала дешевле','Most available seats':'Больше свободных мест','Try again':'Повторить',
+    'Continue to passengers':'Далее: пассажиры','Continue to seats':'Далее: места','Choose your fare':'Выберите тариф','Choose fare':'Выбрать тариф','Selected':'Выбрано',
+    'Compare your options. Total includes all passengers and taxes.':'Сравните тарифы. Итог включает всех пассажиров и сборы.',
+    'Please enter the passenger name':'Введите имя пассажира','Seat selection':'Выбор мест','Demo checkout · no charge':'Демонстрационная оплата · без списания',
+    'Choose a seat or get one at check-in':'Выберите место или получите его при регистрации',
+    'Prices per traveller, taxes included':'Цены за пассажира, включая сборы'
+  });
+  Object.assign(KK, {
+    'Flight details':'Рейс туралы','Per passenger · before taxes':'Бір жолаушыға · алымсыз',
+    'Sort flights':'Рейстерді сұрыптау','Departure time':'Ұшу уақыты бойынша','Lowest price':'Ең арзан','Most available seats':'Бос орындар саны','Try again':'Қайталау',
+    'Continue to passengers':'Келесі: жолаушылар','Continue to seats':'Келесі: орындар','Choose your fare':'Тарифті таңдаңыз','Choose fare':'Тарифті таңдау','Selected':'Таңдалды',
+    'Compare your options. Total includes all passengers and taxes.':'Тарифтерді салыстырыңыз. Жалпы сомаға барлық жолаушылар мен алымдар кіреді.',
+    'Please enter the passenger name':'Жолаушының атын енгізіңіз','Seat selection':'Орын таңдау','Demo checkout · no charge':'Сынақ төлемі · ақша алынбайды',
+    'Choose a seat or get one at check-in':'Орынды таңдаңыз немесе тіркелу кезінде алыңыз',
+    'Prices per traveller, taxes included':'Бағалар жолаушыға, алымдарды қоса'
+  });
   var DICTIONARIES = { en: null, ru: RU, kk: KK };
   var PREFIX_RULES = {
     ru: [
@@ -221,6 +271,7 @@
 
   function applyPrices(root) {
     (root || document).querySelectorAll('[data-price-kzt]').forEach(function (element) {
+      if (element.dataset.priceIncluded === 'true') { element.textContent = 'Included'; return; }
       var base = Number(element.dataset.priceKzt);
       if (!Number.isFinite(base)) return;
       var text = format(base);

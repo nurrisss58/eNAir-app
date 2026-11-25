@@ -1,0 +1,201 @@
+/* Shared interaction layer. Loaded after the existing page and responsive styles. */
+:root{--experience-ease:cubic-bezier(.22,1,.36,1);--experience-shadow:0 18px 48px rgba(30,41,59,.09)}
+html{scroll-padding-top:110px}
+button,a,[role=button],input,select,textarea,[contenteditable]{-webkit-tap-highlight-color:transparent}
+:is(button,a,[role=button],input,select,textarea,[contenteditable]):focus-visible{outline:3px solid #0891b2!important;outline-offset:4px}
+:is(input,select,textarea,[contenteditable=true]):focus{border-color:#8b5cf6!important;box-shadow:0 0 0 4px #8b5cf612}
+.sticky-navigation-2,.navigation-2,.nav{position:sticky!important;top:0;z-index:800;transition:box-shadow .22s,background .22s;isolation:isolate}
+.experience-scrolled :is(.sticky-navigation-2,.navigation-2,.nav){background:rgba(255,255,255,.95)!important;backdrop-filter:blur(18px);box-shadow:0 5px 24px #0f172a0d}
+
+/* Hero -------------------------------------------------------------------- */
+.hero-section-20{min-height:640px;height:auto!important;background-image:linear-gradient(180deg,rgba(240,249,255,.82),rgba(248,250,252,.42) 65%,rgba(255,255,255,.92)),url('images/2c0e2f3a5230af3a420c346a0d8fc31223b5e3c1.jpg')!important;gap:44px!important}
+.hero-copy-21{height:auto!important;max-width:880px}
+.fly-beyond-boundaries-24{font-size:clamp(42px,5.8vw,80px)!important;line-height:1.05!important;letter-spacing:-.045em!important;max-width:850px;text-wrap:balance}
+.redefining-air-travel-throug-25{line-height:1.7!important;color:#334155!important;max-width:610px;text-wrap:balance}
+.tag-22{background:#ffffffc9!important;border:1px solid #fff!important;box-shadow:0 4px 18px #0f172a05;max-width:100%;height:auto!important;text-align:center}
+.search-bar-container-26{background:rgba(255,255,255,.96)!important;border:1px solid #fff!important;box-shadow:0 24px 64px #17255420!important;border-radius:24px!important}
+.search-bar-container-26>div:not([class^=line-]):not(.search-action-54){border-radius:12px;transition:background .18s}
+.search-bar-container-26>div:not([class^=line-]):not(.search-action-54):hover{background:#f5f3ff}
+.search-bar-container-26 :is(.new-york-jfk-32,.london-lhr-39){white-space:normal!important;overflow-wrap:anywhere;line-height:1.4;min-width:0}
+.welcome-to-next-gen-aviation-23{white-space:normal!important;line-height:1.5!important}
+.search-action-54,.enair-fare-continue,.enair-auth-submit{background:linear-gradient(125deg,#7c3aed,#6366f1)!important;box-shadow:0 6px 18px #7c3aed22}
+.experience-shortcuts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:-20px}
+.experience-shortcuts a{padding:10px 16px;border:1px solid #ffffffd9;border-radius:100px;background:#ffffffc9;color:#334155;text-decoration:none;font:500 14px 'Geist',sans-serif;transition:background .2s,transform .2s}
+.experience-shortcuts a:hover{background:#fff;transform:translateY(-2px)}
+
+/* Generic cards ----------------------------------------------------------- */
+.enair-card-hover,.home-destination-card,.frame-129>div,.fare-tiers-46>div{transition:transform .25s var(--experience-ease),box-shadow .25s,border-color .25s!important}
+@media(hover:hover){.enair-card-hover:hover,.home-destination-card:hover,.frame-129>div:hover{transform:translateY(-4px);box-shadow:var(--experience-shadow)!important;border-color:#c4b5fd!important}}
+
+/* Search form: one compact row of fields instead of four full-width rows --- */
+.booking-search-1 .search-form-39{height:auto!important;gap:18px!important;padding:24px!important}
+.booking-search-1 .trip-options-40{height:auto!important;flex-direction:row!important;align-items:center!important;justify-content:space-between!important;gap:16px!important;flex-wrap:wrap;width:100%}
+.booking-search-1 .trip-options-40>.cabin-46{white-space:normal;font-size:13px}
+.booking-search-1 .route-fields-47{height:auto!important;display:grid!important;grid-template-columns:1.15fr 1.15fr .9fr .9fr;gap:14px!important;width:100%;overflow:visible!important}
+.booking-search-1 .route-fields-47>[class^=field-]{height:auto!important;min-height:78px;justify-content:center;transition:border-color .18s,box-shadow .18s}
+.booking-search-1 .route-fields-47>[class^=field-]:hover{border-color:#c4b5fd!important;box-shadow:0 4px 14px #8b5cf614}
+@media(max-width:1100px){.booking-search-1 .route-fields-47{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.booking-search-1 .route-fields-47{grid-template-columns:1fr}.booking-search-1 .search-form-39{padding:18px!important}}
+
+/* Flight results ---------------------------------------------------------- */
+.results-60{height:auto!important;min-height:0!important;gap:14px!important}
+.booking-search-1 .content-38{height:auto!important;min-height:0!important;overflow:visible!important;padding-bottom:140px!important}
+.experience-results-meta{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;width:100%;margin:-4px 0 2px;color:#64748b;font:500 14px/1.5 'Geist',sans-serif}
+.experience-results-meta strong{color:#0f172a;font-weight:700}
+.experience-meta-note{margin-left:auto;color:#94a3b8;font-size:12.5px}
+.results-60>[class^=flight-option-]{display:grid!important;grid-template-columns:minmax(180px,215px) 100px minmax(150px,1fr) 100px auto 128px;grid-template-areas:"aircraft dep duration arr price button";align-items:center!important;height:auto!important;min-height:112px;gap:16px!important;padding:20px 24px!important;border:1px solid #e2e8f0!important;border-radius:18px!important;background:#fff!important;box-shadow:0 4px 18px #0f172a05;overflow:visible!important;cursor:pointer;transition:transform .22s var(--experience-ease),box-shadow .22s,border-color .22s!important;animation:experience-in .35s var(--experience-ease) backwards}
+@media(hover:hover){.results-60>[class^=flight-option-]:hover{transform:translateY(-2px);border-color:#c4b5fd!important;box-shadow:0 16px 40px #0f172a10}}
+.results-60>[class^=flight-option-]:focus-visible{outline:3px solid #0891b2;outline-offset:3px}
+.results-60>[class^=flight-option-]>[class^=aircraft-]{grid-area:aircraft;width:auto!important;height:auto!important;overflow:visible!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:flex-start!important;gap:12px!important;min-width:0}
+.results-60>[class^=flight-option-]>[class^=aircraft-]>[class^=plane-icon-]{width:42px!important;height:42px!important;flex:0 0 42px;border-radius:12px}
+.results-60>[class^=flight-option-]>[class^=aircraft-]>[class^=info-]{height:auto!important;overflow:visible!important;gap:3px!important;min-width:0}
+.results-60>[class^=flight-option-]>[class^=aircraft-] [class^=number-]{font-size:15.5px;line-height:1.25}
+.results-60>[class^=flight-option-]>[class^=aircraft-] [class^=aircraft-]{font-size:11px;line-height:1.35;white-space:normal!important;overflow-wrap:anywhere}
+.results-60>[class^=flight-option-]>[class^=departure-],.results-60>[class^=flight-option-]>[class^=arrival-]{font-family:'Outfit',sans-serif;font-size:20px!important;font-weight:700!important;line-height:1.2!important;letter-spacing:-.02em;font-variant-numeric:tabular-nums;white-space:nowrap}
+.results-60>[class^=flight-option-]>[class^=departure-]{grid-area:dep;justify-self:start}
+.results-60>[class^=flight-option-]>[class^=arrival-]{grid-area:arr;justify-self:start}
+.results-60>[class^=flight-option-]>[class^=duration-]{grid-area:duration;height:auto!important;align-self:center;overflow:visible!important;display:flex!important;flex-direction:column;align-items:stretch!important;gap:7px!important;min-width:0}
+.results-60>[class^=flight-option-]>[class^=duration-]>[class^=time-]{font:500 11px/1.4 'Geist',sans-serif!important;letter-spacing:.045em;text-align:center;white-space:normal!important;color:#64748b}
+.results-60>[class^=flight-option-]>[class^=duration-]>[class^=route-line-]{height:2px!important;border-radius:99px;background:linear-gradient(90deg,#06b6d4,#8b5cf6)!important;position:relative;overflow:visible}
+.results-60>[class^=flight-option-]>[class^=duration-]>[class^=route-line-]::before{content:'';position:absolute;left:0;top:50%;width:6px;height:6px;border-radius:50%;background:#06b6d4;transform:translate(-1px,-50%)}
+.results-60>[class^=flight-option-]>[class^=duration-]>[class^=route-line-]::after{content:'';position:absolute;right:0;top:50%;width:7px;height:7px;border-top:2px solid #8b5cf6;border-right:2px solid #8b5cf6;transform:translateY(-50%) rotate(45deg)}
+.experience-flight-info{align-self:center;background:none;border:0;padding:2px 0;color:#6d28d9;text-decoration:none;cursor:pointer;font:500 11.5px 'Geist',sans-serif;opacity:.85}
+.experience-flight-info:hover{opacity:1;text-decoration:underline;text-underline-offset:3px}
+.results-60>[class^=flight-option-]>[class^=price-]{grid-area:price;justify-self:end;text-align:right;font-family:'Outfit',sans-serif;font-size:23px!important;font-weight:800!important;line-height:1.1!important;letter-spacing:-.02em;white-space:nowrap;color:#0f172a}
+.results-60>[class^=flight-option-]>[class^=price-]::after{content:attr(data-price-hint);display:block;margin-top:4px;font:500 10.5px/1.3 'Geist',sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#64748b}
+.results-60>[class^=flight-option-]>[class^=button-]{grid-area:button;width:100%!important;height:44px!important;padding:0 18px!important;justify-content:center!important;border-radius:12px!important;background:linear-gradient(115deg,#7c3aed,#6366f1)!important;box-shadow:0 6px 16px #7c3aed1f;transition:filter .18s,transform .18s}
+.results-60>[class^=flight-option-]:hover>[class^=button-]{filter:brightness(1.06)}
+.results-60>.enair-flight-soldout{opacity:.72;cursor:not-allowed}
+.results-60>.enair-flight-soldout>[class^=button-]{background:#e2e8f0!important;box-shadow:none}
+.results-60>.enair-flight-soldout>[class^=button-]>div{color:#64748b!important}
+.results-60>.enair-flight-soldout>[class^=price-]{color:#94a3b8}
+.experience-sort{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;color:#64748b;font:500 14px 'Geist',sans-serif;margin:8px 0 2px}
+.experience-sort[hidden]{display:none!important}
+.results-60>[role=status].experience-empty{padding:20px 22px;border:1px dashed #cbd5e1;border-radius:16px;background:#fff;color:#475569;font:500 14px/1.6 'Geist',sans-serif;margin:4px 0 0;width:100%;box-sizing:border-box}
+.results-60>.enair-grid{gap:10px;margin-top:2px}
+.results-60>.enair-grid .enair-choice{padding:10px 16px;border:1px solid #e2e8f0;border-radius:100px;background:#fff;color:#0f172a;font:600 13px 'Geist',sans-serif;cursor:pointer;transition:border-color .18s,background .18s,transform .18s}
+.results-60>.enair-grid .enair-choice:hover{border-color:#c4b5fd;background:#faf5ff;transform:translateY(-1px)}
+.experience-sort select{font:inherit;background:#fff;border:1px solid #e2e8f0;padding:10px 14px;border-radius:12px;color:#0f172a}
+.experience-skeleton{height:112px;border-radius:18px;margin:0;background:linear-gradient(100deg,#edf2f7 30%,#fafbff 45%,#edf2f7 60%);background-size:220% 100%;animation:experience-shimmer 1.4s linear infinite}
+@media(max-width:1120px) and (min-width:961px){.results-60>[class^=flight-option-]{grid-template-columns:minmax(150px,190px) 88px minmax(120px,1fr) 88px auto 118px;gap:12px!important;padding:18px 20px!important}.results-60>[class^=flight-option-]>[class^=departure-],.results-60>[class^=flight-option-]>[class^=arrival-]{font-size:18px!important}.results-60>[class^=flight-option-]>[class^=price-]{font-size:20px!important}}
+@media(max-width:960px){.results-60>[class^=flight-option-]{grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"aircraft aircraft aircraft" "dep duration arr" "price price button";gap:14px 12px!important;padding:18px!important;min-height:0}.results-60>[class^=flight-option-]>[class^=departure-],.results-60>[class^=flight-option-]>[class^=arrival-]{font-size:19px!important}.results-60>[class^=flight-option-]>[class^=duration-]>[class^=time-]{font-size:10px!important;white-space:nowrap!important;letter-spacing:.02em}.results-60>[class^=flight-option-]>[class^=price-]{justify-self:start;text-align:left;font-size:21px!important}.results-60>[class^=flight-option-]>[class^=button-]{width:auto!important;min-width:118px;padding:0 20px!important}.experience-meta-note{margin-left:0;flex-basis:100%}}
+
+/* Fare selection ---------------------------------------------------------- */
+.experience-fare .fare-tiers-46>div{min-height:340px}
+.experience-fare .content-38{height:auto!important;overflow:visible!important}
+.experience-fare .fare-tiers-46{height:auto!important;display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));align-items:stretch!important;gap:20px}
+.experience-fare .trip-summary-39{height:auto!important;min-height:110px;flex-direction:row!important;justify-content:space-between!important;align-items:center!important;gap:20px!important;background:#0f172a!important;color:white;border-radius:22px!important}
+.experience-fare .trip-summary-39 :is(.flight-41,.price-45){color:white!important}
+.experience-fare .trip-summary-39 :is(.details-42,.tier-44){color:#cbd5e1!important}
+.experience-fare .fare-43{align-items:flex-end!important}
+.experience-fare .fare-tiers-46>div>[class^=benefit-]{white-space:normal;line-height:1.5;height:auto}
+.experience-fare .fare-tiers-46>div>[class^=price-]{font-size:clamp(24px,2.3vw,36px);white-space:normal}
+.experience-per-person{display:block;font:400 11px/1.4 'Geist',sans-serif;color:#64748b;margin-top:-6px;letter-spacing:.02em}
+.experience-fare .fare-tiers-46>div{height:auto!important;min-height:340px;padding:28px!important;border:1px solid #e2e8f0!important;background:#fff!important;position:relative;cursor:pointer}
+.experience-fare .fare-tiers-46>div::before{content:'';position:absolute;top:26px;right:26px;width:18px;height:18px;border-radius:50%;border:2px solid #cbd5e1;background:#fff;transition:border-color .18s,background .18s,box-shadow .18s}
+.experience-fare .fare-tiers-46>div[aria-pressed=true]::before{border-color:#7c3aed;background:#7c3aed;box-shadow:inset 0 0 0 3px #fff}
+.experience-fare .fare-tiers-46>div[aria-pressed=true]{border:2px solid #8b5cf6!important;padding:27px!important;background:linear-gradient(155deg,#faf5ff,#fff)!important;box-shadow:0 12px 32px #8b5cf619}
+.experience-fare .fare-tiers-46>div>div[class^=button-]{margin-top:auto!important;background:#0f172a!important;transition:background .18s}
+.experience-fare .fare-tiers-46>div[aria-pressed=true]>div[class^=button-]{background:#7c3aed!important}
+.experience-fare-actions{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:6px 0 20px;width:100%;box-sizing:border-box;font:14px/1.6 'Geist',sans-serif;color:#64748b}
+.experience-fare-actions button{border:0;border-radius:14px;padding:16px 26px;color:#fff;font:600 15px 'Geist',sans-serif;cursor:pointer;background:linear-gradient(125deg,#7c3aed,#6366f1)}
+.experience-fare-actions button:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.2)}
+.experience-total-flash{animation:experience-price .4s ease-out}
+@media(max-width:1000px){.experience-fare .fare-tiers-46{grid-template-columns:1fr}.experience-fare .trip-summary-39{flex-direction:column!important;align-items:flex-start!important}.experience-fare .fare-43{align-items:flex-start!important}}
+
+/* Booking summary, steps and forms ---------------------------------------- */
+.order-summary-68{position:sticky!important;top:115px;align-self:flex-start;box-shadow:var(--experience-shadow);border-radius:22px!important}
+.experience-progress{display:flex;align-items:center;gap:0;width:100%;margin:26px 0 0;font:600 13px 'Geist',sans-serif;flex-wrap:nowrap}
+.experience-progress>a,.experience-progress>span{display:inline-flex;align-items:center;gap:9px;text-decoration:none;color:#94a3b8;white-space:nowrap}
+.experience-progress .experience-step-num{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;border:1px solid #e2e8f0;background:#f8fafc;color:#94a3b8;font:700 11px 'Geist',sans-serif;transition:background .2s,color .2s,border-color .2s}
+.experience-progress .experience-step-line{display:block;flex:1 1 auto;height:1px;min-width:16px;margin:0 14px;border-radius:1px;background:#e2e8f0}
+.experience-progress>a.is-done{color:#0e7490}
+.experience-progress>a.is-done .experience-step-num{border-color:#a5f3fc;background:#ecfeff;color:#0e7490}
+.experience-progress [aria-current=step]{color:#0f172a}
+.experience-progress [aria-current=step] .experience-step-num{border-color:#0f172a;background:#0f172a;color:#fff;box-shadow:0 4px 10px #0f172a26}
+.experience-progress a:hover .experience-step-num{border-color:#67e8f9;background:#ecfeff}
+.experience-mobile-bar{display:none}
+.experience-bar-total{font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+
+/* Payment summary: label left, amount right (was a stack of two lines) ---- */
+.booking-payment-1 .order-summary-68{min-width:0}
+.booking-payment-1 .card-69{height:auto!important;gap:0!important;padding:26px!important;border-radius:20px!important}
+.booking-payment-1 .card-69>.title-70{margin-bottom:10px}
+.booking-payment-1 .card-69>[class^=line-item-]{height:auto!important;overflow:visible!important;flex-direction:row!important;align-items:center!important;justify-content:space-between!important;gap:14px;padding:11px 0;border-bottom:1px solid #f1f5f9}
+.booking-payment-1 .card-69>[class^=line-item-]>[class^=label-]{white-space:normal}
+.booking-payment-1 .card-69>[class^=line-item-]>[class^=amount-]{text-align:right;font-weight:500}
+.booking-payment-1 .card-69>.divider-80{display:none}
+.booking-payment-1 .card-69>.total-81{height:auto!important;flex-direction:row!important;align-items:baseline!important;justify-content:space-between!important;padding:18px 0 16px;gap:12px}
+.booking-payment-1 .card-69>.total-81>[class^=label-]{font:600 14px 'Geist',sans-serif;color:#0f172a}
+.booking-payment-1 .card-69>.button-84{width:100%;margin-top:2px}
+.booking-payment-1 .card-69>.terms-86{margin-top:12px}
+.experience-seat-line{padding:11px 0;border-bottom:1px solid #f1f5f9;align-items:center}
+.experience-seat-line>span{color:#64748b}
+[data-price-included=true]{color:#0e7490!important;font-weight:600;font-size:13px!important;letter-spacing:0}
+
+/* Payment in progress: the button itself shows the work ------------------- */
+.booking-payment-1 .button-84.enair-issuing{cursor:progress;background-image:linear-gradient(100deg,#7c3aed 28%,#a78bfa 46%,#7c3aed 64%)!important;background-size:220% 100%!important;animation:experience-shimmer 1.1s linear infinite!important;box-shadow:0 8px 22px #7c3aed33}
+.booking-payment-1 .button-84.enair-issuing>div{color:#fff!important}
+
+/* Confirmation ticket: keep the boarding pass readable on phones ---------- */
+@media(max-width:700px){
+  .confirm .ticket-flight{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:6px 8px;align-items:center}
+  .confirm .ticket-flight>div:first-child{grid-column:1;grid-row:1;min-width:0}
+  .confirm .ticket-flight>div:last-child{grid-column:3;grid-row:1;text-align:right;min-width:0}
+  .confirm .ticket-flight>div:nth-child(2){grid-column:1/-1;grid-row:2;display:flex!important;flex-direction:row!important;align-items:center;justify-content:space-between;gap:12px;margin-top:6px}
+  .confirm .ticket-flight>div:nth-child(2)>span:nth-child(2){display:none!important}
+  .confirm .ticket-flight .time{font-size:30px}
+  .confirm .ticket-flight .ap{font-size:9.5px;letter-spacing:.08em;white-space:normal}
+  .confirm .ticket-main{padding:20px!important}
+  .confirm .ticket-stub{padding:20px!important}
+}
+
+/* Seats, modals, toasts --------------------------------------------------- */
+.seat{transition:background .18s,box-shadow .18s,transform .18s!important}
+.seat:not(.occupied):hover{transform:translateY(-3px);box-shadow:0 5px 12px #8b5cf625}
+.seat.selected{box-shadow:0 0 0 3px #8b5cf626;transform:translateY(-2px)}
+.seat:disabled{cursor:not-allowed}
+.enair-modal-backdrop{animation:experience-fade .18s ease-out}
+.enair-modal,.enair-receipt-card{animation:experience-in .28s var(--experience-ease)}
+.enair-toast{animation:experience-in .22s var(--experience-ease)}
+.confirm .success-ico{animation:experience-in .45s var(--experience-ease)}
+.confirm .ticket{animation:experience-in .5s .08s var(--experience-ease) both}
+
+/* Forms ------------------------------------------------------------------- */
+.enair-value-input{width:100%;min-width:0;box-sizing:border-box;border:1px solid #e2e8f0;border-radius:10px;padding:11px 12px;color:#0f172a;background:#fff;font:400 16px 'Geist',sans-serif}
+.enair-value-input[aria-invalid=true]{border-color:#dc2626;background:#fff7f7}
+.booking-passengers-1 :is(.content-38,.passenger-layout-46,.passenger-forms-47,.card-48,.card-70,.name-50,.name-72,.details-60,.details-82,.extras-92,.card-93),.booking-payment-1 :is(.content-38,.payment-layout-46,.payment-form-47,.card-48,.card-69,.card-details-58,.order-summary-68){height:auto!important;overflow:visible!important;min-width:0}
+.booking-passengers-1 :is(.name-50,.name-72,.details-60,.details-82){display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:100%;gap:14px}
+.booking-passengers-1 [class^=field-],.booking-payment-1 [class^=field-]{width:100%;min-width:0}
+.booking-passengers-1 .passenger-layout-46,.booking-payment-1 .payment-layout-46{display:grid;grid-template-columns:minmax(0,1fr) 360px;align-items:start;width:100%}
+.booking-passengers-1 .extras-92{position:sticky;top:110px;width:100%}
+.booking-payment-1 .order-summary-68{width:100%!important}
+.booking-payment-1 .card-details-58{display:grid;grid-template-columns:1fr 1fr;width:100%}
+.booking-payment-1 .card-69{background:linear-gradient(145deg,#faf5ff,#fff);border:1px solid #ddd6fe}
+.booking-payment-1 .button-84{border-radius:12px;background:#7c3aed}
+.booking-passengers-1 .header-15,.booking-payment-1 .header-15,.booking-select-fare-1 .header-15{height:auto!important;min-height:230px;overflow:visible!important}
+@media(max-width:1000px){.booking-passengers-1 .passenger-layout-46,.booking-payment-1 .payment-layout-46{grid-template-columns:1fr}.booking-passengers-1 .extras-92{position:static}}
+@media(max-width:600px){.booking-passengers-1 :is(.name-50,.name-72,.details-60,.details-82){grid-template-columns:1fr}.booking-passengers-1 .header-15,.booking-payment-1 .header-15,.booking-select-fare-1 .header-15{min-height:0}}
+.experience-field-error{color:#b91c1c;font:13px/1.4 'Geist',sans-serif;margin-top:5px}
+.experience-password{display:flex;gap:8px;align-items:center}
+.experience-password input{min-width:0;flex:1}
+.experience-password button{border:0;background:#f1f5f9;color:#475569;padding:10px;border-radius:10px;font:500 13px 'Geist',sans-serif;cursor:pointer}
+
+/* Header: keep every control inside the bar on laptop widths --------------- */
+@media(max-width:1560px){.sticky-navigation-2,.navigation-2{gap:18px!important;padding-left:40px!important;padding-right:40px!important}.nav-links-7{gap:22px!important}}
+@media(max-width:1400px){.sticky-navigation-2,.navigation-2{gap:14px!important;padding-left:30px!important;padding-right:30px!important}.nav-links-7{gap:18px!important}}
+@media(max-width:1300px){.enair-auth-email{display:none!important}.enair-local-controls{gap:4px!important}.enair-local-group button{padding:6px 7px!important}}
+@media(max-width:1240px){.sticky-navigation-2,.navigation-2{padding-left:24px!important;padding-right:24px!important}[class^="book-now-"]{display:none!important}.nav-links-7{gap:14px!important}}
+@media(min-width:761px) and (max-width:1200px){.sticky-navigation-2,.navigation-2,.nav{padding-left:24px!important;padding-right:24px!important;gap:12px!important}.nav-links-7,.links-7,.nav>.nav-links{display:none!important}.menu-mobile{display:block!important}.search-bar-container-26{display:grid!important;grid-template-columns:1fr 1fr;gap:18px!important;max-width:700px}.search-bar-container-26>[class^=line-]{display:none}.search-bar-container-26 .search-action-54{grid-column:1/-1;width:100%!important}.hero-section-20{padding-left:32px!important;padding-right:32px!important}}
+
+/* Mobile ------------------------------------------------------------------ */
+@media(max-width:400px){.search-bar-container-26{grid-template-columns:1fr!important}.search-bar-container-26>div{grid-column:1!important}.hero-section-20{padding-left:18px!important;padding-right:18px!important}.hero-copy-21{width:100%!important}.redefining-air-travel-throug-25{font-size:16px!important}}
+@media(max-width:760px){.experience-has-bar .enair-ai{bottom:100px!important}.hero-section-20{min-height:610px;padding-top:44px!important;padding-bottom:36px!important;gap:30px!important}.fly-beyond-boundaries-24{font-size:clamp(38px,10vw,60px)!important}.experience-shortcuts{margin-top:0;gap:6px}.experience-shortcuts a{font-size:12px;padding:9px 12px}.experience-fare-actions{flex-direction:column;align-items:stretch}.experience-fare-actions button{width:100%}.experience-fare .fare-tiers-46>div{min-height:0;padding:22px!important}.experience-fare .fare-tiers-46>div[aria-pressed=true]{padding:21px!important}.experience-fare .fare-tiers-46{gap:14px}.experience-progress{margin-top:18px;font-size:12px}.experience-progress .experience-step-label{display:none}.experience-progress [aria-current=step] .experience-step-label{display:inline}.experience-progress .experience-step-line{margin:0 7px;min-width:6px}.experience-progress .experience-step-num{width:24px;height:24px}.experience-mobile-bar{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:900;align-items:center;justify-content:space-between;gap:12px;padding:12px 18px calc(12px + env(safe-area-inset-bottom));background:#ffffffed;backdrop-filter:blur(16px);border-top:1px solid #e2e8f0;box-shadow:0 -6px 30px #0f172a08;font:600 18px 'Outfit',sans-serif}.experience-mobile-bar button{border:0;border-radius:12px;background:#7c3aed;color:#fff;padding:13px 16px;font:600 14px 'Geist',sans-serif}.experience-has-bar{padding-bottom:90px!important}.experience-has-bar #enair-assistant-toggle{bottom:100px!important}.order-summary-68{position:static!important}}
+
+@keyframes experience-in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes experience-fade{from{opacity:0}to{opacity:1}}
+@keyframes experience-shimmer{to{background-position:-220% 0}}
+@keyframes experience-price{50%{color:#8b5cf6;transform:translateY(-2px)}}
+@media(prefers-reduced-motion:no-preference){.hero-copy-21{animation:experience-in .6s var(--experience-ease) both}.search-bar-container-26{animation:experience-in .6s .1s var(--experience-ease) both}.experience-shortcuts{animation:experience-in .6s .18s var(--experience-ease) both}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+@media print{.experience-mobile-bar,.experience-shortcuts,.experience-progress{display:none!important}}

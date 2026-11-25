@@ -5,15 +5,16 @@
     const account = document.querySelector('[data-auth="account"]');
     const signin = document.querySelector('[data-auth="signin"]');
     if (!account && !signin) return;
+    let localUser = null;
+    try { localUser = JSON.parse(localStorage.getItem('enairUser') || 'null'); } catch (error) { localUser = null; }
+    let serverUser = false;
     try {
       const response = await fetch('/api/me', { credentials: 'same-origin' });
       const data = await response.json();
-      const authed = Boolean(data.authenticated);
-      if (account) account.hidden = !authed;
-      if (signin) signin.hidden = authed;
-    } catch (error) {
-      if (account) account.hidden = true;
-      if (signin) signin.hidden = false;
-    }
+      serverUser = Boolean(data.authenticated);
+    } catch (error) { /* offline preview keeps the local session */ }
+    const authed = serverUser || Boolean(localUser && localUser.email);
+    if (account) account.hidden = !authed;
+    if (signin) signin.hidden = authed;
   });
 })();

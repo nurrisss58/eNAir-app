@@ -1,0 +1,23 @@
+# Python / Flask
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Design artefacts (large, not needed for the live site)
+*.fig
+_figma/
+_report_shots/
+_site/chrome-*/
+_audit/ui/
+
+# Editor / OS
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Local scratch
+*.log
+
+# Prepared upload packages
+_upload/

@@ -13,19 +13,24 @@
   // На хостинге API на том же домене; при открытии файлов с диска — локальный Flask.
   const API_BASE = location.protocol === 'file:' ? 'http://127.0.0.1:5000' : '';
 
-  const GREETING = 'Здравствуйте! Я ассистент eNAir. Спросите про рейс и свободные места, тарифы, багаж, мили, оплату или возврат — найду ответ в расписании.';
+  const GREETING = 'Hello! I am the eNAir assistant. Ask about a flight and available seats, fares, baggage, miles, payment, or refunds — I will find the answer in the schedule.';
   const DEFAULT_CHIPS = [
-    'Сколько стоит билет до Лондона?',
-    'Какие рейсы в Москву?',
-    'Что входит в тариф Flex?'
+    'How much is a flight to London?',
+    'Which flights go to Dubai?',
+    'What is included in Flex?'
   ];
 
   const style = document.createElement('style');
   style.textContent = [
-    '.enair-ai{position:fixed;right:20px;bottom:20px;z-index:100002;font-family:"Geist",system-ui,sans-serif}',
-    '.enair-ai-launcher{display:inline-flex;align-items:center;gap:9px;border:0;border-radius:999px;padding:13px 20px;',
+    '.enair-ai{position:fixed;right:20px;bottom:20px;z-index:99980;font-family:"Geist",system-ui,sans-serif}',
+    '.enair-ai-launcher{display:inline-flex;align-items:center;justify-content:center;gap:0;border:0;border-radius:999px;width:54px;height:54px;padding:0;',
     'background:linear-gradient(110deg,#06b6d4,#8b5cf6);color:#fff;font:600 14px "Geist",sans-serif;cursor:pointer;',
-    'box-shadow:0 12px 34px rgba(15,23,42,.28);transition:transform .15s,filter .15s}',
+    'box-shadow:0 12px 34px rgba(15,23,42,.28);transition:transform .15s,filter .15s,width .22s ease,padding .22s ease;overflow:hidden}',
+    '.enair-ai-icon{width:21px;height:21px;flex:0 0 21px}',
+    '.enair-ai-label{display:none;white-space:nowrap}',
+    '@media(hover:hover){.enair-ai-launcher:hover{width:auto;gap:9px;padding:0 20px}.enair-ai-launcher:hover .enair-ai-label{display:inline}}',
+    '.enair-ai-launcher:focus-visible{width:auto;gap:9px;padding:0 20px}',
+    '.enair-ai-launcher:focus-visible .enair-ai-label{display:inline}',
     '.enair-ai-launcher:hover{transform:translateY(-1px);filter:brightness(1.05)}',
     '.enair-ai-launcher:focus-visible{outline:2px solid #0f172a;outline-offset:3px}',
     '.enair-ai-dot{width:8px;height:8px;border-radius:50%;background:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.35)}',
@@ -54,7 +59,7 @@
     '.enair-ai-input:focus{outline:2px solid rgba(6,182,212,.3);border-color:#06b6d4}',
     '.enair-ai-send{border:0;border-radius:11px;padding:0 16px;background:#0f172a;color:#fff;font:600 13px "Geist",sans-serif;cursor:pointer}',
     '.enair-ai-send:disabled{opacity:.5;cursor:default}',
-    '@media(max-width:480px){.enair-ai{right:12px;bottom:12px}.enair-ai-launcher{padding:11px 14px;font-size:13px;gap:7px}.enair-ai-panel{right:0;left:auto;width:auto;min-width:min(348px,calc(100vw - 24px))}}'
+    '@media(max-width:480px){.enair-ai{right:12px;bottom:12px}.enair-ai-launcher{width:50px;height:50px}.enair-ai-panel{right:0;left:auto;width:auto;min-width:min(348px,calc(100vw - 24px))}}'
   ].join('');
 
   document.head.appendChild(style);
@@ -68,7 +73,8 @@
   launcher.className = 'enair-ai-launcher';
   launcher.setAttribute('aria-expanded', 'false');
   launcher.setAttribute('aria-controls', 'enair-ai-panel');
-  launcher.innerHTML = '<span class="enair-ai-dot" aria-hidden="true"></span><span>Ask the assistant</span>';
+  launcher.innerHTML = '<svg class="enair-ai-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z"/></svg><span class="enair-ai-label">Ask the assistant</span>';
+  launcher.setAttribute('title', 'Ask the assistant');
 
   const panel = document.createElement('section');
   panel.className = 'enair-ai-panel';
@@ -82,10 +88,10 @@
   const titles = document.createElement('div');
   const title = document.createElement('div');
   title.className = 'enair-ai-title';
-  title.textContent = 'Ассистент eNAir';
+  title.textContent = 'eNAir assistant';
   const sub = document.createElement('span');
   sub.className = 'enair-ai-sub';
-  sub.textContent = 'Рейсы, тарифы, багаж, регистрация';
+  sub.textContent = 'Flights, fares, baggage, check-in';
   titles.append(title, sub);
 
   const closeBtn = document.createElement('button');
@@ -108,13 +114,13 @@
   const input = document.createElement('input');
   input.className = 'enair-ai-input';
   input.type = 'text';
-  input.placeholder = 'Ваш вопрос…';
+  input.placeholder = 'Type your question…';
   input.setAttribute('aria-label', 'Question for the assistant');
   input.maxLength = 400;
   const send = document.createElement('button');
   send.type = 'submit';
   send.className = 'enair-ai-send';
-  send.textContent = 'Отправить';
+  send.textContent = 'Send';
   form.append(input, send);
 
   panel.append(head, log, chips, form);
@@ -183,7 +189,7 @@
     send.disabled = true;
     input.value = '';
     bubble(message, 'user');
-    const pending = bubble('Печатает…', 'bot pending');
+    const pending = bubble('Typing…', 'bot pending');
 
     try {
       const response = await fetch(API_BASE + '/api/assistant', {
@@ -206,7 +212,7 @@
       pending.remove();
 
       if (!response.ok || !data || !data.reply) {
-        bubble('Не получилось получить ответ. Попробуйте ещё раз через минуту.', 'bot');
+        bubble('I could not get an answer. Please try again in a minute.', 'bot');
         return;
       }
 
@@ -219,7 +225,7 @@
       if (data.ai_error) {
         const note = document.createElement('div');
         note.className = 'enair-ai-note';
-        note.textContent = 'Режим ИИ недоступен (' + data.ai_error + '), отвечает встроенный движок правил.';
+        note.textContent = 'AI mode is unavailable (' + data.ai_error + '); the built-in rules engine is answering.';
         log.appendChild(note);
         log.scrollTop = log.scrollHeight;
       }
@@ -227,7 +233,7 @@
       if (Array.isArray(data.suggestions)) renderChips(data.suggestions);
     } catch (error) {
       pending.remove();
-      bubble('Не удалось связаться с сервером. Проверьте подключение и попробуйте снова.', 'bot');
+      bubble('Could not reach the server. Check your connection and try again.', 'bot');
     } finally {
       busy = false;
       send.disabled = false;

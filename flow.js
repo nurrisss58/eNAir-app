@@ -6,6 +6,24 @@
 
   const $ = (sel, root) => (root || document).querySelector(sel);
   const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
+  // The API answers in Russian for a few validation cases; keep the UI English.
+  const SERVER_TEXT = {
+    'Сначала войдите в аккаунт': 'Please sign in to your account first.',
+    'Доступ запрещен. Пожалуйста, войдите в систему.': 'Please sign in to continue.',
+    'Бронь не найдена': 'Booking not found.',
+    'Бронь с таким номером не найдена': 'No booking was found with that reference.',
+    'Недостаточно миль': 'Not enough miles in your balance.',
+    'Неверное количество миль': 'Enter a valid number of miles.',
+    'Срок действия указан неверно': 'The expiry date is invalid.',
+    'Проверьте номер карты и срок действия': 'Check the card number and expiry date.',
+    'Не удалось прочитать пассажиров': 'The passenger details could not be read.',
+    'Нет пассажиров для регистрации': 'There are no passengers to check in.',
+    'Неизвестный уровень': 'Unknown tier.',
+    'Неизвестный статус рейса': 'Unknown flight status.',
+    'Задержка должна быть числом минут': 'The delay must be a number of minutes.',
+    'Пустой запрос': 'The request was empty.'
+  };
+  const tr = text => SERVER_TEXT[text] || text;
   const money = value => {
     const localization = window.enairLocalization;
     const amount = Number(value) || 0;
@@ -398,7 +416,7 @@
             throw new Error(data.error || 'Check-in was not saved. Please try again.');
           }
         } catch (error) {
-          toast(error.message || 'Check-in was not saved. Please try again.', 'err');
+          toast(tr(error.message) || 'Check-in was not saved. Please try again.', 'err');
           submit.disabled = false;
           return;
         }
@@ -514,7 +532,7 @@
           if (back) back.href = 'enair-manage-booking.html?ref=' + encodeURIComponent(ref);
           toast('Booking cancelled · refund ' + money(data.refund ?? refund), 'ok');
         } catch (error) {
-          toast(error.message || 'Could not cancel the booking', 'err');
+          toast(tr(error.message) || 'Could not cancel the booking', 'err');
         } finally {
           confirm.disabled = false;
         }
@@ -646,7 +664,7 @@
           setTimeout(() => { location.href = 'enair-rewards.html'; }, 700);
         } catch (error) {
           store.set('enair.miles', Math.max(0, balance - miles));
-          toast(error.message || 'Database unavailable — redeemed locally', 'err');
+          toast(tr(error.message) || 'Database unavailable — redeemed locally', 'err');
           setTimeout(() => { location.href = 'enair-rewards.html'; }, 900);
         } finally {
           confirm.disabled = false;
@@ -761,7 +779,7 @@
             if (statusLine) statusLine.textContent = data.demo ? 'Saved in demo mode.' : 'Saved to your account.';
             toast(data.demo ? 'Saved in demo mode' : 'Profile updated', 'ok');
           } catch (error) {
-            if (statusLine) statusLine.textContent = error.message || 'Could not save.';
+            if (statusLine) statusLine.textContent = tr(error.message) || 'Could not save.';
             toast('Could not save the profile', 'err');
           } finally {
             if (button) button.disabled = false;
@@ -1124,7 +1142,7 @@
           await load((numberInput.value || 'EN-101').trim());
           toast('Status updated', 'ok');
         } catch (error) {
-          toast(error.message, 'err');
+          toast(tr(error.message), 'err');
         }
       });
 
@@ -1162,7 +1180,7 @@
                 : 'Saved to flight_events and the flight row.';
             }
           } catch (error) {
-            toast(error.message, 'err');
+            toast(tr(error.message), 'err');
           } finally {
             if (save) save.disabled = false;
           }

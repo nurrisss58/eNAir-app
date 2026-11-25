@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -6,6 +6,7 @@
 <title>Choose your seats · eNAir</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="enair-app.css">
+  <link rel="stylesheet" href="experience.css">
 </head>
 <body>
 
@@ -48,14 +49,14 @@
         <span class="badge badge-violet">A350-H2 · Economy</span>
         <h3 style="font-size:20px;margin-top:8px">Main cabin · rows 10–24</h3>
       </div>
-      <span class="small muted">2 seats included in Economy Flex</span>
+      <span class="small muted">Choose a seat or get one at check-in</span>
     </div>
 
     <div class="legend">
       <span><i style="background:#fff;border:1px solid var(--line)"></i>Available</span>
       <span><i style="background:var(--grad)"></i>Selected</span>
       <span><i style="background:var(--soft)"></i>Occupied</span>
-      <span><i style="background:#faf5ff;border:1px solid #c4b5fd"></i>Extra legroom +$25</span>
+      <span><i style="background:#faf5ff;border:1px solid #c4b5fd"></i>Extra legroom</span>
     </div>
 
     <div class="cabin">
@@ -113,7 +114,38 @@
   const premiumRows = [10, 11];
   const cols = ['A','B','C','D','E','F'];
   const bookingState = JSON.parse(localStorage.getItem('enairState') || '{}');
-  let selected = Array.isArray(bookingState.seats) ? bookingState.seats : ['12A', '12B'];
+  const passengerCount = Math.max(1, (Number(bookingState.adults) || 1) + (Number(bookingState.children) || 0));
+  let selected = (Array.isArray(bookingState.seats) ? bookingState.seats : []).filter(id => !occupied.has(id)).slice(0, passengerCount);
+  const summaryCard = document.querySelector('.summary .card');
+  const paxRows = [...summaryCard.querySelectorAll('.pax')];
+  const paxAnchor = paxRows[0];
+  for (let index=0; index<passengerCount; index++) {
+    const row=document.createElement('div');row.className='pax';
+    const name=document.createElement('span');name.textContent=bookingState.passengers?.[index] || `Passenger ${index+1}`;
+    const chip=document.createElement('span');chip.className='seat-chip';row.append(name,chip);paxAnchor.before(row);
+  }
+  paxRows.forEach(row=>row.remove());
+  const flight=bookingState.flight;
+  const departureLabel=bookingState.departureDate
+    ? new Intl.DateTimeFormat('en',{weekday:'short',day:'numeric',month:'short'}).format(new Date(`${bookingState.departureDate}T00:00:00`))
+    : '';
+  if(flight){
+    const route=summaryCard.children[1];
+    route.replaceChildren();
+    route.style.cssText='display:flex;flex-direction:column;gap:6px;width:100%;font-weight:400';
+    const cities=document.createElement('div');cities.style.cssText='display:flex;justify-content:space-between;gap:12px;font:500 12px Geist,sans-serif;color:#64748b';
+    const fromCity=document.createElement('span');fromCity.textContent=flight.from;
+    const toCity=document.createElement('span');toCity.textContent=flight.to;
+    cities.append(fromCity,toCity);
+    const times=document.createElement('div');times.style.cssText='display:flex;align-items:center;gap:10px;width:100%';
+    const fromTime=document.createElement('strong');fromTime.textContent=flight.dep;fromTime.style.cssText='font:700 19px Outfit,sans-serif;color:#0f172a;white-space:nowrap';
+    const line=document.createElement('span');line.style.cssText='flex:1;min-width:18px;height:2px;border-radius:2px;background:linear-gradient(90deg,#06b6d4,#8b5cf6)';
+    const toTime=document.createElement('strong');toTime.textContent=flight.arr;toTime.style.cssText='font:700 19px Outfit,sans-serif;color:#0f172a;white-space:nowrap';
+    times.append(fromTime,line,toTime);
+    route.append(cities,times);
+    summaryCard.children[2].textContent=`${flight.no} · ${flight.aircraft} · ${bookingState.fare || 'Flex'} fare`;
+    summaryCard.querySelector('.small.muted').textContent=departureLabel;
+  }
 
   function seatRow(row) {
     const wrap = document.createElement('div');
@@ -131,6 +163,10 @@
       b.className = 'seat';
       b.textContent = id;
       b.dataset.seat = id;
+      b.disabled = occupied.has(id);
+      b.setAttribute('aria-pressed',String(selected.includes(id)));
+      b.setAttribute('aria-label',`${id}, ${occupied.has(id)?'occupied':(['A','F'].includes(c)?'window':['C','D'].includes(c)?'aisle':'middle')} seat`);
+      b.title=b.getAttribute('aria-label');
       if (occupied.has(id)) b.classList.add('occupied');
       if (premiumRows.includes(row)) b.classList.add('premium');
       if (selected.includes(id)) b.classList.add('selected');
@@ -153,7 +189,7 @@
           selected = selected.filter(s => s !== id);
           b.classList.remove('selected');
         } else {
-          if (selected.length >= 2) selected.shift();
+          if (selected.length >= passengerCount) selected.shift();
           selected.push(id);
           document.querySelectorAll('.seat.selected').forEach(s => {
             if (!selected.includes(s.dataset.seat)) s.classList.remove('selected');
@@ -173,13 +209,21 @@
     chips.forEach((chip, i) => chip.textContent = selected[i] || '—');
     document.getElementById('seat-count').textContent = selected.length;
     const seatPrice = selected.length * 12250;
-    document.getElementById('seat-price').textContent = '₸ ' + seatPrice.toLocaleString('en-US').replace(/,/g, ',');
-    const total = 533120 + seatPrice + 47040;
-    document.getElementById('total').textContent = '₸ ' + total.toLocaleString('en-US');
+    const fare = Math.round(((Number(bookingState.flight?.price)||244510)+({Lite:0,Flex:70,Business:260,First:520}[bookingState.fare]??70)*490)*passengerCount);
+    const taxes=96*490;
+    const setPrice=(element,value)=>{element.dataset.priceKzt=String(value);element.textContent='₸ '+value.toLocaleString('en-US');};
+    const rows=summaryCard.querySelectorAll('.sum-row');
+    rows[0].firstElementChild.textContent=`Fare · ${passengerCount} passengers`;
+    setPrice(rows[0].querySelector('strong'),fare);setPrice(rows[2].querySelector('strong'),taxes);
+    setPrice(document.getElementById('seat-price'),seatPrice);
+    setPrice(document.getElementById('total'),fare+seatPrice+taxes);
+    document.querySelectorAll('.seat').forEach(b=>b.setAttribute('aria-pressed',String(selected.includes(b.dataset.seat))));
+    window.enairLocalization?.applyPrices();
   }
 
   paint();
   sync();
+  document.querySelector('.summary a.link').addEventListener('click',()=>{selected=[];sync();});
 </script>
 <script src="navigation.js"></script>
   <script src="localization.js"></script>
