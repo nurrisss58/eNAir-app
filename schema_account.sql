@@ -60,7 +60,8 @@ CREATE INDEX IF NOT EXISTS flight_events_number_idx
 --    FROM flight_events WHERE flight_number = 'EN-88' ORDER BY created_at DESC LIMIT 3;
 
 -- ---------------------------------------------------------------- cards, passengers, services, miles
-ALTER TABLE bookings ADD COLUMN IF NOT EXISTS seat VARCHAR(8);
+ALTER TABLE bookings ADD COLUMN IF NOT EXISTS seat TEXT;
+ALTER TABLE bookings ALTER COLUMN seat TYPE TEXT;
 ALTER TABLE bookings ADD COLUMN IF NOT EXISTS baggage_summary VARCHAR(120);
 
 CREATE TABLE IF NOT EXISTS payment_methods (

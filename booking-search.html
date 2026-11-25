@@ -188,15 +188,6 @@
   <script src="localization.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const group = document.querySelector('.trip-type-41');
-    if (!group) return;
-    const options = [...group.children].filter(node => node.className !== 'cabin-46');
-    options.forEach((option, index) => {
-      option.classList.toggle('is-active', index === 0);
-      option.addEventListener('click', () => {
-        options.forEach(node => node.classList.toggle('is-active', node === option));
-      });
-    });
     document.querySelectorAll('.flight-option-62').forEach(card => {
       card.style.borderColor = '#e2e8f0';
     });

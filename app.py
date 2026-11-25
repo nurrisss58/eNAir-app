@@ -2,6 +2,7 @@ import json
 import os
 import random
 import re
+import secrets
 import urllib.error
 import urllib.request
 from datetime import datetime, timedelta
@@ -17,7 +18,7 @@ app = Flask(__name__, static_folder=None)
 CORS(app, supports_credentials=True)
 
 # Подпись сессионной cookie. На Render задайте SECRET_KEY в переменных окружения.
-app.secret_key = os.environ.get("SECRET_KEY") or "enair-dev-secret-2026"
+app.secret_key = os.environ.get("SECRET_KEY") or secrets.token_hex(32)
 app.config.update(SESSION_COOKIE_HTTPONLY=True, SESSION_COOKIE_SAMESITE="Lax")
 
 from account_api import award_miles, ensure_schema, load_profile, membership_code, register_routes
@@ -118,11 +119,10 @@ def get_db():
 
     # Локальная разработка. На хостинге всегда используется DATABASE_URL (Neon).
     return psycopg2.connect(
-        dbname="airline",
-        user="postgres",
-        password="2726259012",
-        host="localhost",
-        port="5432",
+        dbname=os.environ.get("PGDATABASE", "airline"),
+        user=os.environ.get("PGUSER", "postgres"),
+        host=os.environ.get("PGHOST", "localhost"),
+        port=os.environ.get("PGPORT", "5432"),
         connect_timeout=2
     )
 
@@ -140,7 +140,7 @@ def init_db():
         cur = conn.cursor()
 
         # Блокировка, чтобы несколько воркеров gunicorn не создавали данные одновременно
-        cur.execute("SELECT pg_advisory_lock(918273645);")
+        cur.execute("SELECT pg_advisory_xact_lock(918273645);")
 
         cur.execute("""
             CREATE TABLE IF NOT EXISTS users (
@@ -285,8 +285,6 @@ def init_db():
         """)
 
         conn.commit()
-        cur.execute("SELECT pg_advisory_unlock(918273645);")
-        conn.commit()
         print("Database initialized successfully.")
     except Exception:
         if conn:
@@ -370,7 +368,7 @@ def flights():
         return jsonify(result)
     except Exception:
         app.logger.exception("Unable to list the flights")
-        return jsonify([]), 200
+        return jsonify({"error": "Flight availability is temporarily unavailable"}), 503
 
 
 def _split_name(name):
@@ -482,7 +480,8 @@ def login():
             conn.rollback()
         app.logger.exception("User login failed")
         # Локальный запуск без Neon: демо-вход, чтобы кабинет можно было проверить.
-        if email == "demo@enair.com" and password == "demo1234":
+        demo_password = os.environ.get("DEMO_LOGIN_PASSWORD")
+        if email == "demo@enair.com" and demo_password and secrets.compare_digest(password.encode(), demo_password.encode()):
             session.clear()
             session["user_id"] = 1
             session["demo"] = True
@@ -564,6 +563,14 @@ def book_flight():
     cabin = str(data.get("cabin") or "Economy").strip()[:40]
     fare = str(data.get("fare") or "Flex").strip()[:40]
     passenger_names = _clean_passenger_names(data.get("passenger_names"))
+    raw_seats = data.get("seats")
+    seats = []
+    if isinstance(raw_seats, list):
+        seats = list(dict.fromkeys(
+            str(seat).upper() for seat in raw_seats[:passengers]
+            if re.fullmatch(r"[1-9][0-9]?[A-Za-z]", str(seat))
+        ))
+    seat_summary = ", ".join(seats)
 
     conn = None
     cur = None
@@ -607,14 +614,14 @@ def book_flight():
             INSERT INTO bookings (
                 reference, user_id, flight_id, flight_number, departure_city,
                 arrival_city, departure_time, arrival_time, cabin, fare, passengers,
-                passenger_names, total_price, card_last4, status
-            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 'confirmed')
+                passenger_names, total_price, card_last4, seat, status
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 'confirmed')
             RETURNING id, created_at;
         """, (
             reference, user_id, flight_id, flight[0], flight[1], flight[2],
             flight[3], flight[4], cabin, fare, passengers,
             json.dumps(passenger_names, ensure_ascii=False), round(total_price, 2),
-            card_last4 or None,
+            card_last4 or None, seat_summary or None,
         ))
         booking_id, created_at = cur.fetchone()
         earned = int(total_price // 100)
@@ -637,6 +644,7 @@ def book_flight():
                 "fare": fare,
                 "passengers": passengers,
                 "passenger_names": passenger_names,
+                "seats": seat_summary,
                 "total_price": round(total_price, 2),
                 "card_last4": card_last4,
                 "seats_left": seats_available - passengers,
@@ -674,7 +682,7 @@ def booking_receipt(reference):
             SELECT reference, flight_number, departure_city, arrival_city,
                    departure_time, arrival_time, cabin, fare, passengers,
                    passenger_names, total_price, card_last4, status, created_at,
-                   refund_amount, cancelled_at
+                   refund_amount, cancelled_at, seat
             FROM bookings WHERE reference = %s;
         """, (reference,))
         row = cur.fetchone()
@@ -703,6 +711,7 @@ def booking_receipt(reference):
             "created_at": row[13].strftime("%d.%m.%Y %H:%M") if row[13] else "",
             "refund_amount": float(row[14]) if row[14] is not None else None,
             "cancelled_at": row[15].strftime("%d.%m.%Y %H:%M") if row[15] else "",
+            "seats": row[16] or "",
         })
     except Exception:
         app.logger.exception("Unable to read the booking receipt")

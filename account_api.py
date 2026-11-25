@@ -170,7 +170,19 @@ def ensure_schema(cur):
         "ON flight_events (flight_number, created_at DESC);"
     )
 
-    cur.execute("ALTER TABLE bookings ADD COLUMN IF NOT EXISTS seat VARCHAR(8);")
+    cur.execute("ALTER TABLE bookings ADD COLUMN IF NOT EXISTS seat TEXT;")
+    cur.execute("""
+        DO $$
+        BEGIN
+            IF EXISTS (
+                SELECT 1 FROM information_schema.columns
+                WHERE table_schema = current_schema() AND table_name = 'bookings'
+                  AND column_name = 'seat' AND data_type <> 'text'
+            ) THEN
+                ALTER TABLE bookings ALTER COLUMN seat TYPE TEXT;
+            END IF;
+        END; $$;
+    """)
     cur.execute("ALTER TABLE bookings ADD COLUMN IF NOT EXISTS baggage_summary VARCHAR(120);")
     cur.execute("ALTER TABLE bookings ADD COLUMN IF NOT EXISTS refund_amount NUMERIC(12,2);")
     cur.execute("ALTER TABLE bookings ADD COLUMN IF NOT EXISTS cancelled_at TIMESTAMP;")
@@ -765,11 +777,13 @@ def register_routes(app, get_db):
         ref = str(reference or "").strip().upper()[:16]
         data = request.get_json(silent=True) or {}
         people = data.get("passengers") or []
-        if not isinstance(people, list) or not people:
+        if not isinstance(people, list) or not 1 <= len(people) <= 9:
             return jsonify({"error": "Нет пассажиров для регистрации"}), 400
 
         cleaned = []
-        for person in people[:9]:
+        for person in people:
+            if not isinstance(person, dict):
+                return jsonify({"error": "Invalid passenger details"}), 400
             name = str(person.get("name") or "").strip()[:120]
             if not name:
                 continue
@@ -780,36 +794,48 @@ def register_routes(app, get_db):
                 "document": document[-4:],
                 "seat": str(person.get("seat") or "").strip()[:8],
             })
-        if not cleaned:
+        if len(cleaned) != len(people):
             return jsonify({"error": "Не удалось прочитать пассажиров"}), 400
 
         seats = ", ".join(person["seat"] for person in cleaned if person["seat"])
+        conn = None
         try:
             conn = db()
-            cur = conn.cursor()
-            for person in cleaned:
+            with conn, conn.cursor() as cur:
+                cur.execute("SELECT status, passengers FROM bookings WHERE reference = %s FOR UPDATE;", (ref,))
+                row = cur.fetchone()
+                if not row:
+                    if any(booking["reference"] == ref for booking in DEMO_BOOKINGS):
+                        _DEMO["passengers"][ref] = cleaned
+                        return jsonify({"ok": True, "reference": ref, "passengers": cleaned, "demo": True})
+                    return jsonify({"error": "Booking not found"}), 404
+                if row[0] == "cancelled":
+                    return jsonify({"error": "This booking has been cancelled"}), 409
+                if len(cleaned) != row[1] or len({person["name"] for person in cleaned}) != len(cleaned):
+                    return jsonify({"error": "Provide one set of details per passenger"}), 400
+
+                for person in cleaned:
+                    cur.execute("""
+                        INSERT INTO booking_passengers
+                            (booking_reference, full_name, date_of_birth, document_last4, seat, checked_in_at)
+                        VALUES (%s, %s, %s, %s, %s, CURRENT_TIMESTAMP)
+                        ON CONFLICT (booking_reference, full_name) DO UPDATE
+                        SET date_of_birth = EXCLUDED.date_of_birth,
+                            document_last4 = EXCLUDED.document_last4,
+                            seat = EXCLUDED.seat,
+                            checked_in_at = CURRENT_TIMESTAMP;
+                    """, (ref, person["name"], person["dob"], person["document"], person["seat"]))
                 cur.execute("""
-                    INSERT INTO booking_passengers
-                        (booking_reference, full_name, date_of_birth, document_last4, seat, checked_in_at)
-                    VALUES (%s, %s, %s, %s, %s, CURRENT_TIMESTAMP)
-                    ON CONFLICT (booking_reference, full_name) DO UPDATE
-                    SET date_of_birth = EXCLUDED.date_of_birth,
-                        document_last4 = EXCLUDED.document_last4,
-                        seat = EXCLUDED.seat,
-                        checked_in_at = CURRENT_TIMESTAMP;
-                """, (ref, person["name"], person["dob"], person["document"], person["seat"]))
-            cur.execute(
-                "UPDATE bookings SET status = 'checked_in', seat = COALESCE(NULLIF(%s, ''), seat) WHERE reference = %s;",
-                (seats, ref),
-            )
-            conn.commit()
-            cur.close()
-            conn.close()
+                    UPDATE bookings SET status = 'checked_in', seat = COALESCE(NULLIF(%s, ''), seat)
+                    WHERE reference = %s;
+                """, (seats, ref))
             return jsonify({"ok": True, "reference": ref, "passengers": cleaned, "demo": False})
         except Exception:
             app.logger.exception("Unable to store the check-in")
-            _DEMO["passengers"][ref] = cleaned
-            return jsonify({"ok": True, "reference": ref, "passengers": cleaned, "demo": True})
+            return jsonify({"error": "Check-in could not be saved. Please try again."}), 503
+        finally:
+            if conn is not None:
+                conn.close()
 
     # ---------------------------------------------------------------- services
     def _services_payload(rows):
@@ -986,46 +1012,41 @@ def register_routes(app, get_db):
         data = request.get_json(silent=True) or {}
         reason = str(data.get("reason") or "Change of plans").strip()[:200]
 
+        conn = None
         try:
             conn = db()
-            cur = conn.cursor()
-            cur.execute("""
-                SELECT user_id, total_price, status FROM bookings WHERE reference = %s FOR UPDATE;
-            """, (ref,))
-            row = cur.fetchone()
-            if not row:
-                conn.rollback()
-                cur.close()
-                conn.close()
-                return jsonify({"error": "Бронь не найдена"}), 404
-            user_id, total, status = row[0], float(row[1] or 0), row[2]
-            if status == "cancelled":
-                refund = float(0)
-                cur.execute("SELECT refund_amount FROM bookings WHERE reference = %s;", (ref,))
-                extra = cur.fetchone()
-                if extra and extra[0] is not None:
-                    refund = float(extra[0])
-                cur.close()
-                conn.close()
-                return jsonify({"ok": True, "demo": False, "status": "cancelled", "refund": refund,
-                                "reason": reason, "already": True})
-            fee = round(total * 0.138)
-            refund = round(total - fee)
-            cur.execute("""
-                UPDATE bookings SET status = 'cancelled', refund_amount = %s, cancelled_at = CURRENT_TIMESTAMP
-                WHERE reference = %s;
-            """, (refund, ref))
-            conn.commit()
-            cur.close()
-            conn.close()
+            with conn, conn.cursor() as cur:
+                cur.execute("""
+                    SELECT total_price, status, refund_amount, flight_id, passengers
+                    FROM bookings WHERE reference = %s FOR UPDATE;
+                """, (ref,))
+                row = cur.fetchone()
+                if not row:
+                    return jsonify({"error": "Бронь не найдена"}), 404
+                price, status, previous_refund, flight_id, passengers = row
+                total = float(price or 0)
+                fee = round(total * 0.138)
+                if status == "cancelled":
+                    return jsonify({"ok": True, "demo": False, "status": "cancelled",
+                                    "refund": float(previous_refund or 0), "fee": fee,
+                                    "reason": reason, "already": True})
+                refund = round(total - fee)
+                cur.execute("""
+                    UPDATE bookings SET status = 'cancelled', refund_amount = %s, cancelled_at = CURRENT_TIMESTAMP
+                    WHERE reference = %s;
+                """, (refund, ref))
+                if flight_id is not None and passengers > 0:
+                    cur.execute("""
+                        UPDATE flights SET seats_available = seats_available + %s WHERE id = %s;
+                    """, (passengers, flight_id))
             return jsonify({"ok": True, "demo": False, "status": "cancelled",
                             "refund": refund, "fee": fee, "reason": reason})
         except Exception:
             app.logger.exception("Unable to cancel the booking")
-            total = 604660
-            fee = round(total * 0.138)
-            return jsonify({"ok": True, "demo": True, "status": "cancelled",
-                            "refund": total - fee, "fee": fee, "reason": reason})
+            return jsonify({"error": "Cancellation could not be saved. Please try again."}), 503
+        finally:
+            if conn is not None:
+                conn.close()
 
     @app.route("/api/me/preferences", methods=["POST"])
     def api_preferences():

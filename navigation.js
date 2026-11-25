@@ -868,18 +868,32 @@
     updateCurrencyPrices();
   }
 
-  function airportPicker(target){
+  function airportPicker(target, onChange = () => {}){
     const wrap=document.createElement('div'); const grid=document.createElement('div'); grid.className='enair-grid';
-    airports.forEach(([code,name])=>{const b=document.createElement('button');b.className='enair-choice';b.innerHTML=`<strong>${code}</strong><span>${name}</span>`;b.onclick=()=>{state[target]=code;state[target+'Name']=name;save();close();updateDisplayedRoute();toast(`${target==='from'?'From':'To'}: ${code}`)};grid.append(b)});
+    airports.forEach(([code,name])=>{const b=document.createElement('button');b.className='enair-choice';b.innerHTML=`<strong>${code}</strong><span>${name}</span>`;b.onclick=()=>{state[target]=code;state[target+'Name']=name;save();close();updateDisplayedRoute();onChange();toast(`${target==='from'?'From':'To'}: ${code}`)};grid.append(b)});
     const back=modal(target==='from'?'Choose departure airport':'Choose destination airport','Select an airport for your search',grid); const close=()=>back.remove();
     back.querySelector('.enair-modal-close').onclick=close; return back;
   }
-  function datePicker(kind){
+  function setDepartureDate(value){
+    state.departureDate=value;
+    if(state.returnDate<value)state.returnDate=dateValue(addDays(new Date(`${value}T00:00:00`),7));
+  }
+  function datePicker(kind, onChange = () => {}){
     const body=document.createElement('div');
     const current=(kind==='departure'?state.departureDate:state.returnDate);
     body.innerHTML=`<label style="display:block;margin-bottom:14px">${kind==='departure'?'Departure':'Return'} date<br><input id="edate" type="date" value="${current}" min="${dateValue(today)}" style="margin-top:8px;width:100%;box-sizing:border-box;padding:12px;border:1px solid #e2e8f0;border-radius:10px"></label><button id="savedate" style="border:0;background:#0f172a;color:#fff;border-radius:10px;padding:12px 18px">Apply date</button>`;
     const back=modal(`${kind==='departure'?'Departure':'Return'} date`,'Choose a date for your trip',body);
-    body.querySelector('#savedate').onclick=()=>{const value=body.querySelector('#edate').value;if(!value){toast('Choose a valid date first');return}if(kind==='departure'){state.departureDate=value;if(state.returnDate<value)state.returnDate=dateValue(addDays(new Date(`${value}T00:00:00`),7))}else{if(value<state.departureDate){toast('Return date must follow departure');return}state.returnDate=value}save();updateDisplayedDates();back.remove();toast('Date updated')};
+    body.querySelector('#savedate').onclick=()=>{
+      const input=body.querySelector('#edate');
+      const value=input.value;
+      if(!value||!input.checkValidity()){toast('Choose a valid date first');return}
+      if(kind==='departure')setDepartureDate(value);
+      else {
+        if(value<state.departureDate){toast('Return date must follow departure');return}
+        state.returnDate=value;
+      }
+      save();updateDisplayedDates();back.remove();onChange();toast('Date updated');
+    };
   }
   function passengerPicker(){
     const body=document.createElement('div'); body.innerHTML=`<div style="display:grid;gap:12px"><label>Adults <input id="ea" type="number" min="1" max="9" value="${state.adults}" style="float:right;width:80px"></label><label>Children <input id="ec" type="number" min="0" max="9" value="${state.children}" style="float:right;width:80px"></label><label>Cabin <select id="eac" style="float:right"><option>Economy</option><option>Premium</option><option>Business</option><option>First</option></select></label><button id="savep" style="margin-top:8px;border:0;background:#0f172a;color:#fff;border-radius:10px;padding:12px">Apply</button></div>`;
@@ -1270,6 +1284,16 @@
 
   // «New York, USA» -> «new york»: так города из базы сравниваются с маршрутом.
   const cityKey = label => String(label || '').split(',')[0].trim().toLowerCase();
+  const matchesRoute = flight => cityKey(flight.departure_city)===cityKey(state.fromName)
+    && cityKey(flight.arrival_city)===cityKey(state.toName);
+  const departureDay = flight => {
+    const match=String(flight.departure_time||'').match(/^(\d{2})\.(\d{2})\.(\d{4})\s/);
+    return match ? `${match[3]}-${match[2]}-${match[1]}` : '';
+  };
+  const upcomingFlightDays = flights => [...new Set(flights.filter(flight=>flight.seats_available>0)
+    .map(departureDay).filter(date=>date>=dateValue(today)))];
+  const displayDate = value => new Intl.DateTimeFormat('en',{weekday:'short',day:'numeric',month:'short',year:'numeric'})
+    .format(new Date(`${value}T00:00:00`));
 
   // Перерисовка карточки рейса данными из базы: номер, время, цена и остаток мест.
   function paintFlightRow(row, offer) {
@@ -1298,38 +1322,146 @@
   }
 
   function searchPage(){
-    // Turn the exported fields into controls.
-    findAll('Round-trip').forEach(el=>clickable(el,()=>{state.trip='Round-trip';save();toast('Round-trip selected')}));
-    findAll('One-way').forEach(el=>clickable(el,()=>{state.trip='One-way';save();toast('One-way selected')}));
-    const fields=[['JFK · New York, USA','from'],['LHR · London, UK','to']]; fields.forEach(([t,k])=>{const el=find(t);clickable(el,()=>airportPicker(k))});
-    const cabin=find('Economy  ·  Premium  ·  Business  ·  First'); if(cabin)clickable(cabin,passengerPicker);
-    updateDisplayedDates(); bindDateFields();
-    // Make every flight row selectable, not only its text button.
-    const rows=[...document.querySelectorAll('[class^="flight-option-"]')];
-    let offers=flights.slice();
-    rows.forEach((row,index)=>{
-      row.classList.add('enair-card-hover');
-      clickable(row,()=>requireAuthentication(()=>{
-        const offer=offers[index%offers.length];
-        if(!offer?.id){toast('Live flight availability is not available right now. Please try again shortly.');return;}
-        if(offer&&Number(offer.seats)===0){toast('Этот рейс распродан — выберите другой');return;}
-        state.flight=offer;state.seats=[];save();go(routes.fare);
-      }));
-    });
-    // Карточки заполняются расписанием из базы: именно по этим рейсам
-    // списываются места, поэтому номер, цена и остаток должны быть настоящими.
-    fetchFlightsFromApi().then(list=>{
-      if(!Array.isArray(list)||!list.length)return;
-      const from=cityKey(state.fromName), to=cityKey(state.toName);
-      const matching=list.filter(flight=>cityKey(flight.departure_city)===from&&cityKey(flight.arrival_city)===to);
-      const pool=(matching.length?matching:list).slice(0,Math.max(rows.length,1));
-      offers=pool.map(normalizeDatabaseFlight);
-      rows.forEach((row,index)=>{
-        if(index<offers.length)paintFlightRow(row,offers[index]);
-        else row.classList.add('enair-filter-hidden');
+    const results=document.querySelector('.results-60');
+    const templates=[...results.querySelectorAll('[class^="flight-option-"]')];
+    const status=document.createElement('p');
+    status.setAttribute('role','status');
+    const alternatives=document.createElement('div');
+    alternatives.className='enair-grid';
+    results.replaceChildren(results.firstElementChild,status,alternatives);
+    const origin=document.querySelector('.value-50');
+    const destination=document.querySelector('.value-53');
+    const cabin=document.querySelector('.cabin-46');
+    const departure=document.querySelector('.value-56');
+    const backDate=document.querySelector('.value-59');
+    const tripOptions=[['Round-trip','.selected-42'],['One-way','.option-44']];
+    let schedule=null;
+    function renderSearch(){
+      origin.textContent=`${state.from} · ${state.fromName}`;
+      destination.textContent=`${state.to} · ${state.toName}`;
+      departure.textContent=displayDate(state.departureDate);
+      backDate.textContent=displayDate(state.returnDate);
+      backDate.parentElement.classList.toggle('enair-filter-hidden',state.trip==='One-way');
+      tripOptions.forEach(([name,selector])=>{
+        const option=document.querySelector(selector);
+        option.classList.toggle('is-active',state.trip===name);
+        option.setAttribute('aria-pressed',String(state.trip===name));
       });
-    }).catch(error=>console.warn('Расписание из базы недоступно:',error.message));
-    updateDisplayedRoute();
+      alternatives.replaceChildren();
+      results.querySelectorAll('[class^="flight-option-"]').forEach(row=>row.remove());
+      if(!schedule)return;
+      const matching=schedule.filter(matchesRoute);
+      const offers=matching.filter(flight=>departureDay(flight)===state.departureDate);
+      status.textContent=offers.length ? '' : 'No flights for this route on the selected departure date.';
+      if(!offers.length){
+        upcomingFlightDays(matching).forEach(date=>{
+          const button=document.createElement('button');
+          button.type='button';button.className='enair-choice';
+          button.textContent=displayDate(date);
+          button.addEventListener('click',()=>{setDepartureDate(date);save();renderSearch();});
+          alternatives.append(button);
+        });
+      }
+      offers.map(normalizeDatabaseFlight).forEach((offer,index)=>{
+        const row=templates[index%templates.length].cloneNode(true);
+        row.classList.add('enair-card-hover');
+        paintFlightRow(row,offer);
+        if(offer.id&&offer.seats>0){
+          clickable(row,()=>requireAuthentication(()=>{
+            state.flight=offer;state.seats=[];save();go(routes.fare);
+          }));
+        }else{
+          const select=row.querySelector('[class^="select-"]');
+          if(select)select.textContent='Sold out';
+        }
+        results.append(row);
+      });
+    }
+
+    clickable(origin,()=>airportPicker('from',renderSearch));
+    clickable(destination,()=>airportPicker('to',renderSearch));
+    clickable(departure,()=>datePicker('departure',renderSearch));
+    clickable(backDate,()=>datePicker('return',renderSearch));
+    clickable(cabin,passengerPicker);
+    tripOptions.forEach(([name,selector])=>clickable(document.querySelector(selector),()=>{
+      state.trip=name;save();renderSearch();
+    }));
+    status.textContent='Loading flights…';
+    renderSearch();
+    fetchFlightsFromApi().then(list=>{
+      schedule=list;
+      renderSearch();
+    }).catch(()=>{
+      status.textContent='Flight availability could not be loaded. Reload the page to try again.';
+    });
+  }
+
+  function mobileSearchPage(){
+    const list=document.querySelector('.m-list');
+    const template=list.firstElementChild;
+    const dates=document.querySelector('.m-dates');
+    const status=document.createElement('p');
+    status.setAttribute('role','status');
+    const [nonStop,sort,chooseDate]=document.querySelectorAll('.m-filters .chip');
+    nonStop.disabled=true;
+    chooseDate.textContent='Change date';
+    const [header,summary,routeInfo,bottom]=['.m-top h1','.m-route .pair','.m-route small','.m-bar .info']
+      .map(selector=>document.querySelector(selector));
+    let schedule=null, byPrice=false;
+    list.replaceChildren(status);
+
+    function render(){
+      header.textContent=summary.textContent=`${state.from} → ${state.to}`;
+      routeInfo.textContent=`${displayDate(state.departureDate)} · ${Number(state.adults)+Number(state.children)} passengers · ${state.cabin}`;
+      bottom.textContent=routeInfo.textContent;
+      list.replaceChildren(status);dates.replaceChildren();
+      if(!schedule)return;
+      const matching=schedule.filter(matchesRoute);
+      upcomingFlightDays(matching).forEach(date=>{
+        const option=document.createElement('button');
+        option.type='button';option.className='m-date';
+        option.classList.toggle('is-on',date===state.departureDate);
+        option.setAttribute('aria-pressed',String(date===state.departureDate));
+        option.textContent=displayDate(date);
+        option.addEventListener('click',()=>{setDepartureDate(date);save();render();});
+        dates.append(option);
+      });
+      const found=matching.filter(flight=>departureDay(flight)===state.departureDate);
+      if(byPrice)found.sort((a,b)=>Number(a.price)-Number(b.price));
+      status.textContent=found.length?'':'No flights for this route on the selected departure date.';
+      found.forEach(flight=>{
+        const offer=normalizeDatabaseFlight(flight);
+        const card=template.cloneNode(true);
+        const [number,duration]=card.querySelectorAll('.top span');
+        const [departure,arrival]=card.querySelectorAll('.times b');
+        number.textContent=`${offer.no} · ${offer.aircraft}`;
+        duration.textContent=`${offer.duration} · non-stop`;
+        departure.textContent=offer.dep;arrival.textContent=offer.arr;
+        card.querySelector('.small.muted').textContent=`${offer.from} → ${offer.to}`;
+        const price=card.querySelector('.price');price.dataset.priceKzt=String(offer.price);
+        price.firstChild.textContent=formatPriceKzt(offer.price);
+        const select=card.querySelector('.bottom a');
+        if(offer.seats>0)clickable(select,()=>window.enairSelectDatabaseFlight(flight));
+        else {
+          select.removeAttribute('href');select.setAttribute('aria-disabled','true');
+          select.textContent='Sold out';card.classList.add('sold');
+        }
+        list.append(card);
+      });
+    }
+    const change=()=>datePicker('departure',render);
+    clickable(document.querySelector('.m-top button'),change);
+    clickable(chooseDate,change);
+    clickable(sort,()=>{
+      byPrice=!byPrice;
+      sort.textContent=byPrice?'Sort · Price':'Sort · Time';
+      sort.setAttribute('aria-pressed',String(byPrice));render();
+    });
+    status.textContent='Loading flights…';
+    render();
+    fetchFlightsFromApi().then(flights=>{schedule=flights;render();}).catch(()=>{
+      status.textContent='Flight availability could not be loaded. Reload the page to try again.';
+    });
   }
 
   function farePage(){
@@ -1607,6 +1739,7 @@
           fare:state.fare,
           total:breakdown.total,
           passenger_names:names,
+          seats:state.seats||[],
           card_last4:state.cardLast4||''
         })
       });
@@ -1921,6 +2054,7 @@
   if(is('enair-booking.html')||is('mobile-booking.html')) bookingPage();
   if(is('enair-destinations.html')) destinationsPage();
   if(is('booking-search.html')) searchPage();
+  if(is('mobile-search.html')) mobileSearchPage();
   if(is('booking-select-fare.html')) farePage();
   if(is('booking-passengers.html')) passengersPage();
   if(is('booking-confirmation.html')) confirmationPage();

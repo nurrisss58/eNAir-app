@@ -97,20 +97,20 @@
     <aside class="flow-col">
       <section class="panel">
         <h2 style="font-size:18px;margin-bottom:16px">Your flight</h2>
-        <p style="font:700 26px 'Outfit';margin-bottom:4px">JFK → LHR</p>
+        <p data-checkin-trip="route" style="font:700 26px 'Outfit';margin-bottom:4px">JFK → LHR</p>
         <p class="muted" style="font-size:13px;margin-bottom:18px">Reference <b data-checkin-ref>EN482913</b></p>
         <div class="kv-grid" style="grid-template-columns:1fr 1fr">
-          <div class="kv"><span>Date</span><b>28 Mar 2026</b></div>
-          <div class="kv"><span>Departure</span><b>08:15</b></div>
-          <div class="kv"><span>Gate</span><b>B22</b></div>
-          <div class="kv"><span>Boarding</span><b>07:35</b></div>
+          <div class="kv"><span>Date</span><b data-checkin-trip="date">28 Mar 2026</b></div>
+          <div class="kv"><span>Departure</span><b data-checkin-trip="departure">08:15</b></div>
+          <div class="kv"><span>Gate</span><b data-checkin-trip="gate">B22</b></div>
+          <div class="kv"><span>Boarding</span><b data-checkin-trip="boarding">07:35</b></div>
         </div>
         <div class="divider"></div>
-        <p class="badge badge-amber">Check-in closes in 3 h 12 m</p>
+        <p class="badge badge-amber" data-checkin-demo>Check-in closes in 3 h 12 m</p>
         <ul class="muted" style="margin:16px 0 0 18px;font-size:14px;line-height:1.9">
-          <li>2 passengers</li>
+          <li data-checkin-trip="count">2 passengers</li>
           <li>Seats <span id="seat-value">12A · 12B</span></li>
-          <li>2 bags included</li>
+          <li data-checkin-demo>2 bags included</li>
         </ul>
         <p class="hint" style="margin-top:14px">Bags can still be added after check-in.</p>
       </section>

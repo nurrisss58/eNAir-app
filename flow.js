@@ -284,15 +284,89 @@
       if (!form) return;
       const ref = param('ref', DEMO_BOOKING.reference);
       $$('[data-checkin-ref]').forEach(el => { el.textContent = ref; });
+      const submit = $('button[type="submit"]', form);
+      submit.disabled = true;
+      let trip = DEMO_BOOKING;
+      let isDemo = false;
+      try {
+        const response = await fetch('/api/bookings/' + encodeURIComponent(ref));
+        if (response.ok) trip = await response.json();
+        else if (response.status === 404 && DEMO_BOOKINGS.some(item => item.reference === ref)) isDemo = true;
+        else throw new Error('Booking could not be loaded.');
+      } catch (error) {
+        toast('Booking could not be loaded. Please try again.', 'err');
+        return;
+      }
+      if (trip.status === 'cancelled') {
+        toast('This booking has been cancelled.', 'err');
+        return;
+      }
+      const seats = String(trip.seats || '').split(',').map(seat => seat.trim()).filter(Boolean);
+      const [flightDate,departureTime] = String(trip.departure_time || '').split(' ');
+      if (!isDemo) {
+        const primaryName = $('[data-passenger-name]');
+        const originalPanels = $$('.panel', form);
+        const consent = $('#consent');
+        consent.checked = false;
+        const consentLabel = consent.closest('label');
+        const groups = document.createDocumentFragment();
+        for (let index = 0; index < trip.passengers; index++) {
+          const panel = document.createElement('section');
+          panel.className = originalPanels.length ? 'panel' : 'm-card';
+          const name = document.createElement('h2');
+          name.dataset.passengerName = '';
+          name.textContent = trip.passenger_names[index] || 'Passenger ' + (index + 1);
+          panel.append(name);
+          const fields = document.createElement('div');
+          fields.className = 'field-grid';
+          fields.innerHTML = `
+            <div class="field" data-validate="passport">
+              <label for="passport-${index}">Passport number</label>
+              <input class="input" id="passport-${index}" autocomplete="off">
+              <span class="error">Enter a valid passport number</span>
+            </div>
+            <div class="field" data-validate="date">
+              <label for="dob-${index}">Date of birth</label>
+              <input class="input" id="dob-${index}" type="date">
+              <span class="error">Enter the date of birth</span>
+            </div>`;
+          panel.append(fields);
+          groups.append(panel);
+        }
+        originalPanels.forEach(panel => panel.remove());
+        $$('.field[data-validate], .m-card', form).forEach(field => field.remove());
+        form.prepend(groups);
+        form.append(consentLabel, submit.closest('.btn-row') || submit);
+        if (primaryName && !originalPanels.length) {
+          const headerCard = primaryName.closest('.m-card');
+          if (headerCard) headerCard.style.display = 'none';
+        }
+        const note = $('.flow-head p');
+        if (note) note.textContent = 'Confirm travel documents for every passenger. Names must match the passport.';
+        const seatValue = $('#seat-value');
+        if (seatValue) seatValue.textContent = seats.join(' · ') || 'Not yet assigned';
+        const tripDetails = {
+          route: trip.departure_city + ' → ' + trip.arrival_city,
+          date: flightDate || '—',
+          departure: departureTime || '—',
+          gate: '—',
+          boarding: '—',
+          count: trip.passengers + (trip.passengers === 1 ? ' passenger' : ' passengers')
+        };
+        $$('[data-checkin-trip]').forEach(el => { el.textContent = tripDetails[el.dataset.checkinTrip]; });
+        $$('[data-checkin-demo]').forEach(el => { el.style.display = 'none'; });
+      }
+      submit.disabled = false;
 
       form.addEventListener('submit', async event => {
         event.preventDefault();
+        if (submit.disabled) return;
         let valid = true;
         $$('.field[data-validate]', form).forEach(field => {
           const input = $('input', field);
           const value = (input.value || '').trim();
           const rule = field.getAttribute('data-validate');
-          const ok = rule === 'passport' ? value.length >= 6 : value.length >= 4;
+          const ok = rule === 'passport' ? /^[a-z0-9]{6,20}$/i.test(value) : value.length >= 4 && input.checkValidity();
           field.classList.toggle('has-error', !ok);
           if (!ok) valid = false;
         });
@@ -300,33 +374,53 @@
         if (consent && !consent.checked) { valid = false; toast('Confirm the document data to continue', 'err'); }
         if (!valid) return;
 
-        const names = $$('[data-passenger-name]').map(el => el.textContent.trim());
+        const names = (isDemo ? $$('[data-passenger-name]') : $$('[data-passenger-name]', form))
+          .map(el => el.textContent.trim());
         const passports = $$('.field[data-validate="passport"] input, #passport').map(input => input.value.trim());
         const dobs = $$('.field[data-validate="date"] input, #dob').map(input => input.value.trim());
-        const seats = ['12A', '12B'];
         const people = (names.length ? names : ['Alex Morgan']).map((name, index) => ({
           name,
           dob: dobs[index] || '',
           document: passports[index] || '',
-          seat: seats[index] || '12A'
+          seat: seats[index] || ''
         }));
 
+        submit.disabled = true;
         try {
-          await fetch('/api/bookings/' + encodeURIComponent(ref) + '/checkin', {
+          const response = await fetch('/api/bookings/' + encodeURIComponent(ref) + '/checkin', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'same-origin',
             body: JSON.stringify({ passengers: people })
           });
-        } catch (error) { /* the demo store still lets the flow continue */ }
+          const data = await response.json();
+          if (!response.ok || !data.ok || (!isDemo && data.demo)) {
+            throw new Error(data.error || 'Check-in was not saved. Please try again.');
+          }
+        } catch (error) {
+          toast(error.message || 'Check-in was not saved. Please try again.', 'err');
+          submit.disabled = false;
+          return;
+        }
 
-        session.set('enair.pass', Object.assign({}, passData(), {
+        const existingPass = isDemo ? passData() : { gate: '—', terminal: '—', boarding: '—', bags: '—' };
+        session.set('enair.pass', Object.assign({}, existingPass, {
           reference: ref,
-          passenger: people[0].name + (people[1] ? ' + ' + people[1].name : ''),
-          seat: people[0].seat
+          flight: trip.flight_number,
+          from: trip.departure_city,
+          to: trip.arrival_city,
+          cityFrom: trip.departure_city,
+          cityTo: trip.arrival_city,
+          date: flightDate || '—',
+          departure: departureTime || '—',
+          cabin: trip.cabin,
+          passenger: people.map(person => person.name).join(' · '),
+          seat: people.map(person => person.seat).filter(Boolean).join(', ') || 'Not assigned'
         }));
-        toast('Check-in complete · boarding pass ready', 'ok');
-        setTimeout(() => { location.href = 'enair-boarding-pass.html'; }, 600);
+        toast(isDemo ? 'Demo check-in completed' : 'Check-in complete · boarding pass ready', 'ok');
+        const passPage = document.body.dataset.page === 'mobileCheckin'
+          ? 'mobile-boarding-pass.html' : 'enair-boarding-pass.html';
+        setTimeout(() => { location.href = passPage; }, 600);
       });
     },
 
@@ -409,16 +503,16 @@
             body: JSON.stringify({ reason: chosen ? chosen.value : 'Change of plans' })
           });
           const data = await response.json();
-          if (!response.ok) throw new Error(data.error || 'Could not cancel');
+          if (!response.ok || !data.ok || data.demo) throw new Error(data.error || 'Cancellation was not saved');
           const form = $('#refund-form');
           if (form) form.classList.add('hidden');
           const done = $('#refund-done');
           if (done) done.classList.remove('hidden');
-          $$('[data-refund-done]').forEach(el => { el.textContent = money(data.refund || refund); });
-          $$('[data-refund-fee]').forEach(el => { el.textContent = money(data.fee || fee); });
+          $$('[data-refund-done]').forEach(el => { el.textContent = money(data.refund ?? refund); });
+          $$('[data-refund-fee]').forEach(el => { el.textContent = money(data.fee ?? fee); });
           const back = $('#refund-back');
           if (back) back.href = 'enair-manage-booking.html?ref=' + encodeURIComponent(ref);
-          toast('Booking cancelled · refund ' + money(data.refund || refund), 'ok');
+          toast('Booking cancelled · refund ' + money(data.refund ?? refund), 'ok');
         } catch (error) {
           toast(error.message || 'Could not cancel the booking', 'err');
         } finally {
