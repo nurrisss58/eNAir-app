@@ -67,5 +67,9 @@
   });
   new MutationObserver(()=>{
     document.querySelectorAll('[data-experience-label]').forEach(node=>text(node,Number(node.dataset.experienceLabel)));
+    document.querySelectorAll('.experience-progress > a,.experience-progress > span[aria-label]').forEach(item=>{
+      const number=item.querySelector('.experience-step-num');const caption=item.querySelector('.experience-step-label');
+      if(number&&caption)item.setAttribute('aria-label',`${number.textContent}. ${caption.textContent}`);
+    });
   }).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
 })();

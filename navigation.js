@@ -1416,7 +1416,7 @@
       const count=document.createElement('strong');
       count.textContent=offers.length?`${offers.length} flight${offers.length===1?'':'s'}`:'No flights';
       const where=document.createElement('span');where.textContent=` · ${state.fromName} → ${state.toName}`;
-      const note=document.createElement('span');note.className='experience-meta-note';note.textContent='Prices per traveller, taxes included';note.hidden=offers.length===0;
+      const note=document.createElement('span');note.className='experience-meta-note';note.textContent='Per passenger · before taxes';note.hidden=offers.length===0;
       meta.replaceChildren(count,where,note);
       toolbar.hidden=offers.length<2;
       if(!offers.length){
