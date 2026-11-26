@@ -296,3 +296,13 @@ img,svg{display:block}
 .begin-your-premium-digital-j-183{max-width:100%;color:#fff;white-space:normal;text-wrap:balance}
 .membership-enrollment-182{color:#67e8f9}
 .frame-184{cursor:pointer}
+
+/* Fix: the injected "Help" nav item (added by navigation.js as .frame-16 / .about-enair-17)
+   is styled like the other nav items and given room next to "Book Now". */
+.frame-16{position:relative;height:20px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:4px;box-sizing:border-box}
+.about-enair-17{position:relative;flex-shrink:0;font-family:'Geist',sans-serif;font-size:15px;font-weight:500;line-height:20px;white-space:nowrap;color:#0f172a}
+.sticky-navigation-2{gap:24px}
+.nav-links-7{width:auto!important;gap:26px!important;flex-shrink:1!important;min-width:0}
+.nav-links-7>*{flex-shrink:0}
+.book-now-cta-19{margin-left:8px}
+@media (max-width:1180px){.nav-links-7{gap:18px!important}.sticky-navigation-2{gap:14px}}
