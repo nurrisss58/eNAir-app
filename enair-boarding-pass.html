@@ -56,8 +56,8 @@
 
   <div class="btn-row" style="margin-top:24px">
     <button class="btn btn-dark" data-toast="Added to Wallet">Add to Apple Wallet</button>
-    <button class="btn btn-ghost" data-toast="Boarding pass downloaded as PDF">Download PDF</button>
-    <button class="btn btn-ghost" data-toast="Sent to the printer">Print</button>
+    <button class="btn btn-ghost" data-pdf="boarding-pass">Download PDF</button>
+    <button class="btn btn-ghost" onclick="window.print()">Print</button>
     <a class="btn btn-ghost" href="enair-manage-booking.html">Manage booking</a>
   </div>
   <p class="hint" style="margin-top:14px">Gate closes 15 minutes before departure.</p>
@@ -70,6 +70,7 @@
 </footer>
 <div id="toast" class="toast"></div>
 <script src="flow.js?v=53"></script>
+<script src="ticket-pdf.js?v=53"></script>
 <script src="auth-nav.js"></script>
 <script src="localization.js"></script>
 </body>

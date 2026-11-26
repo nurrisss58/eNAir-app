@@ -1743,8 +1743,8 @@
     return line;
   }
 
-  // Экран чека: остаётся на странице, печатается в PDF кнопкой «Print / Save PDF»
-  // (в печати видны только строки чека, остальная страница скрыта).
+  // Экран чека: остаётся на странице, «Download PDF» сохраняет настоящий
+  // PDF-файл (ticket-pdf.js), а «Print» открывает системную печать.
   function showReceipt(booking, breakdown) {
     const existing = document.querySelector('.enair-receipt');
     if (existing) existing.remove();
@@ -1826,22 +1826,30 @@
 
     const actions = document.createElement('div');
     actions.className = 'enair-receipt-actions';
+    const downloadButton = document.createElement('button');
+    downloadButton.type = 'button';
+    downloadButton.className = 'enair-receipt-print';
+    downloadButton.textContent = 'Download PDF';
+    downloadButton.addEventListener('click', () => {
+      if (window.enairTicketPDF) window.enairTicketPDF.download('e-ticket');
+      else window.print();
+    });
     const printButton = document.createElement('button');
     printButton.type = 'button';
-    printButton.className = 'enair-receipt-print';
-    printButton.textContent = 'Print / Save PDF';
+    printButton.className = 'enair-receipt-close';
+    printButton.textContent = 'Print';
     printButton.addEventListener('click', () => window.print());
     const homeButton = document.createElement('button');
     homeButton.type = 'button';
     homeButton.className = 'enair-receipt-close';
     homeButton.textContent = 'Back to eNAir home';
     homeButton.addEventListener('click', () => go(routes.home));
-    actions.append(printButton, homeButton);
+    actions.append(downloadButton, printButton, homeButton);
 
     card.append(head, title, reference, rows, money, note, actions);
     overlay.append(card);
     document.body.append(overlay);
-    printButton.focus();
+    downloadButton.focus();
   }
 
   async function completeBooking(){
@@ -2096,7 +2104,7 @@
       const script=document.createElement('script');script.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';script.onload=()=>new window.QRCode(qr,{text:ref,width:116,height:116,colorDark:'#0f172a',colorLight:'#ffffff',correctLevel:window.QRCode.CorrectLevel.M});document.head.append(script);
     }
     const ticketLink=document.querySelector('.ticket-actions .btn-primary');
-    if(ticketLink)ticketLink.textContent='Print / Save e-ticket';
+    if(ticketLink)ticketLink.textContent='Download e-ticket';
     const manage=document.querySelector('.confirm .link');
     if(manage)manage.href=routes.profile;
   }
